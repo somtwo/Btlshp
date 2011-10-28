@@ -1,0 +1,376 @@
+[1mdiff --git a/README b/README[m
+[1mindex 8b13789..38d03ea 100644[m
+[1m--- a/README[m
+[1m+++ b/README[m
+[36m@@ -1 +1,6 @@[m
+[32m+[m[32mThis is where we can write changes to the config.[m
+ [m
+[32m+[m[32m- created src/btlship.testjavas/Block to get rid of errors, so program compiles[m
+[32m+[m[32malso put return statements on all of classes that had errors, as well as adding[m
+[32m+[m[32mmay imports from around the other classes.[m
+[32m+[m[32m~Zach	10/28/2011[m
+\ No newline at end of file[m
+[1mdiff --git a/src/btlshp/entities/Base.java b/src/btlshp/entities/Base.java[m
+[1mindex 07bce6f..be78ea9 100644[m
+[1m--- a/src/btlshp/entities/Base.java[m
+[1m+++ b/src/btlshp/entities/Base.java[m
+[36m@@ -2,16 +2,17 @@[m [mpackage btlshp.entities;[m
+ [m
+ public class Base extends Construct {[m
+ 	/**[m
+[31m-	* Determains if this base is in condition to conduct repairs[m
+[32m+[m	[32m* Determines if this base is in condition to conduct repairs[m
+ 	* @return[m
+ 	*/[m
+ 	boolean canRepair() {[m
+[32m+[m		[32mreturn true;[m
+ 	}[m
+ [m
+ 	/**[m
+ 	* Constructor for Base[m
+ 	* Returns the Base Constructed[m
+[31m-	* @param owner   Player the base belongs to.[m
+[32m+[m	[32m* @param owner   Player the base belongs to owner.[m
+ 	*/[m
+ 	Base(Player owner) {[m
+ 	}[m
+[1mdiff --git a/src/btlshp/entities/Construct.java b/src/btlshp/entities/Construct.java[m
+[1mindex 263a0eb..6c617d6 100644[m
+[1m--- a/src/btlshp/entities/Construct.java[m
+[1m+++ b/src/btlshp/entities/Construct.java[m
+[36m@@ -1,6 +1,7 @@[m
+ package btlshp.entities;[m
+ [m
+ import btlshp.enums.Weapon;[m
+[32m+[m[32mimport btlshp.testjavas.Block;[m
+ [m
+ public abstract class Construct {[m
+ 	/**[m
+[36m@@ -8,17 +9,20 @@[m [mpublic abstract class Construct {[m
+ 	* @param hitBlock The block damaged[m
+ 	* @param weaponUsed The Weapon used to do the damaging[m
+ 	*/[m
+[31m-	void assessDamage(Block hitBlock, Weapon weaponUsed) = 0;[m
+[32m+[m	[32mvoid assessDamage(Block hitBlock, Weapon weaponUsed) {[m
+[32m+[m	[32m}// = 0;[m
+ [m
+ 	/**[m
+ 	* Computes the damage to the Construct when a block is damaged.[m
+ 	* @param hitBlock The block damaged[m
+ 	*/[m
+[31m-	void damageBlock(Block damagedBlock) = 0;[m
+[32m+[m	[32mvoid damageBlock(Block damagedBlock) {[m
+[32m+[m	[32m}// = 0;[m
+ [m
+ 	/**[m
+ 	* Computes the repair to the Construct when a block is repaired.[m
+ 	* @param hitBlock The block damaged[m
+ 	*/[m
+[31m-	void repairBlock(Block repairBlock) = 0;[m
+[32m+[m	[32mvoid repairBlock(Block repairBlock) {[m
+[32m+[m	[32m}// = 0;[m
+ }[m
+[1mdiff --git a/src/btlshp/entities/Map.java b/src/btlshp/entities/Map.java[m
+[1mindex fe04409..1814353 100644[m
+[1m--- a/src/btlshp/entities/Map.java[m
+[1m+++ b/src/btlshp/entities/Map.java[m
+[36m@@ -27,6 +27,7 @@[m [mpublic class Map {[m
+ 	* @return[m
+ 	*/[m
+ 	StoredMap makeStoredMap() {[m
+[32m+[m		[32mreturn null;[m
+ 	}[m
+ [m
+ 	        	[m
+[36m@@ -52,6 +53,7 @@[m [mpublic class Map {[m
+ 	* @returns The map block at the given location[m
+ 	*/[m
+ 	MapBlock getMapBlock(Location loc) {[m
+[32m+[m		[32mreturn null;[m
+ 	}[m
+ [m
+ 	/**[m
+[36m@@ -61,6 +63,7 @@[m [mpublic class Map {[m
+ 	* @returns The map block at the given location.[m
+ 	*/[m
+ 	MapBlock getMapBlock(int x, int y) {[m
+[32m+[m		[32mreturn null;[m
+ 	}[m
+ 	        	[m
+ 	/**[m
+[36m@@ -71,6 +74,7 @@[m [mpublic class Map {[m
+ 	* @return true if the ship movement can be carried out.[m
+ 	*/[m
+ 	boolean canMove(Ship s, Direction dir, int blocks) {[m
+[32m+[m		[32mreturn false;[m
+ 	}[m
+ 	        	[m
+ 	/**[m
+[36m@@ -82,6 +86,7 @@[m [mpublic class Map {[m
+ 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.[m
+ 	*/[m
+ 	int move(Ship s, Direction dir, int blocks) {[m
+[32m+[m		[32mreturn blocks;[m
+ 	}[m
+ 	        	[m
+ 	/**[m
+[36m@@ -94,6 +99,7 @@[m [mpublic class Map {[m
+ 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.[m
+ 	*/[m
+ 	boolean canShipRotate(Ship s, Direction newDir) {[m
+[32m+[m		[32mreturn false;[m
+ 	}[m
+ 	        	[m
+ 	/**[m
+[36m@@ -113,6 +119,7 @@[m [mpublic class Map {[m
+ 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.[m
+ 	*/[m
+ 	boolean placeMine(Ship s, Location loc) {[m
+[32m+[m		[32mreturn false;[m
+ 	}[m
+ [m
+ 	/**[m
+[36m@@ -123,6 +130,7 @@[m [mpublic class Map {[m
+ 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.[m
+ 	*/[m
+ 	boolean pickupMine(Ship s, Location loc) {[m
+[32m+[m		[32mreturn false;[m
+ 	}[m
+ 	        	[m
+ 	/**[m
+[1mdiff --git a/src/btlshp/entities/Player.java b/src/btlshp/entities/Player.java[m
+[1mindex 44704b1..e3202d1 100644[m
+[1m--- a/src/btlshp/entities/Player.java[m
+[1m+++ b/src/btlshp/entities/Player.java[m
+[36m@@ -12,6 +12,7 @@[m [mpublic class Player {[m
+ 	 * @return number of ships player has in play[m
+ 	 */[m
+ 	public int shipCount() {[m
+[32m+[m		[32mreturn 0;[m
+ 	}[m
+ [m
+ 	/**[m
+[36m@@ -19,6 +20,7 @@[m [mpublic class Player {[m
+ 	*@return number of mines player has in play[m
+ 	*/[m
+ 	public int numberOfMines() {[m
+[32m+[m		[32mreturn 0;[m
+ 	}[m
+ [m
+ 	/**[m
+[36m@@ -38,5 +40,6 @@[m [mpublic class Player {[m
+ 	 * Calculates the current number of points the player has.[m
+ 	 */[m
+ 	public int getPoints() {[m
+[32m+[m		[32mreturn 0;[m
+ 	}[m
+ }[m
+[1mdiff --git a/src/btlshp/entities/Ship.java b/src/btlshp/entities/Ship.java[m
+[1mindex f9d869e..2e83ebb 100644[m
+[1m--- a/src/btlshp/entities/Ship.java[m
+[1m+++ b/src/btlshp/entities/Ship.java[m
+[36m@@ -81,6 +81,7 @@[m [mpublic class Ship extends Construct {[m
+ 	* @returns the Ship Constructed[m
+ 	*/[m
+ 	static Ship buildCruiser() {[m
+[32m+[m		[32mreturn null;[m
+ 	}[m
+ [m
+ 	/**[m
+[36m@@ -88,6 +89,7 @@[m [mpublic class Ship extends Construct {[m
+ 	* @returns the Ship Constructed[m
+ 	*/[m
+ 	static Ship buildTorpedoBoat() {[m
+[32m+[m		[32mreturn null;[m
+ 	}[m
+ [m
+ 	/**[m
+[36m@@ -95,6 +97,7 @@[m [mpublic class Ship extends Construct {[m
+ 	* @returns the Ship Constructed[m
+ 	*/[m
+ 	static Ship buildDestroyer() {[m
+[32m+[m		[32mreturn null;[m
+ 	}[m
+ [m
+ 	/**[m
+[36m@@ -102,5 +105,6 @@[m [mpublic class Ship extends Construct {[m
+ 	* @returns the Ship Constructed[m
+ 	*/[m
+ 	static Ship buildMineSweeper() {[m
+[32m+[m		[32mreturn null;[m
+ 	}[m
+ }[m
+[1mdiff --git a/src/btlshp/turns/Turn.java b/src/btlshp/turns/Turn.java[m
+[1mindex 180afcf..6fd4bd2 100644[m
+[1m--- a/src/btlshp/turns/Turn.java[m
+[1m+++ b/src/btlshp/turns/Turn.java[m
+[36m@@ -4,17 +4,21 @@[m [mpublic abstract class Turn {[m
+ 	/**[m
+ 	 * @returns true if the move object represents a successful move, false otherwise.[m
+ 	 */[m
+[31m-	boolean wasSuccessful() = 0;[m
+[32m+[m	[32mboolean wasSuccessful() {[m
+[32m+[m		[32mreturn false;[m
+[32m+[m	[32m}// = 0;[m
+ 	  [m
+ 	/**[m
+ 	 * Sends the object representing a move this player made, to the other player.[m
+ 	 * @throws IllegalStateException If the move is sent from a machine that did not create it.[m
+ 	 */[m
+[31m-	void sendTurn() = 0;[m
+[32m+[m	[32mvoid sendTurn() {[m
+[32m+[m	[32m}// = 0;[m
+ [m
+ 	/**[m
+ 	 * Executes a given move object representing a move from the other player.[m
+ 	 * @throws IllegalStateException If the turn was not successful.[m
+ 	 */[m
+[31m-	void executeTurn() = 0;[m
+[32m+[m	[32mvoid executeTurn() {[m
+[32m+[m	[32m}// = 0;[m
+ }[m
+[1mdiff --git a/src/btlshp/turns/TurnFactory.java b/src/btlshp/turns/TurnFactory.java[m
+[1mindex 77cda5a..503c568 100644[m
+[1m--- a/src/btlshp/turns/TurnFactory.java[m
+[1m+++ b/src/btlshp/turns/TurnFactory.java[m
+[36m@@ -1,41 +1,50 @@[m
+ package btlshp.turns;[m
+ [m
+[32m+[m[32mimport btlshp.entities.Base;[m
+[32m+[m[32mimport btlshp.entities.Location;[m
+[32m+[m[32mimport btlshp.entities.Ship;[m
+[32m+[m[32mimport btlshp.enums.Direction;[m
+[32m+[m
+ public final class TurnFactory {[m
+ 	/**[m
+ 	* Factory method to create a turn representing a request to postpone the game.[m
+ 	* @return the resulting turn object.[m
+ 	*/[m
+[31m-	static Turn requestPostoneGame();[m
+[32m+[m	[32mstatic Turn requestPostoneGame() {[m
+[32m+[m		[32mreturn null;[m
+[32m+[m	[32m}[m
+ [m
+ 	/**[m
+ 	* Factory method to create a turn representing a confirmation to postpone the game.[m
+ 	* @return the resulting turn object.[m
+ 	*/[m
+[31m-	static Turn confirmPostponeGame();[m
+[32m+[m	[32mstatic Turn confirmPostponeGame() {[m
+[32m+[m		[32mreturn null;[m
+[32m+[m	[32m}[m
+ [m
+ 	/**[m
+ 	* Factory method to create a turn representing a request to surrender the game.[m
+ 	* @return the resulting turn object.[m
+ 	*/[m
+[31m-	static Turn requestSurrender();[m
+[32m+[m	[32mstatic Turn requestSurrender() {[m
+[32m+[m		[32mreturn null;[m
+[32m+[m	[32m}[m
+ [m
+ 	/**[m
+ 	* Factory method to create a turn representing accepting a surrender of the game.[m
+ 	* @return the resulting turn object.[m
+ 	*/[m
+[31m-	static Turn acceptSurrender();[m
+[31m-[m
+[31m-	/**[m
+[31m-	* Factory method to create a turn representing a confirmation to postpone the game.[m
+[31m-	* @return the resulting turn object.[m
+[31m-	*/[m
+[31m-	static Turn confirmPostponeGame();[m
+[32m+[m	[32mstatic Turn acceptSurrender() {[m
+[32m+[m		[32mreturn null;[m
+[32m+[m	[32m}[m
+ [m
+ 	/**[m
+ 	* Factory method to create a turn representing the start of a previously saved game.[m
+ 	* @return the resulting turn object.[m
+ 	*/[m
+[31m-	static Turn loadGameState();[m
+[32m+[m	[32mstatic Turn loadGameState() {[m
+[32m+[m		[32mreturn null;[m
+[32m+[m	[32m}[m
+ [m
+ 	/**[m
+ 	 * Move ship in a certain direction[m
+[36m@@ -44,7 +53,9 @@[m [mpublic final class TurnFactory {[m
+ 	 * @param distance number of map units to move the ship[m
+ 	 * @return the resulting turn object.[m
+ 	 */[m
+[31m-	static Turn moveShip(Ship s, Direction dir, int distance);[m
+[32m+[m	[32mstatic Turn moveShip(Ship s, Direction dir, int distance) {[m
+[32m+[m		[32mreturn null;[m
+[32m+[m	[32m}[m
+ [m
+ 	[m
+ [m
+[36m@@ -53,21 +64,27 @@[m [mpublic final class TurnFactory {[m
+ 	* @param loc location to place mine[m
+ 	* @return the resulting turn object.[m
+ 	*/[m
+[31m-	static Turn placeMine(Location loc);[m
+[32m+[m	[32mstatic Turn placeMine(Location loc) {[m
+[32m+[m		[32mreturn null;[m
+[32m+[m	[32m}[m
+ [m
+ 	/**[m
+ 	* Withdraw mine from specified location[m
+ 	* @param loc location of mine to be removed[m
+ 	* @return the resulting turn object.[m
+ 	*/[m
+[31m-	static Turn takeMine(Location loc);[m
+[32m+[m	[32mstatic Turn takeMine(Location loc) {[m
+[32m+[m		[32mreturn null;[m
+[32m+[m	[32m}[m
+ [m
+ 	/**[m
+ 	* Launch a torpedo from a ship[m
+ 	* @param s ship to launch a torpedo from[m
+ 	* @return true if torpedo launched[m
+ 	*/[m
+[31m-	static Turn launchTorpedo(Ship s);[m
+[32m+[m	[32mstatic Turn launchTorpedo(Ship s) {[m
+[32m+[m		[32mreturn null;[m
+[32m+[m	[32m}[m
+ [m
+ 	/**[m
+ 	* Shoot from a ship[m
+[36m@@ -75,24 +92,32 @@[m [mpublic final class TurnFactory {[m
+ 	* @param loc location to shoot at[m
+ 	* @return the resulting turn object.[m
+ 	*/[m
+[31m-	static Turn shoot(Ship s, Location loc);[m
+[32m+[m	[32mstatic Turn shoot(Ship s, Location loc) {[m
+[32m+[m		[32mreturn null;[m
+[32m+[m	[32m}[m
+ [m
+ 	/**[m
+ 	* Generates a repair ship turn for player[m
+ 	* @param s ship to be repaired[m
+ 	* @return the resulting turn object.[m
+ 	*/[m
+[31m-	static Turn repairShip(Ship s);[m
+[32m+[m	[32mstatic Turn repairShip(Ship s) {[m
+[32m+[m		[32mreturn null;[m
+[32m+[m	[32m}[m
+ [m
+ 	/**[m
+ 	* Repairs specified base b[m
+ 	* @param b base to be repaired[m
+ 	* @return the resulting turn object.[m
+ 	*/[m
+[31m-	static Turn repairBase(Base b);[m
+[32m+[m	[32mstatic Turn repairBase(Base b) {[m
+[32m+[m		[32mreturn null;[m
+[32m+[m	[32m}[m
+ [m
+ 	/**[m
+ 	* Generates a pass turn for the player[m
+ 	*/[m
+[31m-	static Turn pass();[m
+[32m+[m	[32mstatic Turn pass() {[m
+[32m+[m		[32mreturn null;[m
+[32m+[m	[32m}[m
+ }[m
