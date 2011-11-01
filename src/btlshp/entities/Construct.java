@@ -3,8 +3,8 @@ package btlshp.entities;
 import btlshp.enums.Weapon;
 
 public abstract class Construct {
-	ConstructBlock blocks[];
-	int radarRange;
+	private ConstructBlock blocks[];
+	private int radarRange;
 	
 	/**
 	* Computes the damage of the Construct when a block is damaged.
@@ -109,6 +109,11 @@ public abstract class Construct {
 	 * @param myBlock is the block's location to be determined.
 	 * @return
 	 */
+	
+	public int getRadarRange(){
+		return this.radarRange;
+	}
+	
 	private int blockLocation(Block myBlock){
 		int j = -1; //Start Location for search
 		for (int i = 0; i < blocks.length; i++){
