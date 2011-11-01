@@ -3,6 +3,7 @@ package btlshp.entities;
 import btlshp.enums.Direction;
 
 public class Map {
+	
 	/**
 	* Constructor to create a map object which will be the map used by two players to play a game.
 	* Any random elements will be generated.
@@ -51,7 +52,7 @@ public class Map {
 	* @param loc   Location to get the map block from
 	* @returns The map block at the given location
 	*/
-	MapBlock getMapBlock(Location loc) {
+	MapNode getMapBlock(Location loc) {
 	}
 
 	/**
@@ -60,7 +61,7 @@ public class Map {
 	* @param y      y-map coordinate
 	* @returns The map block at the given location.
 	*/
-	MapBlock getMapBlock(int x, int y) {
+	MapNode getMapBlock(int x, int y) {
 	}
 	        	
 	/**

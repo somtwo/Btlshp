@@ -3,6 +3,8 @@ package btlshp.entities;
 import btlshp.enums.Weapon;
 
 public abstract class Construct {
+	ConstructBlock blocks[];
+	
 	/**
 	* Computes the damage of the Construct when a block is damaged.
 	* @param hitBlock The block damaged
