@@ -2,5 +2,6 @@ package btlshp.enums;
 
 public enum Weapon {
 	Gun,
-	Torpedo
+	Torpedo,
+	Mine
 }
