@@ -3,6 +3,7 @@ package btlshp.entities;
 import btlshp.enums.Direction;
 
 public class Map {
+	MapNode [][] nodes;
 	
 	/**
 	* Constructor to create a map object which will be the map used by two players to play a game.

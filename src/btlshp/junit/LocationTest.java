@@ -1,4 +1,4 @@
-package btlshp.qunit;
+package btlshp.junit;
 
 import junit.framework.TestCase;
 
