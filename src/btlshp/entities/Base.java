@@ -3,7 +3,7 @@ package btlshp.entities;
 public class Base extends Construct {
 	
 	Player         pl;
-	
+	//TEST
 	/**
 	* Constructor for Base
 	* Returns the Base Constructed
