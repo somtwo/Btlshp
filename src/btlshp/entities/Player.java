@@ -12,6 +12,7 @@ public class Player {
 	 * @return number of ships player has in play
 	 */
 	public int shipCount() {
+		return 0;
 	}
 
 	/**
@@ -19,6 +20,7 @@ public class Player {
 	*@return number of mines player has in play
 	*/
 	public int numberOfMines() {
+		return 0;
 	}
 
 	/**
@@ -38,5 +40,6 @@ public class Player {
 	 * Calculates the current number of points the player has.
 	 */
 	public int getPoints() {
+		return 0;
 	}
 }
