@@ -1,5 +1,5 @@
 package btlshp.entities;
 
-public class MapBlock {
+public class Block {
 
 }
