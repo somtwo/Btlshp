@@ -81,6 +81,7 @@ public class Ship extends Construct {
 	* @returns the Ship Constructed
 	*/
 	static Ship buildCruiser() {
+		return null;
 	}
 
 	/**
@@ -88,6 +89,7 @@ public class Ship extends Construct {
 	* @returns the Ship Constructed
 	*/
 	static Ship buildTorpedoBoat() {
+		return null;
 	}
 
 	/**
@@ -95,6 +97,7 @@ public class Ship extends Construct {
 	* @returns the Ship Constructed
 	*/
 	static Ship buildDestroyer() {
+		return null;
 	}
 
 	/**
@@ -102,5 +105,6 @@ public class Ship extends Construct {
 	* @returns the Ship Constructed
 	*/
 	static Ship buildMineSweeper() {
+		return null;
 	}
 }

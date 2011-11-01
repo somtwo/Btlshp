@@ -1,0 +1,6 @@
+This is where we can write changes to the config.
+
+- created src/btlship.testjavas/Block to get rid of errors, so program compiles
+also put return statements on all of classes that had errors, as well as adding
+may imports from around the other classes.
+~Zach	10/28/2011

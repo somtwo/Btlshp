@@ -27,6 +27,7 @@ public class Map {
 	* @return
 	*/
 	StoredMap makeStoredMap() {
+		return null;
 	}
 
 	        	
@@ -52,6 +53,7 @@ public class Map {
 	* @returns The map block at the given location
 	*/
 	MapBlock getMapBlock(Location loc) {
+		return null;
 	}
 
 	/**
@@ -61,6 +63,7 @@ public class Map {
 	* @returns The map block at the given location.
 	*/
 	MapBlock getMapBlock(int x, int y) {
+		return null;
 	}
 	        	
 	/**
@@ -71,6 +74,7 @@ public class Map {
 	* @return true if the ship movement can be carried out.
 	*/
 	boolean canMove(Ship s, Direction dir, int blocks) {
+		return false;
 	}
 	        	
 	/**
@@ -82,6 +86,7 @@ public class Map {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	int move(Ship s, Direction dir, int blocks) {
+		return blocks;
 	}
 	        	
 	/**
@@ -94,6 +99,7 @@ public class Map {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	boolean canShipRotate(Ship s, Direction newDir) {
+		return false;
 	}
 	        	
 	/**
@@ -113,6 +119,7 @@ public class Map {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	boolean placeMine(Ship s, Location loc) {
+		return false;
 	}
 
 	/**
@@ -123,6 +130,7 @@ public class Map {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	boolean pickupMine(Ship s, Location loc) {
+		return false;
 	}
 	        	
 	/**
