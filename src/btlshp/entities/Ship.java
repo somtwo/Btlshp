@@ -14,6 +14,7 @@ public class Ship extends Construct {
 	* @param blocks  The blocks to use for the given ship.
 	*/
 	Ship(Player owner, ConstructBlock inBlocks[], ShipType type) {
+		
 		pl = owner;
 		this.blocks = inBlocks;
 	}
