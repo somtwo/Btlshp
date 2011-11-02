@@ -10,8 +10,8 @@ public final class TurnFactory {
 	* Factory method to create a turn representing a request to postpone the game.
 	* @return the resulting turn object.
 	*/
-	static Turn requestPostoneGame() {
-		return new requestPostponegame();
+	static Turn requestPostponeGame() {
+		return new RequestPostponeGame();
 	}
 
 	/**
@@ -19,7 +19,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn requestSurrender() {
-		return new requestSurrender();
+		return new RequestSurrender();
 	}
 
 	/**
@@ -27,7 +27,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn acceptSurrender() {
-		return new acceptSurrender();
+		return new AcceptSurrender();
 	}
 
 	/**
@@ -35,7 +35,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn confirmPostponeGame() {
-		return new confirmPostponeGame();
+		return new ConfirmPostponeGame();
 	}
 
 	/**
@@ -43,7 +43,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn loadGameState() {
-		return new loadGameState();
+		return new LoadGameState();
 	}
 
 	/**
@@ -54,7 +54,7 @@ public final class TurnFactory {
 	 * @return the resulting turn object.
 	 */
 	static Turn moveShip(Ship s, Direction dir, int distance) {
-		return new moveShip(s, dir, distance);
+		return new MoveShip(s, dir, distance);
 	}
 
 
@@ -64,7 +64,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn placeMine(Location loc) {
-		return new placeMine(loc);
+		return new PlaceMine(loc);
 	}
 
 	/**
@@ -73,7 +73,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn takeMine(Location loc) {
-		return new takeMine(loc);
+		return new TakeMine(loc);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public final class TurnFactory {
 	* @return true if torpedo launched
 	*/
 	static Turn launchTorpedo(Ship s) {
-		return new launchTorpedo(s);
+		return new LaunchTorpedo(s);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn shoot(Ship s, Location loc) {
-		return new shoot(s, loc);
+		return new Shoot(s, loc);
 	}
 
 	/**
@@ -101,7 +101,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn repairShip(Ship s) {
-		return new repairShip(s);
+		return new RepairShip(s);
 	}
 
 	/**
@@ -110,13 +110,13 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn repairBase(Base b) {
-		return new repairBase(b);
+		return new RepairBase(b);
 	}
 
 	/**
 	* Generates a pass turn for the player
 	*/
 	static Turn pass() {
-		return new pass();
+		return new Pass();
 	}
 }
