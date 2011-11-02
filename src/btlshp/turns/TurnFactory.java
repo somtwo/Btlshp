@@ -11,7 +11,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn requestPostoneGame() {
-		return null;
+		return new requestPostponegame();
 	}
 
 	/**
@@ -19,7 +19,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn requestSurrender() {
-		return null;
+		return new requestSurrender();
 	}
 
 	/**
@@ -27,7 +27,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn acceptSurrender() {
-		return null;
+		return new acceptSurrender();
 	}
 
 	/**
@@ -35,7 +35,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn confirmPostponeGame() {
-		return null;
+		return new confirmPostponeGame();
 	}
 
 	/**
@@ -43,7 +43,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn loadGameState() {
-		return null;
+		return new loadGameState();
 	}
 
 	/**
@@ -54,10 +54,9 @@ public final class TurnFactory {
 	 * @return the resulting turn object.
 	 */
 	static Turn moveShip(Ship s, Direction dir, int distance) {
-		return null;
+		return new moveShip(s, dir, distance);
 	}
 
-	
 
 	/**
 	* Immerse mine at specified location
@@ -65,7 +64,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn placeMine(Location loc) {
-		return null;
+		return new placeMine(loc);
 	}
 
 	/**
@@ -74,7 +73,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn takeMine(Location loc) {
-		return null;
+		return new takeMine(loc);
 	}
 
 	/**
@@ -83,7 +82,7 @@ public final class TurnFactory {
 	* @return true if torpedo launched
 	*/
 	static Turn launchTorpedo(Ship s) {
-		return null;
+		return new launchTorpedo(s);
 	}
 
 	/**
@@ -93,7 +92,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn shoot(Ship s, Location loc) {
-		return null;
+		return new shoot(s, loc);
 	}
 
 	/**
@@ -102,7 +101,7 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn repairShip(Ship s) {
-		return null;
+		return new repairShip(s);
 	}
 
 	/**
@@ -111,13 +110,13 @@ public final class TurnFactory {
 	* @return the resulting turn object.
 	*/
 	static Turn repairBase(Base b) {
-		return null;
+		return new repairBase(b);
 	}
 
 	/**
 	* Generates a pass turn for the player
 	*/
 	static Turn pass() {
-		return null;
+		return new pass();
 	}
 }
