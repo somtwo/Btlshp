@@ -3,8 +3,8 @@ package btlshp.entities;
 import btlshp.enums.Weapon;
 
 public abstract class Construct {
-	private ConstructBlock blocks[];
-	private int radarRange;
+	protected ConstructBlock blocks[];
+	protected int radarRange;
 	
 	/**
 	* Computes the damage of the Construct when a block is damaged.
