@@ -1,13 +1,21 @@
 package btlshp.entities;
 
+import btlshp.enums.ShipType;
 import btlshp.enums.Weapon;
 
 public class Ship extends Construct {
 	private boolean hasGun, hasTorpedo, hasMinePlacement;
-	private int     maxForwardMove, maxSideMove, maxBackMove;
+	private int     maxForwardMove, maxSideMove, maxBackMove, maxGunRange;
 	
-	private Ship() {
-		
+	/**
+	* Constructor for Ship
+	* Returns the Ship Constructed
+	* @param owner   Player the base belongs to.
+	* @param blocks  The blocks to use for the given ship.
+	*/
+	Ship(Player owner, ConstructBlock inBlocks[], ShipType type) {
+		pl = owner;
+		this.blocks = inBlocks;
 	}
 	
 	/**
@@ -16,6 +24,10 @@ public class Ship extends Construct {
 	 */
 	boolean canFireGun() {
 		return hasGun;
+	}
+	
+	int getMaxGunRange(){
+		return maxGunRange;
 	}
 
 	/**
@@ -64,16 +76,6 @@ public class Ship extends Construct {
 	 */
 	boolean canPickUpMine() {
 		return hasMinePlacement;
-	}
-
-	/**
-	* Determains if and how far the ship can fire the given weapon
-	* @param weapon Weapon in question
-	* @return 0 if not, else gives range of weapon.
-	*/
-	boolean canFireWeapon(Weapon weapon) {
-		return weapon == Weapon.Gun ? hasGun :
-			   weapon == Weapon.Torpedo ? hasTorpedo : false;
 	}
 
 	/**

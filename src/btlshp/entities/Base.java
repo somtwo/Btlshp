@@ -2,8 +2,6 @@ package btlshp.entities;
 
 public class Base extends Construct {
 	
-	Player         pl;
-	
 	/**
 	* Constructor for Base
 	* Returns the Base Constructed
@@ -11,6 +9,7 @@ public class Base extends Construct {
 	* @param blocks  
 	*/
 	Base(Player owner, ConstructBlock inBlocks[]) {
+		radarRange = 0; // TBD!
 		pl = owner;
 		this.blocks = inBlocks;
 	}
