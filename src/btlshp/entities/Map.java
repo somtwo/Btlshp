@@ -3,7 +3,21 @@ package btlshp.entities;
 import btlshp.enums.Direction;
 
 public class Map {
-	MapNode [][] nodes;
+	private static final int MAPWIDTH = 30;
+	private static final int MAPHEIGHT = 30;
+	
+	MapNode   nodes [][];
+	Player    leftPlayer, rightPlayer;
+	
+	private void createNodes() {
+		nodes = new MapNode[MAPWIDTH][MAPHEIGHT];
+		
+		for(int y = 0; y < MAPWIDTH; ++y) {
+			for(int x = 0; x < MAPHEIGHT; ++x) {
+				nodes[y][x] = new MapNode();
+			}
+		}
+	}
 	
 	/**
 	* Constructor to create a map object which will be the map used by two players to play a game.
@@ -11,7 +25,11 @@ public class Map {
 	* @param playerOne     Player 1 (left side)   	
 	* @param playerTwo     Player 2 (right side)
 	*/
-	Map(Player playerOne, Player playerTwo) {
+	public Map(Player playerOne, Player playerTwo) {
+		leftPlayer = playerOne;
+		rightPlayer = playerTwo;
+		
+		createNodes();
 	}
 	        	
 	/**
@@ -21,14 +39,20 @@ public class Map {
 	* @param playerOne     Player 1 (left side)   	
 	* @param playerTwo     Player 2 (right side)
 	*/
-	Map(StoredMap map, Player playerOne, Player playerTwo) {
+	public Map(StoredMap map, Player playerOne, Player playerTwo) {
+		// TODO: Support for loading a stored map.
+		leftPlayer = playerOne;
+		rightPlayer = playerTwo;
+		
+		createNodes();
 	}
 	        	
 	/**
 	* Returns a StoredMap object representing the current state of the map.
 	* @return
 	*/
-	StoredMap makeStoredMap() {
+	public StoredMap makeStoredMap() {
+		// TODO: This
 		return null;
 	}
 
@@ -39,14 +63,21 @@ public class Map {
 	* @param tail  The location of the tail of the ship
 	* @param dir   The direction the ship should be facing.
 	*/
-	void addShip(Ship s, Location tail, Direction dir) {
+	public void addShip(Ship s, Location tail, Direction dir) {
+	}
+	
+	/**
+	 * Removes a ship from the map.
+	 * @param s    The ship to be removed.
+	 */
+	public void removeShip(Ship s) {
 	}
 	        	
 	/**
 	* This method cleans up any visibility data from the previous turn and updates the map with the
 	* radar/sonar of the current ship locations.
 	*/
-	void updateFrame() {
+	public void updateFrame() {
 	}
 
 	/**
@@ -54,18 +85,8 @@ public class Map {
 	* @param loc   Location to get the map block from
 	* @returns The map block at the given location
 	*/
-	MapNode getMapBlock(Location loc) {
-		return null;
-	}
-
-	/**
-	* Returns a MapBlock object representing the state of the map at the given x/y coordinates.
-	* @param x      x-map coordinate
-	* @param y      y-map coordinate
-	* @returns The map block at the given location.
-	*/
-	MapNode getMapBlock(int x, int y) {
-		return null;
+	public MapNode getMapNode(Location loc) {
+		return nodes[loc.gety()][loc.getx()];
 	}
 	        	
 	/**
@@ -75,7 +96,7 @@ public class Map {
 	* @param blocks  number of blocks to move.
 	* @return true if the ship movement can be carried out.
 	*/
-	boolean canMove(Ship s, Direction dir, int blocks) {
+	public boolean canMove(Ship s, Direction dir, int blocks) {
 		return false;
 	}
 	        	
@@ -87,7 +108,7 @@ public class Map {
 	* @returns Number of blocks actually used.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	int move(Ship s, Direction dir, int blocks) {
+	public int move(Ship s, Direction dir, int blocks) {
 		return blocks;
 	}
 	        	
@@ -100,7 +121,7 @@ public class Map {
 	* @returns True if the ship can rotate in the new direction.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	boolean canShipRotate(Ship s, Direction newDir) {
+	public boolean canShipRotate(Ship s, Direction newDir) {
 		return false;
 	}
 	        	
@@ -110,7 +131,7 @@ public class Map {
 	* @param newDir  Direction ship should face by the end of the turn.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	void rotateShip(Ship s, Direction newDir) {
+	public void rotateShip(Ship s, Direction newDir) {
 	}
 
 	/**
@@ -120,7 +141,7 @@ public class Map {
 	* @returns true if the mine was placed, or false if it could not be placed.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	boolean placeMine(Ship s, Location loc) {
+	public boolean placeMine(Ship s, Location loc) {
 		return false;
 	}
 
@@ -131,7 +152,7 @@ public class Map {
 	* @return true if the mine was picked up, or false if it was not.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	boolean pickupMine(Ship s, Location loc) {
+	public boolean pickupMine(Ship s, Location loc) {
 		return false;
 	}
 	        	
@@ -141,7 +162,7 @@ public class Map {
 	* @param s       Ship to fire torpedo from.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	void fireTorpedo(Ship s) {
+	public void fireTorpedo(Ship s) {
 		
 	}
 	        	
@@ -151,7 +172,7 @@ public class Map {
 	* @param loc  Map location of the target of the fire
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	void fireGuns(Ship s, Location loc) {
+	public void fireGuns(Ship s, Location loc) {
 		
 	}
 }
