@@ -1,11 +1,14 @@
 package btlshp.entities;
 
+import java.util.ArrayList;
+
 import btlshp.enums.Direction;
 
 public class Map {
 	private static final int MAPWIDTH = 30;
 	private static final int MAPHEIGHT = 30;
 	
+	ArrayList<Ship> ships;
 	MapNode   nodes [][];
 	Player    leftPlayer, rightPlayer;
 	
