@@ -16,7 +16,7 @@ public abstract class Construct {
 	* @param hitBlock The block damaged
 	* @param weaponUsed The Weapon used to do the damaging
 	*/
-	void assessDamage(Block hitBlock, Weapon weaponUsed) {
+	public void assessDamage(ConstructBlock hitBlock, Weapon weaponUsed) {
 	//Determine Weapon Used and Allocate the Damage accordingly
 		
 	// Gun
@@ -42,7 +42,7 @@ public abstract class Construct {
 	// Mine
 		else if (weaponUsed == Weapon.Mine){
 			// If the Block hit is not already destroyed... Damage it.
-			if (!hitBlock.destroyed()){
+			if (!hitBlock.isDestroyed()){
 				hitBlock.takeDamage();
 			}
 			// Else, determain next block to be Damaged, if it exists.
@@ -51,14 +51,14 @@ public abstract class Construct {
 				boolean damageAllocated = false;
 				// First check Stern Direction
 				for (int i = blockLoc+1; i < blocks.length; i++){
-					if (!damageAllocated && !blocks[i].destroyed()){
+					if (!damageAllocated && !blocks[i].isDestroyed()){
 						blocks[i].takeDamage();
 						damageAllocated = true;
 					}
 				}
 				// Then check Bow Direction
 				for (int i = blockLoc-1; i >= 0; i--){
-					if (!damageAllocated && !blocks[i].destroyed()){
+					if (!damageAllocated && !blocks[i].isDestroyed()){
 						blocks[i].takeDamage();
 						damageAllocated = true;
 					}
@@ -79,24 +79,24 @@ public abstract class Construct {
 	* Does nothing if ship is already fully repaired
 	* @param repairBlock The block damaged
 	*/
-	void AssesRepair(Block repairBlock) {
+	public void AssesRepair(ConstructBlock repairBlock) {
 		boolean repairComplete = false;
 		// Check given Block. (Allows user to prioritize repair to a specific location)
-		if (repairBlock.destroyed()){
+		if (repairBlock.isDestroyed()){
 			repairBlock.repair();
 			repairComplete = true;
 		}
 		else {
 			// Check for Destroyed Blocks from Bow.
 			for (int i = 0; i < blocks.length ; i++){
-				if (!repairComplete && blocks[i].destroyed()){
+				if (!repairComplete && blocks[i].isDestroyed()){
 					blocks[i].repair();
 					repairComplete = true;
 				}
 			}
 			// Check for Damaged Blocks from Bow.
 			for (int i = 0; i < blocks.length ; i++){
-				if (!repairComplete && blocks[i].damaged()){
+				if (!repairComplete && blocks[i].isDamaged()){
 					blocks[i].repair();
 					repairComplete = true;
 				}
@@ -115,7 +115,7 @@ public abstract class Construct {
 		return radarRange;
 	}
 	
-	public Block[] getBlocks(){
+	public ConstructBlock[] getBlocks(){
 		return blocks;
 	}
 	

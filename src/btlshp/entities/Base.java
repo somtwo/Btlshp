@@ -8,11 +8,12 @@ public class Base extends Construct {
 	* @param owner   Player the base belongs to.
 	* ! this is assuming all bases are of size 10.
 	*/
-	Base(Player owner) {
+	public Base(Player owner) {
+		blocks = new ConstructBlock[10];
 		radarRange = 0; // TBD!
 		pl = owner;
 		for (int i = 0; i < 10; i++){
-			blocks[i] = new ConstructBlock();
+			blocks[i] = new ConstructBlock(this);
 		}
 	}
 	
@@ -26,7 +27,7 @@ public class Base extends Construct {
 		
 		// Count good vs. bad (implimented to accomodate a change in the size of the base)
 		for (int i = 0; i < blocks.length; i++){
-			if (blocks[i].destroyed()){
+			if (blocks[i].isDestroyed()){
 				destroyedBlocks++;
 			}
 			else {

@@ -24,13 +24,13 @@ public class Ship extends Construct {
 		if (isArmored){
 			blocks = new ArmoredConstructBlock[numberOfBlocks];
 			for (int i = 0; i<numberOfBlocks ; i++){
-				blocks[i] = new ArmoredConstructBlock();
+				blocks[i] = new ArmoredConstructBlock(this);
 			}	
 		}
 		else {
 			blocks = new ConstructBlock[numberOfBlocks];
 			for (int i = 0; i<numberOfBlocks ; i++){
-				blocks[i] = new ConstructBlock();
+				blocks[i] = new ConstructBlock(this);
 			}	
 		}
 	}
