@@ -115,6 +115,10 @@ public abstract class Construct {
 		return radarRange;
 	}
 	
+	public Block[] getBlocks(){
+		return blocks;
+	}
+	
 	private int blockLocation(Block myBlock){
 		int j = -1; //Start Location for search
 		for (int i = 0; i < blocks.length; i++){

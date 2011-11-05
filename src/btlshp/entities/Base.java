@@ -6,12 +6,14 @@ public class Base extends Construct {
 	* Constructor for Base
 	* Returns the Base Constructed
 	* @param owner   Player the base belongs to.
-	* @param blocks  
+	* ! this is assuming all bases are of size 10.
 	*/
-	Base(Player owner, ConstructBlock inBlocks[]) {
+	Base(Player owner) {
 		radarRange = 0; // TBD!
 		pl = owner;
-		this.blocks = inBlocks;
+		for (int i = 0; i < 10; i++){
+			blocks[i] = new ConstructBlock();
+		}
 	}
 	
 	/**

@@ -1,11 +1,8 @@
 package btlshp.entities;
 
-import btlshp.enums.ShipType;
-import btlshp.enums.Weapon;
-
 public class Ship extends Construct {
-	private boolean hasGun, hasTorpedo, hasMinePlacement;
-	private int     maxForwardMove, maxSideMove, maxBackMove, maxGunRange;
+	private boolean hasGun, hasTorpedo, hasMinePlacement, hasSonar, isArmored;
+	private int     maxForwardMove, maxSideMove, maxBackMove, maxGunRange, maxSonarRange;
 	
 	/**
 	* Constructor for Ship
@@ -13,10 +10,29 @@ public class Ship extends Construct {
 	* @param owner   Player the base belongs to.
 	* @param blocks  The blocks to use for the given ship.
 	*/
-	Ship(Player owner, ConstructBlock inBlocks[], ShipType type) {
-		
+	private Ship(Player owner, boolean isArmored, boolean gun, boolean torpedo, boolean mine, boolean Sonar, int forward, int side, int back, int gunRange, int radarRange, int sonarRange, int numberOfBlocks) {
 		pl = owner;
-		this.blocks = inBlocks;
+		hasGun = gun;
+		hasTorpedo = torpedo;
+		hasMinePlacement = mine;
+		hasSonar = Sonar;
+		maxForwardMove = forward;
+		maxSideMove = side;
+		maxBackMove = back;
+		maxGunRange = gunRange;
+		maxSonarRange = sonarRange;
+		if (isArmored){
+			blocks = new ArmoredConstructBlock[numberOfBlocks];
+			for (int i = 0; i<numberOfBlocks ; i++){
+				blocks[i] = new ArmoredConstructBlock();
+			}	
+		}
+		else {
+			blocks = new ConstructBlock[numberOfBlocks];
+			for (int i = 0; i<numberOfBlocks ; i++){
+				blocks[i] = new ConstructBlock();
+			}	
+		}
 	}
 	
 	/**
@@ -27,6 +43,9 @@ public class Ship extends Construct {
 		return hasGun;
 	}
 	
+	/**
+	 * @return the Range of the guns from any point on the ship, 0 if no guns.
+	 */
 	int getMaxGunRange(){
 		return maxGunRange;
 	}
@@ -78,36 +97,60 @@ public class Ship extends Construct {
 	boolean canPickUpMine() {
 		return hasMinePlacement;
 	}
-
+	
+	/**
+	 * @return true if this ship has Sonar capability, false otherwise
+	 */
+	boolean hasSonar(){
+		return hasSonar;
+	}
+	
+	/**
+	 * @return Range of sonar, 0 if this ship cannot use Sonar.
+	 */
+	int SonarRange(){
+		return maxSonarRange;
+	}
+	
+	/**
+	 * @return true if the ship is constructed with armored blocks, false otherwise.
+	 */
+	boolean hasArmor(){
+		return isArmored;
+	}
 	/**
 	* Factory method for Cruiser
 	* @returns the Ship Constructed
 	*/
-	static Ship buildCruiser() {
-		return null;
+	static Ship buildCruiser(Player owner) {
+		Ship myCruiser = new Ship(owner, false, true, false, false, false, 10, 1, 1, 5, 6, 0, 5);
+		return myCruiser;
 	}
 
 	/**
 	* Factory method for TorpedoBoat
 	* @returns the Ship Constructed
 	*/
-	static Ship buildTorpedoBoat() {
-		return null;
+	static Ship buildTorpedoBoat(Player owner) {
+		Ship myTorpedoBoat = new Ship(owner, false, true, true, false, false, 8, 1, 1, 4, 5, 0, 4);
+		return myTorpedoBoat;
 	}
-
+	// private Ship(Player owner, boolean isArmored, boolean gun, boolean torpedo, boolean mine, boolean Sonar, int forward, int side, int back, int gunRange, int radarRange, int sonarRange, int numberOfBlocks) {
 	/**
 	* Factory method for Destroyer
 	* @returns the Ship Constructed
 	*/
-	static Ship buildDestroyer() {
-		return null;
+	static Ship buildDestroyer(Player owner) {
+		Ship myDestroyer = new Ship(owner, false, false, true, false, false, 6, 1, 1, 0, 4, 0, 3);
+		return myDestroyer;
 	}
 
 	/**
 	* Factory method for MineSweeper
 	* @returns the Ship Constructed
 	*/
-	static Ship buildMineSweeper() {
-		return null;
+	static Ship buildMineSweeper(Player owner) {
+		Ship myMineSweeper = new Ship(owner, true, false, false, true, true, 4, 1, 1, 0, 2, 2, 2);
+		return myMineSweeper;
 	}
 }
