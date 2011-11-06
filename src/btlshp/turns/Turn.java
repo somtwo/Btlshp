@@ -1,21 +1,18 @@
 package btlshp.turns;
 
 import btlshp.entities.Base;
+import btlshp.entities.Block;
+import btlshp.entities.ConstructBlock;
 import btlshp.entities.Location;
+import btlshp.entities.Map;
 import btlshp.entities.Ship;
 import btlshp.enums.Direction;
-
+import java.io.*;
 public interface Turn {
 	/**
 	 * @returns true if the move object represents a successful move, false otherwise.
 	 */
 	boolean wasSuccessful();
-	  
-	/**
-	 * Sends the object representing a move this player made, to the other player.
-	 * @throws IllegalStateException If the move is sent from a machine that did not create it.
-	 */
-	void sendTurn();
 
 	/**
 	 * Executes a given move object representing a move from the other player.
@@ -23,40 +20,22 @@ public interface Turn {
 	 */
 	void executeTurn();
 }
+
 class Pass implements Turn{
-
 	@Override
-	public void executeTurn() {
-		// TODO Auto-generated method stub
-		
+	public void executeTurn() {//Does no work
 	}
-
-	@Override
-	public void sendTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public boolean wasSuccessful() {
-		// TODO Auto-generated method stub
-		return false;
+		//Always returns true because a pass turn cannot fail
+		return true;
 	}
 }
 class RequestPostponeGame implements Turn{
-
 	@Override
 	public void executeTurn() {
 		// TODO Auto-generated method stub
-		
 	}
-
-	@Override
-	public void sendTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public boolean wasSuccessful() {
 		// TODO Auto-generated method stub
@@ -72,11 +51,6 @@ class ConfirmPostponeGame implements Turn{
 		
 	}
 
-	@Override
-	public void sendTurn() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean wasSuccessful() {
@@ -93,111 +67,6 @@ class LoadGameState implements Turn{
 		
 	}
 
-	@Override
-	public void sendTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean wasSuccessful() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-}
-class MoveShip implements Turn{
-
-
-	public MoveShip(Ship s, Direction dir, int distance) {
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void executeTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean wasSuccessful() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-}
-class PlaceMine implements Turn{
-
-
-	public PlaceMine(Location loc) {
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void executeTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean wasSuccessful() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-}
-class TakeMine implements Turn{
-
-
-	public TakeMine(Location loc) {
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void executeTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean wasSuccessful() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-}
-class LaunchTorpedo implements Turn{
-
-
-	LaunchTorpedo(Ship s) {
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void executeTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendTurn() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean wasSuccessful() {
@@ -214,11 +83,6 @@ class RequestSurrender implements Turn{
 		
 	}
 
-	@Override
-	public void sendTurn() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean wasSuccessful() {
@@ -227,98 +91,196 @@ class RequestSurrender implements Turn{
 	}
 }
 class AcceptSurrender implements Turn{
-
-
 	@Override
 	public void executeTurn() {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void sendTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public boolean wasSuccessful() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 }
-class Shoot implements Turn{
+class MoveShip implements Turn{
+	private Ship s;
+	private Direction dir;
+	private int distance;
+	private Map m;
+	private boolean success = false;
 
-
-	public Shoot(Ship s, Location loc) {
-		// TODO Auto-generated constructor stub
+	public MoveShip(Map m, Ship s, Direction dir, int distance) {
+		this.m = m;
+		this.s = s;
+		this.dir = dir;
+		this.distance = distance;
 	}
 
 	@Override
 	public void executeTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendTurn() {
-		// TODO Auto-generated method stub
+		try{
+			m.move(s, dir, distance);
+			success = true;
+		}catch(IllegalStateException e){
+			success = false;
+		}
 		
 	}
 
 	@Override
 	public boolean wasSuccessful() {
-		// TODO Auto-generated method stub
-		return false;
+		return success;
+	}
+}
+class PlaceMine implements Turn{
+	private Map m;
+	private Location loc;
+	private Ship s;
+	private boolean success = false;
+	public PlaceMine(Map m, Ship s, Location loc) {
+		this.loc = loc;
+		this.s = s;
+	}
+
+	@Override
+	public void executeTurn() {
+		try{
+			m.placeMine(s, loc);
+			success = true;
+		}catch(IllegalStateException e){
+			success = false;
+		}
+	}
+
+
+	@Override
+	public boolean wasSuccessful() {
+		return success;
+	}
+}
+class TakeMine implements Turn{
+	private Location loc;
+	private Ship s;
+	private Map m;
+	private boolean success = false;
+
+	public TakeMine(Map m, Ship s, Location loc) {
+		this.s = s;
+		this.loc = loc;
+	}
+
+	@Override
+	public void executeTurn() {
+		try{
+			m.pickupMine(s, loc);
+			success = true;
+		}catch(IllegalStateException e){
+			success = false;
+		}
+	}
+
+	@Override
+	public boolean wasSuccessful() {
+		return success;
+	}
+}
+class LaunchTorpedo implements Turn{
+	private Map m;
+	private Ship s;
+	private boolean success = false;
+
+
+	LaunchTorpedo(Map m, Ship s) {
+		this.m = m;
+		this.s = s;
+	}
+
+	@Override
+	public void executeTurn() {
+		try{
+			m.fireTorpedo(s);
+			success = true;
+		}catch(IllegalStateException e){
+			success = false;
+		}
+	}
+
+
+	@Override
+	public boolean wasSuccessful() {
+		return success;
+	}
+}
+
+class Shoot implements Turn{
+
+	private Map m;
+	private Ship s;
+	private Location loc;
+	private boolean success = false;
+
+	public Shoot(Map m, Ship s, Location loc) {
+		this.m = m;
+		this.s = s;
+		this.loc = loc;
+	}
+
+	@Override
+	public void executeTurn() {
+		try{
+			m.fireGuns(s, loc);
+			success = true;
+		}catch(IllegalStateException e){
+			success = false;
+		}
+	}
+
+	@Override
+	public boolean wasSuccessful() {
+		return success;
 	}
 }
 class RepairBase implements Turn{
 
+	private ConstructBlock repairBlock;
+	private Base b;
+	private boolean success = false;
 
-	RepairBase(Base b) {
-		// TODO Auto-generated constructor stub
+	RepairBase(Base b, ConstructBlock repairBlock) {
+		this.b = b;
+		this.repairBlock = repairBlock;
 	}
 
 	@Override
 	public void executeTurn() {
-		// TODO Auto-generated method stub
-		
+		b.AssesRepair(repairBlock);
+		success = true;
 	}
-
-	@Override
-	public void sendTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public boolean wasSuccessful() {
-		// TODO Auto-generated method stub
-		return false;
+		return success;
 	}
 }
 class RepairShip implements Turn{
+	private Ship s;
+	private ConstructBlock repairBlock;
+	private boolean success = false;
 
-
-	RepairShip(Ship s) {
-		// TODO Auto-generated constructor stub
+	RepairShip(Ship s, ConstructBlock repairBlock) {
+		this.s = s;
+		this.repairBlock = repairBlock;
 	}
 
 	@Override
 	public void executeTurn() {
-		// TODO Auto-generated method stub
-		
+		s.AssesRepair(repairBlock);
+		success = true;
 	}
 
-	@Override
-	public void sendTurn() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public boolean wasSuccessful() {
-		// TODO Auto-generated method stub
-		return false;
+		return success;
 	}
 }
