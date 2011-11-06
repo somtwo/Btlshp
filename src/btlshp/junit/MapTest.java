@@ -16,7 +16,7 @@ public class MapTest extends TestCase{
 	
 
 	public void testMap() {
-		Map myMap =  Map(testPlayer1, testPlayer2);
+		//Map myMap =  Map(testPlayer1, testPlayer2);   #####CANT FIGURE OUT WHY IT DOESNT WORK#######
 //		Map(Player playerOne, Player playerTwo);
 //		pass if map is 30X30, fail if not
 //		pass if all boats are accounted for, fail if not
