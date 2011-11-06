@@ -175,5 +175,5 @@ public abstract class Map {
 	* @param loc  Map location of the target of the fire
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	public abstract void fireGun(Ship s, Location loc);
+	public abstract void fireGuns(Ship s, Location loc);
 }
