@@ -1,7 +1,7 @@
 package btlshp.entities;
 
 public class Base extends Construct {
-	//test
+
 	/**
 	* Constructor for Base
 	* Returns the Base Constructed
