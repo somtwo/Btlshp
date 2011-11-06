@@ -1,11 +1,11 @@
 package btlshp.junit;
 
 import junit.framework.TestCase;
-
 import org.junit.Test;
 
 import btlshp.entities.MapNode;
 import btlshp.entities.Player;
+import btlshp.entities.*;
 
 public class MapTest extends TestCase{
 	MapNode   nodes [][];
