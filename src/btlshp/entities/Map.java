@@ -7,7 +7,6 @@ import btlshp.enums.Direction;
 public abstract class Map {
 	private static final int MAPWIDTH = 30;
 	private static final int MAPHEIGHT = 30;
-	
 	ArrayList<Ship> ships;
 	MapNode   nodes [][];
 	Player    leftPlayer, rightPlayer;
@@ -22,6 +21,20 @@ public abstract class Map {
 		}
 	}
 	
+	private void createShips() {
+		// TODO: Support for creating ship inventory for each player.
+	}
+	
+	private void createReefs() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void createBases() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	/**
 	* Constructor to create a map object which will be the map used by two players to play a game.
 	* Any random elements will be generated.
@@ -33,6 +46,9 @@ public abstract class Map {
 		rightPlayer = playerTwo;
 		
 		createNodes();
+		createBases();
+		createShips();
+		createReefs();
 	}
 	        	
 	/**

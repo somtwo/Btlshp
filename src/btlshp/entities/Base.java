@@ -1,7 +1,7 @@
 package btlshp.entities;
 
 public class Base extends Construct {
-	//test
+
 	/**
 	* Constructor for Base
 	* Returns the Base Constructed
@@ -23,7 +23,7 @@ public class Base extends Construct {
 	*/
 	boolean canRepair() {
 		int goodBlocks = 0;
-		int destroyedBlocks = 0;
+		int destroyedBlocks = 0; 
 		
 		// Count good vs. bad (implimented to accomodate a change in the size of the base)
 		for (int i = 0; i < blocks.length; i++){
