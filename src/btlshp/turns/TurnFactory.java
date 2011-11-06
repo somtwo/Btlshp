@@ -1,7 +1,9 @@
 package btlshp.turns;
 
 import btlshp.entities.Base;
+import btlshp.entities.ConstructBlock;
 import btlshp.entities.Location;
+import btlshp.entities.Map;
 import btlshp.entities.Ship;
 import btlshp.enums.Direction;
 
@@ -10,7 +12,7 @@ public final class TurnFactory {
 	* Factory method to create a turn representing a request to postpone the game.
 	* @return the resulting turn object.
 	*/
-	static Turn requestPostponeGame() {
+	public static Turn requestPostponeGame() {
 		return new RequestPostponeGame();
 	}
 
@@ -18,7 +20,7 @@ public final class TurnFactory {
 	* Factory method to create a turn representing a request to surrender the game.
 	* @return the resulting turn object.
 	*/
-	static Turn requestSurrender() {
+	public static Turn requestSurrender() {
 		return new RequestSurrender();
 	}
 
@@ -26,7 +28,7 @@ public final class TurnFactory {
 	* Factory method to create a turn representing accepting a surrender of the game.
 	* @return the resulting turn object.
 	*/
-	static Turn acceptSurrender() {
+	public static Turn acceptSurrender() {
 		return new AcceptSurrender();
 	}
 
@@ -34,7 +36,7 @@ public final class TurnFactory {
 	* Factory method to create a turn representing a confirmation to postpone the game.
 	* @return the resulting turn object.
 	*/
-	static Turn confirmPostponeGame() {
+	public static Turn confirmPostponeGame() {
 		return new ConfirmPostponeGame();
 	}
 
@@ -42,7 +44,7 @@ public final class TurnFactory {
 	* Factory method to create a turn representing the start of a previously saved game.
 	* @return the resulting turn object.
 	*/
-	static Turn loadGameState() {
+	public static Turn loadGameState() {
 		return new LoadGameState();
 	}
 
@@ -53,8 +55,8 @@ public final class TurnFactory {
 	 * @param distance number of map units to move the ship
 	 * @return the resulting turn object.
 	 */
-	static Turn moveShip(Ship s, Direction dir, int distance) {
-		return new MoveShip(s, dir, distance);
+	public static Turn moveShip(Map m, Ship s, Direction dir, int distance) {
+		return new MoveShip(m, s, dir, distance);
 	}
 
 
@@ -63,8 +65,8 @@ public final class TurnFactory {
 	* @param loc location to place mine
 	* @return the resulting turn object.
 	*/
-	static Turn placeMine(Location loc) {
-		return new PlaceMine(loc);
+	public static Turn placeMine(Map m, Ship s, Location loc) {
+		return new PlaceMine(m, s, loc);
 	}
 
 	/**
@@ -72,8 +74,8 @@ public final class TurnFactory {
 	* @param loc location of mine to be removed
 	* @return the resulting turn object.
 	*/
-	static Turn takeMine(Location loc) {
-		return new TakeMine(loc);
+	public static Turn takeMine(Map m, Ship s, Location loc) {
+		return new TakeMine(m, s, loc);
 	}
 
 	/**
@@ -81,8 +83,8 @@ public final class TurnFactory {
 	* @param s ship to launch a torpedo from
 	* @return true if torpedo launched
 	*/
-	static Turn launchTorpedo(Ship s) {
-		return new LaunchTorpedo(s);
+	public static Turn launchTorpedo(Map m, Ship s) {
+		return new LaunchTorpedo(m, s);
 	}
 
 	/**
@@ -91,8 +93,8 @@ public final class TurnFactory {
 	* @param loc location to shoot at
 	* @return the resulting turn object.
 	*/
-	static Turn shoot(Ship s, Location loc) {
-		return new Shoot(s, loc);
+	public static Turn shoot(Map m, Ship s, Location loc) {
+		return new Shoot(m, s, loc);
 	}
 
 	/**
@@ -100,8 +102,8 @@ public final class TurnFactory {
 	* @param s ship to be repaired
 	* @return the resulting turn object.
 	*/
-	static Turn repairShip(Ship s) {
-		return new RepairShip(s);
+	public static Turn repairShip(ConstructBlock repairBlock, Ship s) {
+		return new RepairShip(s, repairBlock);
 	}
 
 	/**
@@ -109,14 +111,14 @@ public final class TurnFactory {
 	* @param b base to be repaired
 	* @return the resulting turn object.
 	*/
-	static Turn repairBase(Base b) {
-		return new RepairBase(b);
+	public static Turn repairBase(ConstructBlock repairBlock, Base b) {
+		return new RepairBase(b, repairBlock);
 	}
 
 	/**
 	* Generates a pass turn for the player
 	*/
-	static Turn pass() {
+	public static Turn pass() {
 		return new Pass();
 	}
 }

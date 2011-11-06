@@ -45,7 +45,7 @@ public abstract class Construct {
 			if (!hitBlock.isDestroyed()){
 				hitBlock.takeDamage();
 			}
-			// Else, determain next block to be Damaged, if it exists.
+			// Else, determine next block to be Damaged, if it exists.
 			else{
 				int blockLoc = this.blockLocation(hitBlock);
 				boolean damageAllocated = false;
@@ -68,7 +68,7 @@ public abstract class Construct {
 		}
 	// No Other Cases Possible
 		else {
-			// Error Occured, Not Checked.
+			// Error Occurred, Not Checked.
 		}
 	}
 
