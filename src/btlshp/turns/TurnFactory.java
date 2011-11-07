@@ -3,8 +3,8 @@ package btlshp.turns;
 import btlshp.entities.Base;
 import btlshp.entities.ConstructBlock;
 import btlshp.entities.Location;
-import btlshp.entities.Map;
-import btlshp.entities.Ship;
+import TurnTestStubs.Map;
+import ConstructTestStubs.Ship;
 import btlshp.enums.Direction;
 
 public final class TurnFactory {
@@ -102,7 +102,7 @@ public final class TurnFactory {
 	* @param s ship to be repaired
 	* @return the resulting turn object.
 	*/
-	public static Turn repairShip(ConstructBlock repairBlock, Ship s) {
+	public static Turn repairShip(ConstructTestStubs.ConstructBlock repairBlock, Ship s) {
 		return new RepairShip(s, repairBlock);
 	}
 
