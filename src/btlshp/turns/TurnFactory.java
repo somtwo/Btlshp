@@ -12,7 +12,7 @@ public final class TurnFactory {
 	* Factory method to create a turn representing a request to postpone the game.
 	* @return the resulting turn object.
 	*/
-	public static Turn requestPostponeGame() {
+	public static RequestPostponeGame requestPostponeGame() {
 		return new RequestPostponeGame();
 	}
 
@@ -20,7 +20,7 @@ public final class TurnFactory {
 	* Factory method to create a turn representing a request to surrender the game.
 	* @return the resulting turn object.
 	*/
-	public static Turn requestSurrender() {
+	public static RequestSurrender requestSurrender() {
 		return new RequestSurrender();
 	}
 
@@ -28,7 +28,7 @@ public final class TurnFactory {
 	* Factory method to create a turn representing accepting a surrender of the game.
 	* @return the resulting turn object.
 	*/
-	public static Turn acceptSurrender() {
+	public static AcceptSurrender acceptSurrender() {
 		return new AcceptSurrender();
 	}
 
@@ -36,7 +36,7 @@ public final class TurnFactory {
 	* Factory method to create a turn representing a confirmation to postpone the game.
 	* @return the resulting turn object.
 	*/
-	public static Turn confirmPostponeGame() {
+	public static ConfirmPostponeGame confirmPostponeGame() {
 		return new ConfirmPostponeGame();
 	}
 
@@ -44,10 +44,16 @@ public final class TurnFactory {
 	* Factory method to create a turn representing the start of a previously saved game.
 	* @return the resulting turn object.
 	*/
-	public static Turn loadGameState() {
+	public static LoadGameState loadGameState() {
 		return new LoadGameState();
 	}
-
+	/**
+	 * Factory method to create a turn representing the saving of game state
+	 * @return the resulting turn object
+	 */
+	public static SaveGameState saveGameState(){
+		return new SaveGameState();
+	}
 	/**
 	 * Move ship in a certain direction
 	 * @param s ship to move
@@ -55,7 +61,7 @@ public final class TurnFactory {
 	 * @param distance number of map units to move the ship
 	 * @return the resulting turn object.
 	 */
-	public static Turn moveShip(Map m, Ship s, Direction dir, int distance) {
+	public static MoveShip moveShip(Map m, Ship s, Direction dir, int distance) {
 		return new MoveShip(m, s, dir, distance);
 	}
 
@@ -65,7 +71,7 @@ public final class TurnFactory {
 	* @param loc location to place mine
 	* @return the resulting turn object.
 	*/
-	public static Turn placeMine(Map m, Ship s, Location loc) {
+	public static PlaceMine placeMine(Map m, Ship s, Location loc) {
 		return new PlaceMine(m, s, loc);
 	}
 
@@ -74,7 +80,7 @@ public final class TurnFactory {
 	* @param loc location of mine to be removed
 	* @return the resulting turn object.
 	*/
-	public static Turn takeMine(Map m, Ship s, Location loc) {
+	public static TakeMine takeMine(Map m, Ship s, Location loc) {
 		return new TakeMine(m, s, loc);
 	}
 
@@ -83,7 +89,7 @@ public final class TurnFactory {
 	* @param s ship to launch a torpedo from
 	* @return true if torpedo launched
 	*/
-	public static Turn launchTorpedo(Map m, Ship s) {
+	public static LaunchTorpedo launchTorpedo(Map m, Ship s) {
 		return new LaunchTorpedo(m, s);
 	}
 
@@ -93,7 +99,7 @@ public final class TurnFactory {
 	* @param loc location to shoot at
 	* @return the resulting turn object.
 	*/
-	public static Turn shoot(Map m, Ship s, Location loc) {
+	public static Shoot shoot(Map m, Ship s, Location loc) {
 		return new Shoot(m, s, loc);
 	}
 
@@ -102,7 +108,7 @@ public final class TurnFactory {
 	* @param s ship to be repaired
 	* @return the resulting turn object.
 	*/
-	public static Turn repairShip(ConstructTestStubs.ConstructBlock repairBlock, Ship s) {
+	public static RepairShip repairShip(ConstructTestStubs.ConstructBlock repairBlock, Ship s) {
 		return new RepairShip(s, repairBlock);
 	}
 
@@ -111,14 +117,14 @@ public final class TurnFactory {
 	* @param b base to be repaired
 	* @return the resulting turn object.
 	*/
-	public static Turn repairBase(ConstructBlock repairBlock, Base b) {
+	public static RepairBase repairBase(ConstructBlock repairBlock, Base b) {
 		return new RepairBase(b, repairBlock);
 	}
 
 	/**
 	* Generates a pass turn for the player
 	*/
-	public static Turn pass() {
+	public static Pass pass() {
 		return new Pass();
 	}
 }
