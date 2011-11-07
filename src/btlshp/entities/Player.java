@@ -1,6 +1,5 @@
 package btlshp.entities;
 import java.util.ArrayList;
-import PlayerTestStubs.Ship;
 public class Player {
 	
 	/**
