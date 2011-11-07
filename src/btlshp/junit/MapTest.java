@@ -6,8 +6,9 @@ import org.junit.Test;
 
 import btlshp.entities.MapNode;
 import btlshp.entities.Player;
+import btlshp.entities.Map;
 
-public class MapTest extends TestCase{
+public class MapTest {
 	MapNode   nodes [][];
 	Player leftPlayer = new Player(); 
 	Player rightPlayer = new Player();
@@ -16,7 +17,7 @@ public class MapTest extends TestCase{
 	@Test
 	public void testMap() {
 //		######################################################################################################
-		//Map myMap = new Map(leftPlayer, rightPlayer);   //############CANT FIGURE OUT HOW TO MAKE THIS LINE WORK###############
+		Map myMap = new Map(leftPlayer, rightPlayer);   //############CANT FIGURE OUT HOW TO MAKE THIS LINE WORK###############
 //		######################################################################################################
 //		pass if map is 30X30, fail if not
 		for (int i = 0; i < 30; i++) {
