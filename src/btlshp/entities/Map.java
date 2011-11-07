@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import btlshp.enums.Direction;
 
-public abstract class Map {
+public class Map {
 	private static final int MAPWIDTH = 30;
 	private static final int MAPHEIGHT = 30;
 	ArrayList<Ship> ships;
@@ -82,19 +82,25 @@ public abstract class Map {
 	* @param tail  The location of the tail of the ship
 	* @param dir   The direction the ship should be facing.
 	*/
-	public abstract void addShip(Ship s, Location tail, Direction dir);
+	public void addShip(Ship s, Location tail, Direction dir) {
+		
+	}
 	
 	/**
 	 * Removes a ship from the map.
 	 * @param s    The ship to be removed.
 	 */
-	public abstract void removeShip(Ship s); 
+	public void removeShip(Ship s) {
+		
+	}
 	        	
 	/**
 	* This method cleans up any visibility data from the previous turn and updates the map with the
 	* radar/sonar of the current ship locations.
 	*/
-	public abstract void updateFrame();
+	public void updateFrame() {
+		
+	}
 
 	/**
 	* Returns a MapBlock object representing the state of the map at a given location.
@@ -112,7 +118,10 @@ public abstract class Map {
 	* @param blocks  number of blocks to move.
 	* @return true if the ship movement can be carried out.
 	*/
-	public abstract boolean canMove(Ship s, Direction dir, int blocks);
+	public boolean canMove(Ship s, Direction dir, int blocks) {
+		return false;
+		
+	}
 	        	
 	/**
 	* Moves a ship either entirely or partially the number of blocks in the given direction.
@@ -122,7 +131,10 @@ public abstract class Map {
 	* @returns Number of blocks actually used.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	public abstract int move(Ship s, Direction dir, int blocks);
+	public int move(Ship s, Direction dir, int blocks) {
+		return 0;
+		
+	}
 	        	
 	/**
 	* Checks whether a ship can rotate from it's current direction to a new given direction. This method only
@@ -133,7 +145,10 @@ public abstract class Map {
 	* @returns True if the ship can rotate in the new direction.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	public abstract boolean canShipRotate(Ship s, Direction newDir);
+	public boolean canShipRotate(Ship s, Direction newDir) {
+		return false;
+		
+	}
 	        	
 	/**
 	* Attempts to turn a ship from it's current direction to a new direction.
@@ -141,7 +156,9 @@ public abstract class Map {
 	* @param newDir  Direction ship should face by the end of the turn.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	public abstract void rotateShip(Ship s, Direction newDir);
+	public void rotateShip(Ship s, Direction newDir) {
+		
+	}
 
 	/**
 	* Attempts to place a mine via the given ship in the given location
@@ -150,7 +167,10 @@ public abstract class Map {
 	* @returns true if the mine was placed, or false if it could not be placed.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	public abstract boolean placeMine(Ship s, Location loc);
+	public boolean placeMine(Ship s, Location loc) {
+		return false;
+		
+	}
 
 	/**
 	* Attempts to pick up a mine via the given ship.
@@ -159,7 +179,10 @@ public abstract class Map {
 	* @return true if the mine was picked up, or false if it was not.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	public abstract boolean pickupMine(Ship s, Location loc);
+	public boolean pickupMine(Ship s, Location loc) {
+		return false;
+		
+	}
 	        	
 	/**
 	* Fires the torpedo of the given ship. The torpedo will start from the front of the ship and will
@@ -167,7 +190,9 @@ public abstract class Map {
 	* @param s       Ship to fire torpedo from.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	public abstract void fireTorpedo(Ship s);
+	public void fireTorpedo(Ship s) {
+		
+	}
 	        	
 	/**
 	* Fires the guns of a ship at a specific location
@@ -175,5 +200,7 @@ public abstract class Map {
 	* @param loc  Map location of the target of the fire
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	public abstract void fireGuns(Ship s, Location loc);
+	public void fireGuns(Ship s, Location loc) {
+		
+	}
 }

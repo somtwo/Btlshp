@@ -1,13 +1,11 @@
 package btlshp.turns;
 
+import ConstructTestStubs.Ship;
+import TurnTestStubs.Map;
 import btlshp.entities.Base;
-import btlshp.entities.Block;
 import btlshp.entities.ConstructBlock;
 import btlshp.entities.Location;
-import btlshp.entities.Map;
-import btlshp.entities.Ship;
 import btlshp.enums.Direction;
-import java.io.*;
 public interface Turn {
 	/**
 	 * @returns true if the move object represents a successful move, false otherwise.
@@ -39,7 +37,7 @@ class RequestPostponeGame implements Turn{
 	@Override
 	public boolean wasSuccessful() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 }
 class ConfirmPostponeGame implements Turn{
@@ -55,7 +53,7 @@ class ConfirmPostponeGame implements Turn{
 	@Override
 	public boolean wasSuccessful() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 }
 class LoadGameState implements Turn{
@@ -71,7 +69,7 @@ class LoadGameState implements Turn{
 	@Override
 	public boolean wasSuccessful() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 }
 class RequestSurrender implements Turn{
@@ -87,7 +85,7 @@ class RequestSurrender implements Turn{
 	@Override
 	public boolean wasSuccessful() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 }
 class AcceptSurrender implements Turn{
@@ -99,7 +97,7 @@ class AcceptSurrender implements Turn{
 	@Override
 	public boolean wasSuccessful() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 }
 class MoveShip implements Turn{
@@ -138,6 +136,7 @@ class PlaceMine implements Turn{
 	private Ship s;
 	private boolean success = false;
 	public PlaceMine(Map m, Ship s, Location loc) {
+		this.m = m;
 		this.loc = loc;
 		this.s = s;
 	}
@@ -167,6 +166,7 @@ class TakeMine implements Turn{
 	public TakeMine(Map m, Ship s, Location loc) {
 		this.s = s;
 		this.loc = loc;
+		this.m = m;
 	}
 
 	@Override
@@ -263,10 +263,10 @@ class RepairBase implements Turn{
 }
 class RepairShip implements Turn{
 	private Ship s;
-	private ConstructBlock repairBlock;
+	private ConstructTestStubs.ConstructBlock repairBlock;
 	private boolean success = false;
 
-	RepairShip(Ship s, ConstructBlock repairBlock) {
+	RepairShip(Ship s, ConstructTestStubs.ConstructBlock repairBlock) {
 		this.s = s;
 		this.repairBlock = repairBlock;
 	}

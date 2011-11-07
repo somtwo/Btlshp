@@ -1,10 +1,10 @@
 package MapTestStubs;
 
-public class Player {
+public class UnusedPlayer {
 	/**
 	 * Default constructor
 	 */
-	public Player() {
+	public UnusedPlayer() {
 	}
 
 
