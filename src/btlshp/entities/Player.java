@@ -19,6 +19,17 @@ public class Player {
 	}
 
 	/**
+	 * Update number of ship when ship is destroyed
+	 * @throws IllegalArgumentException if the player has no more ship.
+	 */
+	public void removeShip() {
+		if (numberOfShip == 0)
+		{
+			throw new IllegalArgumentException("No more ships");
+		}
+		numberOfShip = numberOfShip - 1;
+	}
+	/**
 	 * counts the ships of player
 	 * @return number of ships player has in play
 	 */
