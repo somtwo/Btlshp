@@ -1,16 +1,14 @@
 package btlshp.junit;
-
-import static org.junit.Assert.*;
+import junit.framework.TestCase;
 import org.junit.Test;
-
 import ConstructTestStubs.*;
 import btlshp.enums.*;
 
-public class ConstructsTest {
+public class ConstructsTest extends TestCase{
 	Player myPlayer = new Player();
 
 	@Test
-	public void testBase() {
+	public void testConstructBasics() {
 		Base myBase = new Base(myPlayer); 
 		ConstructBlock[] myBlocks = myBase.getBlocks();
 // Construct Based Tests
@@ -21,6 +19,21 @@ public class ConstructsTest {
 		for (int i = 0; i <10 ; i++){
 			assertTrue(myBlocks[i].isUntouched());
 		}
+		// Check Location
+		assertTrue(myBase.getLocation() ==null);
+		Location myLoc = new Location(5, 5);
+		myBase.setLocation(myLoc);
+		assertTrue(myBase.getLocation() == myLoc);
+		
+		// Check Direction
+		assertTrue(myBase.getDirection() ==null);
+		Direction myDir = Direction.West;
+		myBase.setDirection(myDir);
+		assertTrue(myBase.getDirection() == myDir);
+	}
+	public void testConstructAndBase() {
+		Base myBase = new Base(myPlayer); 
+		ConstructBlock[] myBlocks = myBase.getBlocks();
 		// Test Damage via Gun
 		myBase.assessDamage(myBlocks[0], Weapon.Gun);
 		assertTrue(myBlocks[0].isDestroyed());
@@ -44,15 +57,18 @@ public class ConstructsTest {
 		}
 // Base Specific Tests
 		// Base should be able to repair
-		assertTrue(myBase.canRepair());
+		assertTrue(myBase.canRepairOther());
+		assertTrue(myBase.canRepairSelf());
 		// Base Cannot repair after 3 more mines
 		myBase.assessDamage(myBlocks[0], Weapon.Mine);
 		myBase.assessDamage(myBlocks[0], Weapon.Mine);
 		myBase.assessDamage(myBlocks[0], Weapon.Mine);
-		assertFalse(myBase.canRepair());
+		assertFalse(myBase.canRepairOther());
+		assertTrue(myBase.canRepairSelf());
 		// Repair one and it should be able to repair again
 		myBase.AssesRepair(myBlocks[0]);
-		assertTrue(myBase.canRepair());
+		assertTrue(myBase.canRepairSelf());
+		assertTrue(myBase.canRepairOther());
 		// Verify That All Blocks are correct... blocks 2-6 should be destroyed
 		assertTrue(myBlocks[0].isUntouched());
 		for (int i = 1; i <6 ; i++){
@@ -75,6 +91,13 @@ public class ConstructsTest {
 		assertTrue(myBlocks[7].isDestroyed());
 		assertTrue(myBlocks[8].isDestroyed());
 		assertTrue(myBlocks[9].isUntouched());
+// Destroy the base and Check isDestroyed and Can Repair self/other
+		for (int i = 0; i <10; i++){
+			myBase.assessDamage(myBlocks[0], Weapon.Mine);
+		}
+		assertTrue(myBase.isDestroyed());
+		assertFalse(myBase.canRepairOther());
+		assertFalse(myBase.canRepairSelf());
 	}
 /* Ship Specific Tests
 	Test Size of each Ship
@@ -118,7 +141,7 @@ public class ConstructsTest {
 	}
 	public void testTorpedoBoat(){
 	//Ship myTorpedoBoat = new Ship(owner, false, true, true, false, false, 8, 1, 1, 4, 5, 0, 4)
-		Ship myTorpedoBoat = Ship.buildCruiser(myPlayer);
+		Ship myTorpedoBoat = Ship.buildTorpedoBoat(myPlayer);
 		assertTrue(myTorpedoBoat.getPlayer() == myPlayer);
 		assertTrue(myTorpedoBoat.canFireGun());
 		assertTrue(myTorpedoBoat.canFireTorpedo());
@@ -138,7 +161,7 @@ public class ConstructsTest {
 
 	public void testDestroyer(){
 	//Ship myDestroyer = new Ship(owner, false, false, true, false, false, 6, 1, 1, 0, 4, 0, 3);
-		Ship myDestroyer = Ship.buildCruiser(myPlayer);
+		Ship myDestroyer = Ship.buildDestroyer(myPlayer);
 		assertTrue(myDestroyer.getPlayer() == myPlayer);
 		assertFalse(myDestroyer.canFireGun());
 		assertTrue(myDestroyer.canFireTorpedo());
@@ -158,7 +181,7 @@ public class ConstructsTest {
 
 	public void Minesweeper(){
 	//Ship myMineSweeper = new Ship(owner, true, false, false, true, true, 4, 1, 1, 0, 2, 2, 2);	
-		Ship myMinesweeper = Ship.buildCruiser(myPlayer);
+		Ship myMinesweeper = Ship.buildMineSweeper(myPlayer);
 		assertTrue(myMinesweeper.getPlayer() == myPlayer);
 		assertFalse(myMinesweeper.canFireGun());
 		assertFalse(myMinesweeper.canFireTorpedo());

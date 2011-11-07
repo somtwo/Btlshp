@@ -21,6 +21,7 @@ public class Ship extends Construct {
 		maxBackMove = back;
 		maxGunRange = gunRange;
 		maxSonarRange = sonarRange;
+		maxRadarRange = radarRange;
 		if (isArmored){
 			blocks = new ArmoredConstructBlock[numberOfBlocks];
 			for (int i = 0; i<numberOfBlocks ; i++){
@@ -39,14 +40,14 @@ public class Ship extends Construct {
 	 * Returns true if this ship can fire guns.
 	 * @returns true if the ship has a gun to fire, false otherwise
 	 */
-	boolean canFireGun() {
+	public boolean canFireGun() {
 		return hasGun;
 	}
 	
 	/**
 	 * @return the Range of the guns from any point on the ship, 0 if no guns.
 	 */
-	int getMaxGunRange(){
+	public int getMaxGunRange(){
 		return maxGunRange;
 	}
 
@@ -54,7 +55,7 @@ public class Ship extends Construct {
 	 * Returns the maximum number of map blocks a ship can travel forward in a turn
 	 * @returns the maximum number of map blocks a ship can travel forward in a turn
 	 */
-	int getMaxForwardMove() {
+	public int getMaxForwardMove() {
 		return maxForwardMove;
 	}
 
@@ -62,7 +63,7 @@ public class Ship extends Construct {
 	 * Returns the maximum number of map blocks a ship can travel sideways in a turn
 	 * @returns the maximum number of map blocks a ship can travel sideways in a turn
 	 */
-	int getMaxSideMove() {
+	public int getMaxSideMove() {
 		return maxSideMove;
 	}
 
@@ -70,7 +71,7 @@ public class Ship extends Construct {
 	 * Returns the maximum number of map blocks a ship can travel backwards in a turn
 	 * @returns the maximum number of map blocks a ship can travel backwards in a turn
 	 */
-	int getMaxReverseMove() {
+	public int getMaxReverseMove() {
 		return maxBackMove;
 	}
 
@@ -78,7 +79,7 @@ public class Ship extends Construct {
 	 * Returns true if this ship can fire a torpedo.
 	 * @returns true if the ship can fire a torpedo, false otherwise
 	 */
-	boolean canFireTorpedo() {
+	public boolean canFireTorpedo() {
 		return hasTorpedo;
 	}
 
@@ -86,7 +87,7 @@ public class Ship extends Construct {
 	 * Returns true if this ship can place a mine.
 	 * @returns true if the ship can place a mine, false otherwise
 	 */
-	boolean canPlaceMine() {
+	public boolean canPlaceMine() {
 		return hasMinePlacement;
 	}
 
@@ -101,14 +102,14 @@ public class Ship extends Construct {
 	/**
 	 * @return true if this ship has Sonar capability, false otherwise
 	 */
-	boolean hasSonar(){
+	public boolean hasSonar(){
 		return hasSonar;
 	}
 	
 	/**
 	 * @return Range of sonar, 0 if this ship cannot use Sonar.
 	 */
-	int SonarRange(){
+	public int getSonarRange(){
 		return maxSonarRange;
 	}
 	
@@ -122,7 +123,7 @@ public class Ship extends Construct {
 	* Factory method for Cruiser
 	* @returns the Ship Constructed
 	*/
-	static Ship buildCruiser(Player owner) {
+	public static Ship buildCruiser(Player owner) {
 		Ship myCruiser = new Ship(owner, false, true, false, false, false, 10, 1, 1, 5, 6, 0, 5);
 		return myCruiser;
 	}
@@ -131,7 +132,7 @@ public class Ship extends Construct {
 	* Factory method for TorpedoBoat
 	* @returns the Ship Constructed
 	*/
-	static Ship buildTorpedoBoat(Player owner) {
+	public static Ship buildTorpedoBoat(Player owner) {
 		Ship myTorpedoBoat = new Ship(owner, false, true, true, false, false, 8, 1, 1, 4, 5, 0, 4);
 		return myTorpedoBoat;
 	}
@@ -140,7 +141,7 @@ public class Ship extends Construct {
 	* Factory method for Destroyer
 	* @returns the Ship Constructed
 	*/
-	static Ship buildDestroyer(Player owner) {
+	public static Ship buildDestroyer(Player owner) {
 		Ship myDestroyer = new Ship(owner, false, false, true, false, false, 6, 1, 1, 0, 4, 0, 3);
 		return myDestroyer;
 	}
@@ -149,8 +150,12 @@ public class Ship extends Construct {
 	* Factory method for MineSweeper
 	* @returns the Ship Constructed
 	*/
-	static Ship buildMineSweeper(Player owner) {
+	public static Ship buildMineSweeper(Player owner) {
 		Ship myMineSweeper = new Ship(owner, true, false, false, true, true, 4, 1, 1, 0, 2, 2, 2);
 		return myMineSweeper;
+	}
+
+	public Player getPlayer() {
+		return pl;
 	}
 }

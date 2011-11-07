@@ -1,10 +1,13 @@
 package ConstructTestStubs;
 
 import btlshp.enums.Weapon;
+import btlshp.enums.*;
 
 public abstract class Construct {
+	protected Location myLoc;
+	protected Direction myDir;
 	protected ConstructBlock blocks[];
-	protected int radarRange;
+	protected int maxRadarRange;
 	protected Player pl;
 	
 	/**
@@ -45,7 +48,7 @@ public abstract class Construct {
 			if (!hitBlock.isDestroyed()){
 				hitBlock.takeDamage();
 			}
-			// Else, determain next block to be Damaged, if it exists.
+			// Else, determine next block to be Damaged, if it exists.
 			else{
 				int blockLoc = this.blockLocation(hitBlock);
 				boolean damageAllocated = false;
@@ -68,7 +71,7 @@ public abstract class Construct {
 		}
 	// No Other Cases Possible
 		else {
-			// Error Occured, Not Checked.
+			// Error Occurred, Not Checked.
 		}
 	}
 
@@ -105,20 +108,48 @@ public abstract class Construct {
 		// No Error Check for repairs on full Health Ship.
 	}
 	
-	/**
-	 * 
-	 * @param myBlock is the block's location to be determined.
-	 * @return
-	 */
+	public Location getLocation(){
+		return myLoc;
+	}
+	
+	public void setLocation(Location loc){
+		myLoc = loc;
+	}
+	
+	public Direction getDirection(){
+		return myDir;
+	}
+	
+	public void setDirection(Direction dir){
+		myDir = dir;
+	}
+	
+	public boolean isDestroyed(){
+		// assume it is destroyed
+		boolean destroyed = true;
+		// check for non-destroyed block
+		for (int i = 0; i < blocks.length; i++){
+			if (!blocks[i].isDestroyed()){
+				destroyed = false;
+			}
+		}
+		// return result
+		return destroyed;
+	}
 	
 	public int getRadarRange(){
-		return radarRange;
+		return maxRadarRange;
 	}
 	
 	public ConstructBlock[] getBlocks(){
 		return blocks;
 	}
 	
+	/**
+	 * 
+	 * @param myBlock is the block's location to be determined.
+	 * @return
+	 */
 	private int blockLocation(Block myBlock){
 		int j = -1; //Start Location for search
 		for (int i = 0; i < blocks.length; i++){

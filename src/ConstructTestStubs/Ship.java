@@ -21,6 +21,7 @@ public class Ship extends Construct {
 		maxBackMove = back;
 		maxGunRange = gunRange;
 		maxSonarRange = sonarRange;
+		maxRadarRange = radarRange;
 		if (isArmored){
 			blocks = new ArmoredConstructBlock[numberOfBlocks];
 			for (int i = 0; i<numberOfBlocks ; i++){
@@ -34,14 +35,6 @@ public class Ship extends Construct {
 			}	
 		}
 	}
-	
-	/**
-	 * @returns the owner of this ship
-	 */
-	public Player getPlayer(){
-		return pl;
-	}
-	
 	
 	/**
 	 * Returns true if this ship can fire guns.
@@ -102,7 +95,7 @@ public class Ship extends Construct {
 	 * Returns true if this ship can pick up a mine.
 	 * @returns true if the ship can pick up a mine, false otherwise
 	 */
-	public boolean canPickUpMine() {
+	boolean canPickUpMine() {
 		return hasMinePlacement;
 	}
 	
@@ -123,7 +116,7 @@ public class Ship extends Construct {
 	/**
 	 * @return true if the ship is constructed with armored blocks, false otherwise.
 	 */
-	public boolean hasArmor(){
+	boolean hasArmor(){
 		return isArmored;
 	}
 	/**
@@ -160,5 +153,9 @@ public class Ship extends Construct {
 	public static Ship buildMineSweeper(Player owner) {
 		Ship myMineSweeper = new Ship(owner, true, false, false, true, true, 4, 1, 1, 0, 2, 2, 2);
 		return myMineSweeper;
+	}
+
+	public Player getPlayer() {
+		return pl;
 	}
 }

@@ -10,7 +10,7 @@ public class Base extends Construct {
 	*/
 	public Base(Player owner) {
 		blocks = new ConstructBlock[10];
-		radarRange = 0; // TBD!
+		maxRadarRange = 0; // TBD!
 		pl = owner;
 		for (int i = 0; i < 10; i++){
 			blocks[i] = new ConstructBlock(this);
@@ -21,7 +21,7 @@ public class Base extends Construct {
 	* Determines if this base is in condition to conduct repairs
 	* @return True if destroyed blocks <= (Total Blocks / 2). (In most cases if destroyed is 5 or less) 
 	*/
-	boolean canRepair() {
+	public boolean canRepairOther() {
 		int goodBlocks = 0;
 		int destroyedBlocks = 0; 
 		
@@ -41,5 +41,8 @@ public class Base extends Construct {
 		else {
 			return false;
 		}
+	}
+	public boolean canRepairSelf(){
+		return !this.isDestroyed();
 	}
 }
