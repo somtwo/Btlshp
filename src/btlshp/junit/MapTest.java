@@ -4,26 +4,28 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
+import btlshp.entities.Location;
 import btlshp.entities.MapNode;
 import btlshp.entities.Player;
 import btlshp.entities.Map;
 
-public class MapTest {
+public class MapTest extends TestCase{
 	MapNode   nodes [][];
 	Player leftPlayer = new Player(); 
 	Player rightPlayer = new Player();
-
+	private static final int MAPWIDTH = 30;
+	private static final int MAPHEIGHT = 30;
 	
 	@Test
 	public void testMap() {
-//		######################################################################################################
-		//Map myMap = new Map(leftPlayer, rightPlayer);   //############CANT FIGURE OUT HOW TO MAKE THIS LINE WORK###############
-//		######################################################################################################
+		Map myMap = new Map(leftPlayer, leftPlayer); 
 //		pass if map is 30X30, fail if not
-		for (int i = 0; i < 30; i++) {
-			for (int j = 0; j < 30; j++) {
+		for (int i = 0; i < MAPWIDTH; i++) {
+			for (int j = 0; j < MAPHEIGHT; j++) {
 				// TODO implement empty node check
-				//assertEquals(expected, MapNode[i][j]);
+				Location myLoc = new Location(i, j);
+				assertEquals(null, myMap.getMapNode(myLoc));
+
 			}
 		}
 //		pass if docks are in right location, fail if not
