@@ -3,16 +3,24 @@ package btlshp.junit;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import PlayerTestStubs.Ship;
+import btlshp.entities.Ship;
 import btlshp.entities.Player;
 
 public class PlayerTest {
-	Ship s = new Ship();
+	Player myPlayer = new Player();
 	public void testAddShip() {
-		Player myPlayer = new Player();
+		Ship s1 = Ship.buildCruiser(myPlayer);
+	
 		// testing addShip
-		myPlayer.addShip(s)
-		;
+		myPlayer.addShip(s1);
+		assertTrue(1 == myPlayer.shipCount());
+		assertFalse(2 == myPlayer.shipCount());
+	
+		// add another ship
+		Ship s2 = Ship.buildCruiser(myPlayer);
+		myPlayer.addShip(s2);
+		assertTrue(2 == myPlayer.shipCount());
+		assertFalse(1 == myPlayer.shipCount());
 		
 	}
 
