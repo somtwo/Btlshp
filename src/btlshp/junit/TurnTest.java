@@ -35,6 +35,7 @@ public class TurnTest extends TestCase {
 		t.add(TurnFactory.confirmPostponeGame());
 		t.add(TurnFactory.launchTorpedo(m, s));
 		t.add(TurnFactory.loadGameState());
+		t.add(TurnFactory.saveGameState());
 		t.add(TurnFactory.moveShip(m, s, dir, distance));
 		t.add(TurnFactory.pass());
 		t.add(TurnFactory.placeMine(m, s, loc));
@@ -50,10 +51,26 @@ public class TurnTest extends TestCase {
 	@Test
 	public void testExecuteTurn(){
 		for(Turn turn: t){
+			assertNotNull(turn);
 			turn.executeTurn();
 			assertTrue(turn.wasSuccessful());
 			
 		}
-
+	}
+	public void testTurnTypes(){
+		assertEquals(t.get(0).toString(),"AcceptSurrender");
+		assertEquals(t.get(1).toString(),"ConfirmPostponeGame");
+		assertEquals(t.get(2).toString(),"LaunchTorpedo");
+		assertEquals(t.get(3).toString(),"LoadGameState");
+		assertEquals(t.get(4).toString(),"SaveGameState");
+		assertEquals(t.get(5).toString(),"MoveShip");
+		assertEquals(t.get(6).toString(),"Pass");
+		assertEquals(t.get(7).toString(),"PlaceMine");
+		assertEquals(t.get(8).toString(),"RepairBase");
+		assertEquals(t.get(9).toString(),"RepairShip");
+		assertEquals(t.get(10).toString(),"RequestPostponeGame");
+		assertEquals(t.get(11).toString(),"RequestSurrender");
+		assertEquals(t.get(12).toString(),"Shoot");
+		assertEquals(t.get(13).toString(),"TakeMine");
 	}
 }

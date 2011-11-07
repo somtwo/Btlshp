@@ -28,32 +28,51 @@ class Pass implements Turn{
 		//Always returns true because a pass turn cannot fail
 		return true;
 	}
+	@Override
+	public String toString(){
+		return "Pass";
+	}
 }
 class RequestPostponeGame implements Turn{
 	@Override
+	/**
+	 * Opponent would like to PostPone Game
+	 */
 	public void executeTurn() {
-		// TODO Auto-generated method stub
+		// TODO Implementation UI dependent
+		//Generate a dialog box with player and allow player to accept or reject
 	}
 	@Override
 	public boolean wasSuccessful() {
-		// TODO Auto-generated method stub
+		// TODO Implementation UI dependent
 		return true;
+	}
+	@Override
+	public String toString(){
+		return "RequestPostponeGame";
 	}
 }
 class ConfirmPostponeGame implements Turn{
 
 
 	@Override
+	/**
+	 * Opponent accepted postponing game
+	 */
 	public void executeTurn() {
-		// TODO Auto-generated method stub
+		// TODO Implementation UI dependent
 		
 	}
 
 
 	@Override
 	public boolean wasSuccessful() {
-		// TODO Auto-generated method stub
+		// TODO Implementation UI dependent
 		return true;
+	}
+	@Override
+	public String toString(){
+		return "ConfirmPostponeGame";
 	}
 }
 class LoadGameState implements Turn{
@@ -61,43 +80,82 @@ class LoadGameState implements Turn{
 
 	@Override
 	public void executeTurn() {
-		// TODO Auto-generated method stub
+		// TODO Implementation IO dependent
 		
 	}
 
 
 	@Override
 	public boolean wasSuccessful() {
+		// TODO Implementation IO dependent
+		return true;
+	}
+	@Override
+	public String toString(){
+		return "LoadGameState";
+	}
+}
+class SaveGameState implements Turn{
+
+	@Override
+	public void executeTurn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean wasSuccessful() {
 		// TODO Auto-generated method stub
 		return true;
 	}
+	@Override
+	public String toString(){
+		return "SaveGameState";
+	}
+	
 }
 class RequestSurrender implements Turn{
 
 
 	@Override
+	/**
+	 * Opponent requests to quit(surrender) game
+	 */
 	public void executeTurn() {
-		// TODO Auto-generated method stub
+		// TODO Implementation UI dependent
+		//Generate dialog for the player to accept or reject surrender
 		
 	}
 
 
 	@Override
 	public boolean wasSuccessful() {
-		// TODO Auto-generated method stub
+		// TODO Implementation UI dependent
 		return true;
+	}
+	@Override
+	public String toString(){
+		return "RequestSurrender";
 	}
 }
 class AcceptSurrender implements Turn{
 	@Override
+	/**
+	 * Opponent has accepted request to surrender
+	 */
 	public void executeTurn() {
-		// TODO Auto-generated method stub
+		// TODO Implementation UI dependent
+		//Generate dialog informing player opponent has accepted surrender
 		
 	}
 	@Override
 	public boolean wasSuccessful() {
-		// TODO Auto-generated method stub
+		// TODO Implementation UI dependent
 		return true;
+	}
+	@Override
+	public String toString(){
+		return "AcceptSurrender";
 	}
 }
 class MoveShip implements Turn{
@@ -129,6 +187,10 @@ class MoveShip implements Turn{
 	public boolean wasSuccessful() {
 		return success;
 	}
+	@Override
+	public String toString(){
+		return "MoveShip";
+	}
 }
 class PlaceMine implements Turn{
 	private Map m;
@@ -155,6 +217,10 @@ class PlaceMine implements Turn{
 	@Override
 	public boolean wasSuccessful() {
 		return success;
+	}
+	@Override
+	public String toString(){
+		return "PlaceMine";
 	}
 }
 class TakeMine implements Turn{
@@ -183,6 +249,10 @@ class TakeMine implements Turn{
 	public boolean wasSuccessful() {
 		return success;
 	}
+	@Override
+	public String toString(){
+		return "TakeMine";
+	}
 }
 class LaunchTorpedo implements Turn{
 	private Map m;
@@ -209,6 +279,10 @@ class LaunchTorpedo implements Turn{
 	@Override
 	public boolean wasSuccessful() {
 		return success;
+	}
+	@Override
+	public String toString(){
+		return "LaunchTorpedo";
 	}
 }
 
@@ -239,6 +313,10 @@ class Shoot implements Turn{
 	public boolean wasSuccessful() {
 		return success;
 	}
+	@Override
+	public String toString(){
+		return "Shoot";
+	}
 }
 class RepairBase implements Turn{
 
@@ -259,6 +337,10 @@ class RepairBase implements Turn{
 	@Override
 	public boolean wasSuccessful() {
 		return success;
+	}
+	@Override
+	public String toString(){
+		return "RepairBase";
 	}
 }
 class RepairShip implements Turn{
@@ -282,5 +364,10 @@ class RepairShip implements Turn{
 	@Override
 	public boolean wasSuccessful() {
 		return success;
+	}
+	
+	@Override
+	public String toString(){
+		return "RepairShip";
 	}
 }
