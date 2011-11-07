@@ -17,7 +17,7 @@ public class MapTest {
 	@Test
 	public void testMap() {
 //		######################################################################################################
-		Map myMap = new Map(leftPlayer, rightPlayer);   //############CANT FIGURE OUT HOW TO MAKE THIS LINE WORK###############
+		//Map myMap = new Map(leftPlayer, rightPlayer);   //############CANT FIGURE OUT HOW TO MAKE THIS LINE WORK###############
 //		######################################################################################################
 //		pass if map is 30X30, fail if not
 		for (int i = 0; i < 30; i++) {
