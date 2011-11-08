@@ -10,6 +10,7 @@ public class Map {
 	ArrayList<Ship> ships;
 	MapNode   nodes [][];
 	Player    leftPlayer, rightPlayer;
+	Base      leftBase, rightBase;
 	
 	private void createNodes() {
 		nodes = new MapNode[MAPWIDTH][MAPHEIGHT];
@@ -21,17 +22,37 @@ public class Map {
 		}
 	}
 	
-	private void createShips() {
-		// TODO: Support for creating ship inventory for each player.
-	}
-	
 	private void createReefs() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private void createBases() {
-		// TODO Auto-generated method stub
+	
+	private void placeBlock(MapNode node, Block block) {
+		if(node.block != null)
+			throw new IllegalStateException();
+		
+		node.block = block;
+	}
+	
+	
+	private void unplaceBlock(MapNode node) {
+		node.block = null;
+	}
+	
+	private void placeBase(Base b, int x) {
+		ConstructBlock [] blocks = b.getBlocks();
+		int y = (MAPHEIGHT - blocks.length) / 2;
+		
+		for(int i = 0; i < blocks.length; ++i)
+			placeBlock(nodes[x][y + i], blocks[i]);
+	}
+	
+	private void createStructures() {
+		// Create the bases
+		leftBase = new Base(leftPlayer);
+		rightBase = new Base(rightPlayer);
+		
 		
 	}
 	
@@ -46,8 +67,7 @@ public class Map {
 		rightPlayer = playerTwo;
 		
 		createNodes();
-		createBases();
-		createShips();
+		createStructures();
 		createReefs();
 	}
 	        	

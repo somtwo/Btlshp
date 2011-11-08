@@ -96,4 +96,13 @@ public class Player {
 	public int getPoints() {
 		return points;
 	}
+	
+	
+	/**
+	 * Returns an array with all the ships the player has 
+	 * @return
+	 */
+	public Ship[] getShips() {
+		return ship.toArray(null);
+	}
 }
