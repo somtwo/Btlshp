@@ -3,6 +3,7 @@ package btlshp.entities;
 import java.util.ArrayList;
 
 import btlshp.enums.Direction;
+import btlshp.enums.Weapon;
 
 public class Map  {
 	private static final int MAPWIDTH = 30;
@@ -145,30 +146,18 @@ public class Map  {
 	 */
 	public void placeShip(Ship s, Location tail, Direction dir) {
 		ConstructBlock [] blocks = s.getBlocks();
-		int x, y, min, max;
+		int x, y, min;
 		
 		if(dir == Direction.North || dir == Direction.South) {
 			x = tail.getx();
-			max = min = tail.gety();
 			
-			if(dir == Direction.North)
-				min -= blocks.length;
-			else
-				max += blocks.length;
-			
-			for(y = min; y <= max; ++y)
+			for(y = min = s.gety1(); y <= s.gety2(); ++y)
 				placeBlock(getMapNode(x, y), blocks[y - min]);
 		}
 		else {
 			y = tail.gety();
-			max = min = tail.getx();
 			
-			if(dir == Direction.West)
-				min -= blocks.length;
-			else
-				max += blocks.length;
-			
-			for(x = min; x <= max; ++x)
+			for(x = min = s.getx1(); x <= s.getx2(); ++x)
 				placeBlock(getMapNode(x, y), blocks[x - min]);
 		}
 		
@@ -185,30 +174,18 @@ public class Map  {
 		ConstructBlock [] blocks = s.getBlocks();
 		Direction dir = s.getDirection();
 		Location  loc = s.getLocation();
-		int x, y, min, max;
+		int x, y, min;
 		
 		if(dir == Direction.North || dir == Direction.South) {
 			x = loc.getx();
-			max = min = loc.gety();
 			
-			if(dir == Direction.North)
-				min -= blocks.length;
-			else
-				max += blocks.length;
-			
-			for(y = min; y <= max; ++y)
+			for(y = min = s.gety1(); y <= s.gety2(); ++y)
 				unplaceBlock(getMapNode(x, y), blocks[y - min]);
 		}
 		else {
 			y = loc.gety();
-			max = min = loc.getx();
 			
-			if(dir == Direction.West)
-				min -= blocks.length;
-			else
-				max += blocks.length;
-			
-			for(x = min; x <= max; ++x)
+			for(x = min = s.getx1(); x <= s.getx2(); ++x)
 				unplaceBlock(getMapNode(x, y), blocks[x - min]);
 		}
 	}
@@ -218,7 +195,7 @@ public class Map  {
 	* radar/sonar of the current ship locations.
 	*/
 	public void updateFrame() {
-		
+		// TODO: Determine how to update the blocks for the UI
 	}
 
 	/**
@@ -247,8 +224,50 @@ public class Map  {
 	* @return true if the ship movement can be carried out.
 	*/
 	public boolean canMove(Ship s, Direction dir, int blocks) {
+		Location   loc = s.getLocation();
+		Direction sdir = s.getDirection();
+		int x1, x2, y1, y2, x, y;	
 		
-		return false;
+		x1 = s.getx1(); x2 = s.getx2();
+		y1 = s.gety1(); y2 = s.gety2();
+		
+		for(int i = 0; i < blocks; ++i) {
+			if(dir == Direction.North) {
+				y1--; y2--;
+			}
+			else if(dir == Direction.South) {
+				y1++; y2++;
+			}
+			else if(dir == Direction.East) {
+				x1--; x2--;
+			}
+			else if(dir == Direction.West) {
+				x1++; x2++;
+			}
+			
+			for(y = y1; y <= y2; ++y) {
+				for(x = x1; x <= x2; ++x) {
+					Block b = getMapNode(x, y).block;
+					
+					if(b == null || b instanceof MineBlock)
+						continue;
+					
+					if(b instanceof ConstructBlock) {
+						ConstructBlock [] sblocks = s.getBlocks();
+						boolean           inship = false;
+						
+						for(int it = 0; it < sblocks.length; ++it)
+							if (b == sblocks[it])
+								inship = true;
+						
+						if(inship)
+							continue;
+					}
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	        	
 	/**
@@ -260,8 +279,64 @@ public class Map  {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public int move(Ship s, Direction dir, int blocks) {
-		return 0;
+		Location   loc = s.getLocation();
+		Direction sdir = s.getDirection();
+		int x1, x2, y1, y2, x, y;	
 		
+		x1 = s.getx1(); x2 = s.getx2();
+		y1 = s.gety1(); y2 = s.gety2();
+		
+		unplaceShip(s);
+		
+		int i;
+		for(i = 0; i < blocks; ++i) {
+			if(dir == Direction.North) {
+				y1--; y2--;
+			}
+			else if(dir == Direction.South) {
+				y1++; y2++;
+			}
+			else if(dir == Direction.East) {
+				x1--; x2--;
+			}
+			else if(dir == Direction.West) {
+				x1++; x2++;
+			}
+			
+			boolean success = true;
+			for(y = y1; y <= y2; ++y) {
+				for(x = x1; x <= x2; ++x) {
+					Block b = getMapNode(x, y).block;
+					
+					if(b == null)
+						continue;
+					
+					if(b instanceof MineBlock) {
+						unplaceBlock(getMapNode(x, y), b);
+						// TODO: EXPLODE MINE
+					}
+
+					success = false;
+				}
+			}
+			
+			if(!success)
+				break;
+		}
+		
+		if(dir == Direction.North) {
+			s.setLocation(new Location(loc.getx(), loc.gety() - i));
+		}
+		else if(dir == Direction.South) {
+			s.setLocation(new Location(loc.getx(), loc.gety() + i));
+		}
+		else if(dir == Direction.East) {
+			s.setLocation(new Location(loc.getx() - i, loc.gety()));
+		}
+		else if(dir == Direction.West) {
+			s.setLocation(new Location(loc.getx() + i, loc.gety()));
+		}
+		return i;
 	}
 	        	
 	/**

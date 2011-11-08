@@ -1,5 +1,7 @@
 package btlshp.entities;
 
+import btlshp.enums.Direction;
+
 public class Ship extends Construct {
 	private boolean hasGun, hasTorpedo, hasMinePlacement, hasSonar, isArmored;
 	private int     maxForwardMove, maxSideMove, maxBackMove, maxGunRange, maxSonarRange;
@@ -159,5 +161,47 @@ public class Ship extends Construct {
 
 	public Player getPlayer() {
 		return pl;
+	}
+	
+	
+	/**
+	 * Gets the left-most x-coordinate the ship occupies
+	 * @return
+	 */
+	public int getx1() {
+		if(myDir == Direction.West)
+			return myLoc.getx() - blocks.length; 
+		return myLoc.getx();
+	}
+	
+	/**
+	 * Gets the right-most x-coordinate the ship occupies
+	 * @return
+	 */
+	public int getx2() {
+		if(myDir == Direction.East)
+			return myLoc.getx() + blocks.length; 
+		return myLoc.getx();
+	}
+	
+	/**
+	 * Gets the top-most y-coordinate the ship occupies
+	 * @return
+	 */
+	public int gety1() {
+		if(myDir == Direction.North)
+			return myLoc.gety() - blocks.length; 
+		return myLoc.gety();
+	}
+	
+	
+	/**
+	 * Gets the bottom-most y-coordinate the ship occupies
+	 * @return
+	 */
+	public int gety2() {
+		if(myDir == Direction.South)
+			return myLoc.gety() + blocks.length; 
+		return myLoc.gety();
 	}
 }
