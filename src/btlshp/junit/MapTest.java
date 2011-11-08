@@ -15,20 +15,10 @@ public class MapTest extends TestCase{
 	Player leftPlayer; 
 	Player rightPlayer;
 	Location myLoc;
-	Map myMap;
-	
-	Ship LmyCruiser = new Ship(leftPlayer, false, true, false, false, false, 10, 1, 1, 5, 6, 0, 5);
-	Ship LmyTorpedoBoat = new Ship(leftPlayer, false, true, true, false, false, 8, 1, 1, 4, 5, 0, 4);
-	Ship LmyDestroyer = new Ship(leftPlayer, false, false, true, false, false, 6, 1, 1, 0, 4, 0, 3);
-	Ship LmineShip = new Ship(leftPlayer, true, false, false, true, true, 4, 1, 1, 0, 2, 2, 2);
-	
-	Ship RmyCruiser = new Ship(leftPlayer, false, true, false, false, false, 10, 1, 1, 5, 6, 0, 5);
-	Ship RmyTorpedoBoat = new Ship(leftPlayer, false, true, true, false, false, 8, 1, 1, 4, 5, 0, 4);
-	Ship RmyDestroyer = new Ship(leftPlayer, false, false, true, false, false, 6, 1, 1, 0, 4, 0, 3);
-	Ship RmineShip = new Ship(leftPlayer, true, false, false, true, true, 4, 1, 1, 0, 2, 2, 2);
+	Map testMap;
 
 	@Before public void setUp() {
-		myMap = new Map(leftPlayer, leftPlayer);
+		testMap = new Map(leftPlayer, leftPlayer);
 		leftPlayer = new Player(); 
 		rightPlayer = new Player();
 	}
@@ -39,23 +29,23 @@ public class MapTest extends TestCase{
 		// pass if map is 30X30 with each block non-null, fail if not
 		for (int i = 0; i < MAPWIDTH; i++) {
 			for (int j = 0; j < MAPHEIGHT; j++) {
-				assertTrue(null != myMap.getMapNode(i, j));
+				assertTrue(null != testMap.getMapNode(i, j));
 			}
 		}
 		
-		Base leftBase = myMap.getLeftBase();
-		Base rightBase = myMap.getRightBase();
+		Base leftBase = testMap.getLeftBase();
+		Base rightBase = testMap.getRightBase();
 		
 		// pass if bases are in right location, fail if not
 		assertTrue(leftBase.getBlocks().length == 10);
 		assertTrue(rightBase.getBlocks().length == 10);
 		
 		for(int i = 0; i < 10; ++i) {
-			assertTrue(myMap.getMapNode(0, 14 + i).block == leftBase.getBlocks()[i]);
-			assertTrue(myMap.getMapNode(29, 14 + i).block == rightBase.getBlocks()[i]);
+			assertTrue(testMap.getMapNode(0, 14 + i).block == leftBase.getBlocks()[i]);
+			assertTrue(testMap.getMapNode(29, 14 + i).block == rightBase.getBlocks()[i]);
 		}
 		
-		Ship[] ships = myMap.getShips();
+		Ship[] ships = testMap.getShips();
 		
 		assertTrue(ships.length == 18);
 		
@@ -84,23 +74,24 @@ public class MapTest extends TestCase{
 	
 	@Test
 	public void testAddShipAndRemoveShip() {
-		myMap.addShip(LmyCruiser);
-		Ship [] ships = myMap.getShips();
+		Ship cruiser = Ship.buildCruiser(leftPlayer);
+		testMap.addShip(cruiser);
+		Ship [] ships = testMap.getShips();
 		
 		int i;
 		
 		for(i = 0; i < ships.length; ++i)
-			if(ships[i] == LmyCruiser)
+			if(ships[i] == cruiser)
 				break;
 		
 		// Assert that the for loop broke
 		assertTrue(i < ships.length);
 		
 		
-		myMap.removeShip(LmyCruiser);
+		testMap.removeShip(cruiser);
 		
 		for(i = 0; i < ships.length; ++i)
-			if(ships[i] == LmyCruiser)
+			if(ships[i] == cruiser)
 				break;
 		
 		// Assert that the for loop did not brake
@@ -119,10 +110,10 @@ public class MapTest extends TestCase{
 	}
 	
 	public void testGetMapNode() {
-		MapNode [][] nodes = myMap.getMapNodes();
+		MapNode [][] nodes = testMap.getMapNodes();
 		
-		assertTrue(nodes[0][0] == myMap.getMapNode(0, 0));
-		assertTrue(nodes[10][2] == myMap.getMapNode(2, 10));
+		assertTrue(nodes[0][0] == testMap.getMapNode(0, 0));
+		assertTrue(nodes[10][2] == testMap.getMapNode(2, 10));
 	}
 	
 	public void testCanMove() {
@@ -159,47 +150,57 @@ public class MapTest extends TestCase{
 	}
 	
 	public void testPlaceMine() {
-		assertTrue(LmineShip.canPlaceMine());
+		Ship mineShip = Ship.buildMineSweeper(leftPlayer);
+		
+		testMap.addShip(mineShip);
+		
+		assertTrue(mineShip.canPlaceMine());
 		Location mineLoc = new Location(0, 0);
 
 //		pass if mine can be placed into empty place and is placed, fail if not
-		assertTrue(myMap.placeMine(LmineShip, mineLoc));
+		assertTrue(testMap.placeMine(mineShip, mineLoc));
 //		fail if mine can be placed into an occupied space, pass if not
-		assertFalse(myMap.placeMine(LmineShip, mineLoc));
+		assertFalse(testMap.placeMine(mineShip, mineLoc));
 //		fail if anyone other than a mineShip can place a mine
-		myMap.pickupMine(LmineShip, mineLoc);
-		assertFalse(myMap.placeMine(LmyCruiser, mineLoc));
-		assertFalse(myMap.placeMine(LmyTorpedoBoat, mineLoc));
-		assertFalse(myMap.placeMine(LmyDestroyer, mineLoc));
+		testMap.pickupMine(mineShip, mineLoc);
+		assertFalse(testMap.placeMine(mineShip, mineLoc));
+		assertFalse(testMap.placeMine(mineShip, mineLoc));
+		assertFalse(testMap.placeMine(mineShip, mineLoc));
 	}
 	
 	public void testPickupMine() {
+		Ship mineShip = Ship.buildMineSweeper(leftPlayer);
+		Ship otherMineShip = Ship.buildMineSweeper(rightPlayer);
+		
+		testMap.addShip(mineShip);
+		testMap.addShip(otherMineShip);
+		
 		Location mineLoc = new Location(0, 0);
 		Location mineShipLoc = new Location(1,0);
 		Direction MineShipDir = Direction.North;
 //		fail if the sub can pick up a mine out of range, pass if not
-		myMap.placeMine(LmineShip, mineLoc);
-		assertFalse(myMap.pickupMine(LmineShip, mineLoc));		
-		assertFalse(myMap.pickupMine(RmineShip, mineLoc));
+		testMap.placeMine(mineShip, mineLoc);
+		assertFalse(testMap.pickupMine(mineShip, mineLoc));		
+		assertFalse(testMap.pickupMine(otherMineShip, mineLoc));
 		
 //		pass if there is a mine, and it is picked up in range, fail if cannot be picked up by either team
-		myMap.placeShip(LmineShip, mineShipLoc, MineShipDir);		//place ships in range
-		myMap.placeShip(LmineShip, mineShipLoc, MineShipDir);
+		testMap.placeShip(mineShip, mineShipLoc, MineShipDir);		//place ships in range
+		testMap.placeShip(mineShip, mineShipLoc, MineShipDir);
 		
-		myMap.placeMine(LmineShip, mineLoc);
-		assertTrue(myMap.pickupMine(RmineShip, mineLoc));			//test left ship
+		testMap.placeMine(mineShip, mineLoc);
+		assertTrue(testMap.pickupMine(otherMineShip, mineLoc));			//test left ship
 		
-		myMap.placeMine(LmineShip, mineLoc);
-		assertTrue(myMap.pickupMine(RmineShip, mineLoc));			//test right ship
+		testMap.placeMine(mineShip, mineLoc);
+		assertTrue(testMap.pickupMine(otherMineShip, mineLoc));			//test right ship
 		
 //		fail if a ‘mine’’ can be picked up from a mapblock where there is no mine, pass if not
-		myMap.pickupMine(LmineShip, mineLoc);
-		assertFalse(myMap.pickupMine(LmineShip, mineLoc));
+		testMap.pickupMine(mineShip, mineLoc);
+		assertFalse(testMap.pickupMine(mineShip, mineLoc));
 
 //		fail if a ship other than the sub can pick up a mine, pass if only the sub can
-		assertFalse(myMap.pickupMine(LmyCruiser, mineLoc));
-		assertFalse(myMap.pickupMine(LmyTorpedoBoat, mineLoc));
-		assertFalse(myMap.pickupMine(LmyDestroyer, mineLoc));
+		Ship criuser = Ship.buildCruiser(leftPlayer);
+		testMap.addShip(criuser);
+		assertFalse(testMap.pickupMine(criuser, mineLoc));
 
 	}
 	
