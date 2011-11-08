@@ -1,40 +1,60 @@
 package btlshp.entities;
+import java.util.ArrayList;
 public class Player {
 	
 	/**
 	 * Instance variables
 	 */
-	private int numberOfShip;
+	private ArrayList<Ship> ship;
 	private int numberOfMine;
 	private int points;
+	private final int MAX_NUM_SHIP = 8; // for default we have 8
 	
 	/**
 	 * Default constructor
 	 */
 	public Player() {
 		// Starting value of player
-		numberOfShip = 8;
+		ship = new ArrayList<Ship>();
 		numberOfMine = 10;
 		points = 0;
 	}
 
 	/**
-	 * Update number of ship when ship is destroyed
-	 * @throws IllegalArgumentException if the player has no more ship.
+	 * Add ship into the array list of ships
+	 * @param s ship to be add
+	 * @return true if ship is added to list else return false
 	 */
-	public void removeShip() {
-		if (numberOfShip == 0)
+	public boolean addShip(Ship s) {
+		boolean shipAdded = false;
+		if (ship.size() < MAX_NUM_SHIP)
 		{
-			throw new IllegalArgumentException("No more ships");
+			ship.add(s);
+			shipAdded = true;
 		}
-		numberOfShip = numberOfShip - 1;
+		return shipAdded;
 	}
+	/**
+	 * remove ship from the array list of ships
+	 * @param s ship to be added
+	 * @return true if ship is remove from list else return false
+	 */
+	public boolean removeShip(Ship s) {
+		boolean removedShip = false;
+		if(ship.size() != 0)
+		{
+			ship.remove(s);
+			removedShip = true;
+		}
+		return removedShip;		
+	}
+	
 	/**
 	 * counts the ships of player
 	 * @return number of ships player has in play
 	 */
 	public int shipCount() {
-		return numberOfShip;
+		return ship.size();
 	}
 
 	/**
@@ -76,5 +96,14 @@ public class Player {
 	 */
 	public int getPoints() {
 		return points;
+	}
+	
+	
+	/**
+	 * Returns an array with all the ships the player has 
+	 * @return
+	 */
+	public Ship[] getShips() {
+		return ship.toArray(null);
 	}
 }

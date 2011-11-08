@@ -1,10 +1,10 @@
 package btlshp.entities;
 
 public class MapNode {
-	Block block;
+	public Block block;
 	boolean p1minemark, p2minemark;
 	
-	MapNode() {
+	public MapNode() {			//changed to public for MapTest.java Junit test
 		
 	}
 	

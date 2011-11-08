@@ -1,6 +1,6 @@
 package ConstructTestStubs;
 
-import btlshp.enums.Weapon;
+import ConstructTestStubs.Location;
 import btlshp.enums.*;
 
 public abstract class Construct {
@@ -108,23 +108,23 @@ public abstract class Construct {
 		// No Error Check for repairs on full Health Ship.
 	}
 	
-	public Location getLocation(){
+	public Location getLocation() {
 		return myLoc;
 	}
 	
-	public void setLocation(Location loc){
+	public void setLocation(Location loc) {
 		myLoc = loc;
 	}
 	
-	public Direction getDirection(){
+	public Direction getDirection() {
 		return myDir;
 	}
 	
-	public void setDirection(Direction dir){
+	public void setDirection(Direction dir) {
 		myDir = dir;
 	}
 	
-	public boolean isDestroyed(){
+	public boolean isDestroyed() {
 		// assume it is destroyed
 		boolean destroyed = true;
 		// check for non-destroyed block
@@ -137,11 +137,11 @@ public abstract class Construct {
 		return destroyed;
 	}
 	
-	public int getRadarRange(){
+	public int getRadarRange() {
 		return maxRadarRange;
 	}
 	
-	public ConstructBlock[] getBlocks(){
+	public ConstructBlock[] getBlocks() {
 		return blocks;
 	}
 	
