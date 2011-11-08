@@ -29,7 +29,8 @@ public class Player {
 		boolean shipAdded = false;
 		if (ship.size() < MAX_NUM_SHIP)
 		{
-			ship.add(s);	
+			ship.add(s);
+			shipAdded = true;
 		}
 		return shipAdded;
 	}
