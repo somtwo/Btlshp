@@ -14,7 +14,7 @@ public class MapTest extends TestCase{
 	private static final int MAPWIDTH = 30;
 	private static final int MAPHEIGHT = 30;
 	Location myLoc;
-	
+	Map myMap = new Map(leftPlayer, leftPlayer);
 	
 	Ship LmyCruiser = new Ship(leftPlayer, false, true, false, false, false, 10, 1, 1, 5, 6, 0, 5);
 	Ship LmyTorpedoBoat = new Ship(leftPlayer, false, true, true, false, false, 8, 1, 1, 4, 5, 0, 4);
@@ -26,7 +26,7 @@ public class MapTest extends TestCase{
 	Ship RmyDestroyer = new Ship(leftPlayer, false, false, true, false, false, 6, 1, 1, 0, 4, 0, 3);
 	Ship RmineShip = new Ship(leftPlayer, true, false, false, true, true, 4, 1, 1, 0, 2, 2, 2);
 	
-	Map myMap = new Map(leftPlayer, leftPlayer);
+	
 	//ConstructBlock blocks = new ConstructBlock(leftPlayer);
 	@Test
 	public void testMap() {
@@ -147,15 +147,22 @@ public class MapTest extends TestCase{
 	
 	public void testPickupMine() {
 		Location mineLoc = new Location(0, 0);
-//		pass if there is a mine, and it is picked up in range, fail if cannot be picked up by either team
-							
-		//test out of range for both ships
+		Location mineShipLoc = new Location(1,0);
+		Direction MineShipDir = Direction.North;
+//		fail if the sub can pick up a mine out of range, pass if not
 		myMap.placeMine(LmineShip, mineLoc);
 		assertFalse(myMap.pickupMine(LmineShip, mineLoc));		
 		assertFalse(myMap.pickupMine(RmineShip, mineLoc));
 		
-		//test in range for both ships
+//		pass if there is a mine, and it is picked up in range, fail if cannot be picked up by either team
+		myMap.placeShip(LmineShip, mineShipLoc, MineShipDir);		//place ships in range
+		myMap.placeShip(LmineShip, mineShipLoc, MineShipDir);
 		
+		myMap.placeMine(LmineShip, mineLoc);
+		assertTrue(myMap.pickupMine(RmineShip, mineLoc));			//test left ship
+		
+		myMap.placeMine(LmineShip, mineLoc);
+		assertTrue(myMap.pickupMine(RmineShip, mineLoc));			//test right ship
 		
 //		fail if a ‘mine’’ can be picked up from a mapblock where there is no mine, pass if not
 		myMap.pickupMine(LmineShip, mineLoc);
@@ -165,11 +172,7 @@ public class MapTest extends TestCase{
 		assertFalse(myMap.pickupMine(LmyCruiser, mineLoc));
 		assertFalse(myMap.pickupMine(LmyTorpedoBoat, mineLoc));
 		assertFalse(myMap.pickupMine(LmyDestroyer, mineLoc));
-//		fail if the sub can pick up a mine out of range, pass if not
-		
-//		true if sub can pick up mine placed by opponent, fail if not
-		myMap.placeMine(LmineShip, mineLoc);
-		assertTrue(myMap.pickupMine(RmineShip, mineLoc));
+
 	}
 	
 	public void testFireTorpedo() {
