@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import btlshp.enums.Direction;
 
-public class Map {
+public class Map  {
 	private static final int MAPWIDTH = 30;
 	private static final int MAPHEIGHT = 30;
 	ArrayList<Ship> ships;
@@ -83,6 +83,7 @@ public class Map {
 	* @param dir   The direction the ship should be facing.
 	*/
 	public void addShip(Ship s, Location tail, Direction dir) {
+		
 		
 	}
 	

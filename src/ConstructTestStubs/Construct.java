@@ -1,6 +1,6 @@
 package ConstructTestStubs;
 
-import btlshp.enums.Weapon;
+import btlshp.entities.Location;
 import btlshp.enums.*;
 
 public abstract class Construct {
