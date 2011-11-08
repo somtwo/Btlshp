@@ -36,9 +36,14 @@ public class Map  {
 	}
 	
 	
-	private void unplaceBlock(MapNode node) {
+	private void unplaceBlock(MapNode node, Block block) {
+		if(node.block != block)
+			throw new IllegalStateException();
+		
 		node.block = null;
 	}
+	
+	
 	
 	private void placeBase(Base b, int x) {
 		ConstructBlock [] blocks = b.getBlocks();
@@ -48,12 +53,14 @@ public class Map  {
 			placeBlock(nodes[x][y + i], blocks[i]);
 	}
 	
+	
 	private void createStructures() {
 		// Create the bases
 		leftBase = new Base(leftPlayer);
+		placeBase(leftBase, 0);
+		
 		rightBase = new Base(rightPlayer);
-		
-		
+		placeBase(rightBase, MAPWIDTH - 1);
 	}
 	
 	/**
@@ -84,8 +91,12 @@ public class Map  {
 		rightPlayer = playerTwo;
 		
 		createNodes();
+		createStructures();
+		createReefs();
 	}
 	        	
+	
+	
 	/**
 	* Returns a StoredMap object representing the current state of the map.
 	* @return
@@ -99,20 +110,107 @@ public class Map  {
 	/**
 	* Performs the initial placement of a ship, either at the start of a game or on save load.
 	* @param s     The ship to be placed
-	* @param tail  The location of the tail of the ship
-	* @param dir   The direction the ship should be facing.
 	*/
-	public void addShip(Ship s, Location tail, Direction dir) {
+	public void addShip(Ship s) {
+		for(int i = 0; i < ships.size(); ++i)
+			if(s == ships.get(i))
+				throw new IllegalStateException();
 		
-		
+		ships.add(s);
 	}
+	
 	
 	/**
 	 * Removes a ship from the map.
 	 * @param s    The ship to be removed.
 	 */
 	public void removeShip(Ship s) {
+		for(int i = 0; i < ships.size(); ++i) {
+			if(s == ships.get(i)) {
+				ships.remove(i);
+				return;
+			}
+		}
 		
+		throw new IllegalStateException();
+	}
+	
+	
+
+	/**
+	 * Places the ship in the given location and facing the given direction. Links the map nodes to the ship blocks
+	 * @param s     Ship to be placed.
+	 * @param tail  The location of the tail of the ship
+	 * @param dir   The direction the ship should be facing.
+	 */
+	public void placeShip(Ship s, Location tail, Direction dir) {
+		ConstructBlock [] blocks = s.getBlocks();
+		int x, y, min, max;
+		
+		if(dir == Direction.North || dir == Direction.South) {
+			x = tail.getx();
+			max = min = tail.gety();
+			
+			if(dir == Direction.North)
+				min -= blocks.length;
+			else
+				max += blocks.length;
+			
+			for(y = min; y <= max; ++y)
+				placeBlock(getMapNode(x, y), blocks[y - min]);
+		}
+		else {
+			y = tail.gety();
+			max = min = tail.getx();
+			
+			if(dir == Direction.West)
+				min -= blocks.length;
+			else
+				max += blocks.length;
+			
+			for(x = min; x <= max; ++x)
+				placeBlock(getMapNode(x, y), blocks[x - min]);
+		}
+		
+		s.setLocation(tail);
+		s.setDirection(dir);
+	}
+	
+	
+	/**
+	 * Unplaces a ships blocks from the map nodes.
+	 * @param s
+	 */
+	public void unplaceShip(Ship s) {
+		ConstructBlock [] blocks = s.getBlocks();
+		Direction dir = s.getDirection();
+		Location  loc = s.getLocation();
+		int x, y, min, max;
+		
+		if(dir == Direction.North || dir == Direction.South) {
+			x = loc.getx();
+			max = min = loc.gety();
+			
+			if(dir == Direction.North)
+				min -= blocks.length;
+			else
+				max += blocks.length;
+			
+			for(y = min; y <= max; ++y)
+				unplaceBlock(getMapNode(x, y), blocks[y - min]);
+		}
+		else {
+			y = loc.gety();
+			max = min = loc.getx();
+			
+			if(dir == Direction.West)
+				min -= blocks.length;
+			else
+				max += blocks.length;
+			
+			for(x = min; x <= max; ++x)
+				unplaceBlock(getMapNode(x, y), blocks[x - min]);
+		}
 	}
 	        	
 	/**
@@ -129,7 +227,16 @@ public class Map  {
 	* @returns The map block at the given location
 	*/
 	public MapNode getMapNode(Location loc) {
-		return nodes[loc.gety()][loc.getx()];
+		return getMapNode(loc.getx(), loc.gety());
+	}
+	
+	/**
+	* Returns a MapBlock object representing the state of the map at a given location.
+	* @param loc   Location to get the map block from
+	* @returns The map block at the given location
+	*/
+	public MapNode getMapNode(int x, int y) {
+		return nodes[y][x];
 	}
 	        	
 	/**
@@ -140,8 +247,8 @@ public class Map  {
 	* @return true if the ship movement can be carried out.
 	*/
 	public boolean canMove(Ship s, Direction dir, int blocks) {
-		return false;
 		
+		return false;
 	}
 	        	
 	/**
@@ -189,8 +296,13 @@ public class Map  {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public boolean placeMine(Ship s, Location loc) {
-		return false;
+		MapNode n = getMapNode(loc);
+		if(!s.canPlaceMine() || n.block != null || s.getPlayer().numberOfMines() == 0)
+			return false;
 		
+		n.block = new MineBlock();
+		s.getPlayer().removeMine();
+		return true;
 	}
 
 	/**
@@ -201,8 +313,15 @@ public class Map  {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public boolean pickupMine(Ship s, Location loc) {
-		return false;
+		MapNode n = getMapNode(loc);
+		MineBlock b = n.block != null && n.block instanceof MineBlock ? (MineBlock)n.block : null;
 		
+		if(!s.canPickUpMine() || b != null || s.getPlayer().numberOfMines() == 0)
+			return false;
+		
+		n.block = null;
+		s.getPlayer().addMine();
+		return true;
 	}
 	        	
 	/**
