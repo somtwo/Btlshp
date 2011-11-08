@@ -10,7 +10,9 @@ public class Ship extends Construct {
 	* @param owner   Player the base belongs to.
 	* @param blocks  The blocks to use for the given ship.
 	*/
-	private Ship(Player owner, boolean isArmored, boolean gun, boolean torpedo, boolean mine, boolean Sonar, int forward, int side, int back, int gunRange, int radarRange, int sonarRange, int numberOfBlocks) {
+	
+//had to make ship public for JUnit testing make private again ~Z
+	public Ship(Player owner, boolean isArmored, boolean gun, boolean torpedo, boolean mine, boolean Sonar, int forward, int side, int back, int gunRange, int radarRange, int sonarRange, int numberOfBlocks) {
 		pl = owner;
 		hasGun = gun;
 		hasTorpedo = torpedo;
