@@ -13,6 +13,42 @@ public class Map  {
 	Player    leftPlayer, rightPlayer;
 	Base      leftBase, rightBase;
 	
+	
+	/**
+	 * Used for unit testing.
+	 * @return
+	 */
+	public Ship[] getShips() {
+		return ships.toArray(null);
+	}
+	
+	
+	/**
+	 * Used for unit testing.
+	 * @return
+	 */
+	public Base getLeftBase() {
+		return leftBase;
+	}
+	
+	
+	/**
+	 * Used for unit testing.
+	 * @return
+	 */
+	public Base getRightBase() {
+		return rightBase;
+	}
+	
+	/**
+	 * Used for unit testing.
+	 * @return
+	 */
+	public MapNode[][] getMapNodes() {
+		return nodes;
+	}
+	
+	
 	private void createNodes() {
 		nodes = new MapNode[MAPWIDTH][MAPHEIGHT];
 		
@@ -56,12 +92,15 @@ public class Map  {
 	
 	
 	private void createStructures() {
-		// Create the bases
+		// Create the left-player base and ships
 		leftBase = new Base(leftPlayer);
 		placeBase(leftBase, 0);
+		// TODO: Ships
 		
+		// Create the left-player base and ships
 		rightBase = new Base(rightPlayer);
 		placeBase(rightBase, MAPWIDTH - 1);
+		// TODO: Ships
 	}
 	
 	/**
@@ -375,6 +414,10 @@ public class Map  {
 		if(!s.canPlaceMine() || n.block != null || s.getPlayer().numberOfMines() == 0)
 			return false;
 		
+		if(loc.getx() < s.getx1() - 1 || loc.getx() > s.getx2() + 1 ||
+		   loc.gety() < s.gety1() - 1 || loc.gety() > s.gety2() + 1)
+			return false;
+		
 		n.block = new MineBlock();
 		s.getPlayer().removeMine();
 		return true;
@@ -392,6 +435,10 @@ public class Map  {
 		MineBlock b = n.block != null && n.block instanceof MineBlock ? (MineBlock)n.block : null;
 		
 		if(!s.canPickUpMine() || b != null || s.getPlayer().numberOfMines() == 0)
+			return false;
+		
+		if(loc.getx() < s.getx1() - 1 || loc.getx() > s.getx2() + 1 ||
+		   loc.gety() < s.gety1() - 1 || loc.gety() > s.gety2() + 1)
 			return false;
 		
 		n.block = null;
