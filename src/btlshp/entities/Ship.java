@@ -1,7 +1,5 @@
 package btlshp.entities;
 
-import btlshp.enums.Direction;
-
 public class Ship extends Construct {
 	private boolean hasGun, hasTorpedo, hasMinePlacement, hasSonar, isArmored;
 	private int     maxForwardMove, maxSideMove, maxBackMove, maxGunRange, maxSonarRange;
@@ -12,9 +10,7 @@ public class Ship extends Construct {
 	* @param owner   Player the base belongs to.
 	* @param blocks  The blocks to use for the given ship.
 	*/
-	
-//had to make ship public for JUnit testing make private again ~Z
-	public Ship(Player owner, boolean isArmored, boolean gun, boolean torpedo, boolean mine, boolean Sonar, int forward, int side, int back, int gunRange, int radarRange, int sonarRange, int numberOfBlocks) {
+	private Ship(Player owner, boolean isArmored, boolean gun, boolean torpedo, boolean mine, boolean Sonar, int forward, int side, int back, int gunRange, int radarRange, int sonarRange, int numberOfBlocks) {
 		pl = owner;
 		hasGun = gun;
 		hasTorpedo = torpedo;
@@ -163,45 +159,53 @@ public class Ship extends Construct {
 		return pl;
 	}
 	
-	
-	/**
-	 * Gets the left-most x-coordinate the ship occupies
-	 * @return
-	 */
-	public int getx1() {
-		if(myDir == Direction.West)
-			return myLoc.getx() - blocks.length; 
-		return myLoc.getx();
+	public Location[] getAdjacentLocations(){
+		if (myLoc == null) return null;
+		Location[] locations = new Location[(this.blocks.length*2) +2];
+		// add the head
+		switch(myDir){
+			case North:{
+				locations[0] = new Location(myLoc.getx(), myLoc.gety()+1);
+			}
+			case East:{
+				locations[0] = new Location(myLoc.getx()+1, myLoc.gety());				
+			}
+			case South:{
+				locations[0] = new Location(myLoc.getx(), myLoc.gety()-1);				
+			}
+			case West:{
+				locations[0] = new Location(myLoc.getx()-1, myLoc.gety());				
+			}
+		}
+		
+		// add the tail
+		// add the adjacent
+
+		
+		return locations;
 	}
-	
-	/**
-	 * Gets the right-most x-coordinate the ship occupies
-	 * @return
-	 */
-	public int getx2() {
-		if(myDir == Direction.East)
-			return myLoc.getx() + blocks.length; 
-		return myLoc.getx();
+	public Location[] getRotateLeftLocations(){
+		if (myLoc == null) return null;
+		Location[] locations = new Location[this.blocks.length];
+		switch(this.blocks.length){
+		case(1):{
+			locations = null;
+		}
+		case(2):{
+			
+		}
+		case(3):
+		case(4):
+		case(5):
+		}
+		
+		return locations;
 	}
-	
-	/**
-	 * Gets the top-most y-coordinate the ship occupies
-	 * @return
-	 */
-	public int gety1() {
-		if(myDir == Direction.North)
-			return myLoc.gety() - blocks.length; 
-		return myLoc.gety();
-	}
-	
-	
-	/**
-	 * Gets the bottom-most y-coordinate the ship occupies
-	 * @return
-	 */
-	public int gety2() {
-		if(myDir == Direction.South)
-			return myLoc.gety() + blocks.length; 
-		return myLoc.gety();
+	public Location[] getRotateRightLocations(){
+		if (myLoc == null) return null;
+		Location[] locations = new Location[this.blocks.length];
+		
+		
+		return locations;
 	}
 }
