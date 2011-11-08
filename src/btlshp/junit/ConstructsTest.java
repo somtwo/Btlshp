@@ -2,7 +2,7 @@ package btlshp.junit;
 import junit.framework.TestCase;
 import org.junit.Test;
 import ConstructTestStubs.*;
-import btlshp.entities.Location;
+import ConstructTestStubs.Location;
 import btlshp.enums.*;
 
 public class ConstructsTest extends TestCase{

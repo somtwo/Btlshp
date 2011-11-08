@@ -1,6 +1,6 @@
 package ConstructTestStubs;
 
-import btlshp.entities.Location;
+import ConstructTestStubs.Location;
 import btlshp.enums.*;
 
 public abstract class Construct {
