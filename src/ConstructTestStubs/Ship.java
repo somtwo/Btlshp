@@ -1,5 +1,7 @@
 package ConstructTestStubs;
 
+import btlshp.enums.Direction;
+
 public class Ship extends Construct {
 	private boolean hasGun, hasTorpedo, hasMinePlacement, hasSonar, isArmored;
 	private int     maxForwardMove, maxSideMove, maxBackMove, maxGunRange, maxSonarRange;
@@ -158,32 +160,6 @@ public class Ship extends Construct {
 	public Player getPlayer() {
 		return pl;
 	}
-	
-	public Location[] getAdjacentLocations(){
-		if (myLoc == null) return null;
-		Location[] locations = new Location[(this.blocks.length*2) +2];
-		// add the head
-		switch(myDir){
-			case North:{
-				locations[0] = new Location(myLoc.getx(), myLoc.gety()+1);
-			}
-			case East:{
-				locations[0] = new Location(myLoc.getx()+1, myLoc.gety());				
-			}
-			case South:{
-				locations[0] = new Location(myLoc.getx(), myLoc.gety()-1);				
-			}
-			case West:{
-				locations[0] = new Location(myLoc.getx()-1, myLoc.gety());				
-			}
-		}
-		
-		// add the tail
-		// add the adjacent
-
-		
-		return locations;
-	}
 	public Location[] getRotateLeftLocations(){
 		if (myLoc == null) return null;
 		Location[] locations = new Location[this.blocks.length];
@@ -207,5 +183,50 @@ public class Ship extends Construct {
 		
 		
 		return locations;
+	}
+	
+	
+	/**
+	 * Retruns the left-most column occupied by a ship.
+	 * @return
+	 */
+	public int getx1() {
+		if(myDir == Direction.West)
+			return myLoc.getx() - blocks.length + 1;
+		
+		return myLoc.getx();
+	}
+	
+	/**
+	 * Retruns the right-most column occupied by a ship.
+	 * @return
+	 */
+	public int getx2() {
+		if(myDir == Direction.East)
+			return myLoc.getx() + blocks.length - 1;
+		
+		return myLoc.getx();
+	}
+	
+	/**
+	 * Retruns the top-most column occupied by a ship.
+	 * @return
+	 */
+	public int gety1() {
+		if(myDir == Direction.North)
+			return myLoc.gety() - blocks.length + 1;
+		
+		return myLoc.gety();
+	}
+	
+	/**
+	 * Retruns the bottom-most column occupied by a ship.
+	 * @return
+	 */
+	public int gety2() {
+		if(myDir == Direction.South)
+			return myLoc.gety() + blocks.length - 1;
+		
+		return myLoc.gety();
 	}
 }

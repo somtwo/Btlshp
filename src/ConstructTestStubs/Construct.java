@@ -1,6 +1,5 @@
 package ConstructTestStubs;
 
-import ConstructTestStubs.Location;
 import btlshp.enums.*;
 
 public abstract class Construct {
@@ -108,23 +107,23 @@ public abstract class Construct {
 		// No Error Check for repairs on full Health Ship.
 	}
 	
-	public Location getLocation() {
+	public Location getLocation(){
 		return myLoc;
 	}
 	
-	public void setLocation(Location loc) {
+	public void setLocation(Location loc){
 		myLoc = loc;
 	}
 	
-	public Direction getDirection() {
+	public Direction getDirection(){
 		return myDir;
 	}
 	
-	public void setDirection(Direction dir) {
+	public void setDirection(Direction dir){
 		myDir = dir;
 	}
 	
-	public boolean isDestroyed() {
+	public boolean isDestroyed(){
 		// assume it is destroyed
 		boolean destroyed = true;
 		// check for non-destroyed block
@@ -137,11 +136,11 @@ public abstract class Construct {
 		return destroyed;
 	}
 	
-	public int getRadarRange() {
+	public int getRadarRange(){
 		return maxRadarRange;
 	}
 	
-	public ConstructBlock[] getBlocks() {
+	public ConstructBlock[] getBlocks(){
 		return blocks;
 	}
 	
@@ -158,5 +157,57 @@ public abstract class Construct {
 			}
 		}
 		return j;
+	}
+	public Location[] getAdjacentLocations(){
+		if (myLoc == null) return null;
+		Location[] locations = new Location[(this.blocks.length*2) +2];
+		// add the head
+		// Then add the tail (opposite direction of head and the length of the ship for distance)
+		// Finally add the Adjacent blocks, 2 for each block on the construct.
+		switch(myDir){
+			case North:{
+				int j = myLoc.gety();
+				locations[0] = new Location(myLoc.getx(), myLoc.gety()-1);
+				locations[1] = new Location(myLoc.getx(), myLoc.gety() + blocks.length);
+				// These loops iterate once per block and i keeps track of the relative index to use for each.
+				for (int i = 2; i < (blocks.length*2)+2; i = i+2){
+					locations[i] = new Location(myLoc.getx()+1, j);
+					locations[i+1] = new Location(myLoc.getx()-1, j);
+					j++;
+				}
+			}
+			case East:{
+				int j = myLoc.getx();
+				locations[0] = new Location(myLoc.getx()+1, myLoc.gety());		
+				locations[1] = new Location(myLoc.getx() - blocks.length, myLoc.gety());	
+				for (int i = 2; i < (blocks.length*2)+2; i = i+2){
+					locations[i] = new Location(j, myLoc.gety()+1);
+					locations[i+1] = new Location(j, myLoc.gety()-1);
+					j--;
+				}
+			}
+			case South:{
+				int j = myLoc.gety();
+				locations[0] = new Location(myLoc.getx(), myLoc.gety()+1);	
+				locations[1] = new Location(myLoc.getx(), myLoc.gety() - blocks.length);
+				for (int i = 2; i < (blocks.length*2)+2; i = i+2){
+					locations[i] = new Location(myLoc.getx()+1, j);
+					locations[i+1] = new Location(myLoc.getx()-1, j);
+					j--;
+				}
+			}
+			case West:{
+				int j = myLoc.getx();
+				locations[0] = new Location(myLoc.getx()-1, myLoc.gety());	
+				locations[1] = new Location(myLoc.getx() + blocks.length, myLoc.gety());
+				for (int i = 2; i < (blocks.length*2)+2; i = i+2){
+					locations[i] = new Location(j, myLoc.gety()+1);
+					locations[i+1] = new Location(j, myLoc.gety()-1);
+					j++;
+				}
+			}
+		}		
+		return locations;
+		
 	}
 }

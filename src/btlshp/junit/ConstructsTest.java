@@ -31,7 +31,42 @@ public class ConstructsTest extends TestCase{
 		Direction myDir = Direction.West;
 		myBase.setDirection(myDir);
 		assertTrue(myBase.getDirection() == myDir);
+		
+		// Check Adjacent Array
+		Location[] myArray = new Location[22];
+		// ! assumes facing west at (5,5) as previously set.
+		myArray[0] = new Location(4,5); // infront of head
+		myArray[1] = new Location(15,5); // infront of tail
+		myArray[2] = new Location(5,6); // Rest does lower, then upper, then next.
+		myArray[3] = new Location(5,4);
+		myArray[4] = new Location(6,6);
+		myArray[5] = new Location(6,4);
+		myArray[6] = new Location(7,6);
+		myArray[7] = new Location(7,4);
+		myArray[8] = new Location(8,6);
+		myArray[9] = new Location(8,4);
+		myArray[10] = new Location(9,6);
+		myArray[11] = new Location(9,4);
+		myArray[12] = new Location(10,6);
+		myArray[13] = new Location(10,4);
+		myArray[14] = new Location(11,6);
+		myArray[15] = new Location(11,4);
+		myArray[16] = new Location(12,6);
+		myArray[17] = new Location(12,4);
+		myArray[18] = new Location(13,6);
+		myArray[19] = new Location(13,4);
+		myArray[20] = new Location(14,6);
+		myArray[21] = new Location(14,4);
+		
+		Location[] myBaseArray = myBase.getAdjacentLocations();
+		
+		for (int i = 0; i < myArray.length; i++){
+			assertTrue(myBaseArray[i].getx() == myArray[i].getx());
+			assertTrue(myBaseArray[i].gety() == myArray[i].gety());
+		}
 	}
+
+		
 	public void testConstructAndBase() {
 		Base myBase = new Base(myPlayer); 
 		ConstructBlock[] myBlocks = myBase.getBlocks();

@@ -160,32 +160,6 @@ public class Ship extends Construct {
 	public Player getPlayer() {
 		return pl;
 	}
-	
-	public Location[] getAdjacentLocations(){
-		if (myLoc == null) return null;
-		Location[] locations = new Location[(this.blocks.length*2) +2];
-		// add the head
-		switch(myDir){
-			case North:{
-				locations[0] = new Location(myLoc.getx(), myLoc.gety()+1);
-			}
-			case East:{
-				locations[0] = new Location(myLoc.getx()+1, myLoc.gety());				
-			}
-			case South:{
-				locations[0] = new Location(myLoc.getx(), myLoc.gety()-1);				
-			}
-			case West:{
-				locations[0] = new Location(myLoc.getx()-1, myLoc.gety());				
-			}
-		}
-		
-		// add the tail
-		// add the adjacent
-
-		
-		return locations;
-	}
 	public Location[] getRotateLeftLocations(){
 		if (myLoc == null) return null;
 		Location[] locations = new Location[this.blocks.length];
