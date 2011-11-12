@@ -162,26 +162,210 @@ public class Ship extends Construct {
 	}
 	public Location[] getRotateLeftLocations(){
 		if (myLoc == null) return null;
-		Location[] locations = new Location[this.blocks.length];
-		switch(this.blocks.length){
-		case(1):{
-			locations = null;
+		if (blocks.length < 2 || blocks.length >5) return null;
+		Location[] locations = new Location[0];
+		// Account for Destroyer's odd pivot point
+		if (this.blocks.length == 3){
+				locations = new Location[4];
+				switch(myDir){
+					case North:{
+						locations[0] = new Location(myLoc.getx()-1, myLoc.gety());
+						locations[1] = new Location(myLoc.getx()-1, myLoc.gety()+1);	
+						locations[2] = new Location(myLoc.getx()+1, myLoc.gety()+1);
+						locations[3] = new Location(myLoc.getx()+1, myLoc.gety()+2);
+						break;
+					}
+					case East:{
+						locations[0] = new Location(myLoc.getx(), myLoc.gety()-1);
+						locations[1] = new Location(myLoc.getx()-1, myLoc.gety()-1);	
+						locations[2] = new Location(myLoc.getx()-1, myLoc.gety()+1);
+						locations[3] = new Location(myLoc.getx()-2, myLoc.gety()+1);
+						break;
+					}
+					case South:{
+						locations[0] = new Location(myLoc.getx()+1, myLoc.gety());
+						locations[1] = new Location(myLoc.getx()+1, myLoc.gety()-1);	
+						locations[2] = new Location(myLoc.getx()-1, myLoc.gety()-1);
+						locations[3] = new Location(myLoc.getx()-1, myLoc.gety()-2);
+						break;
+					}
+					case West:{
+						locations[0] = new Location(myLoc.getx(), myLoc.gety()+1);
+						locations[1] = new Location(myLoc.getx()+1, myLoc.gety()+1);	
+						locations[2] = new Location(myLoc.getx()+1, myLoc.gety()-1);
+						locations[3] = new Location(myLoc.getx()+2, myLoc.gety()-1);
+						break;
+					}
+				}
 		}
-		case(2):{
+		// Do all other ships
+		else {
+			// Counter for array position
+			int k = 0; 
 			
+			if (blocks.length == 2) locations = new Location[2];
+			else if (blocks.length == 4) locations = new Location[9];
+			else if (blocks.length == 5) locations = new Location[14];
+			else locations = new Location[1000];
+			
+			// Do head through one less then tail. Then do tail at one less then length of ship.
+			for (int i = 0; i < blocks.length -1; i++){
+				// for each position on the ship, add that number of blocks in the correct direction
+				for (int j = 1; j < i+2; j++){
+					switch(myDir){
+						case North:{
+							locations[k] = new Location(myLoc.getx()-j, myLoc.gety()+i);
+							k++;
+							break;
+						}
+						case East:{
+							locations[k] = new Location(myLoc.getx()-i, myLoc.gety()-j);
+							k++;
+							break;
+						}
+						case South:{
+							locations[k] = new Location(myLoc.getx()+j, myLoc.gety()-i);
+							k++;
+							break;
+						}
+						case West:{
+							locations[k] = new Location(myLoc.getx()+i, myLoc.gety()+j);
+							k++;
+							break;
+						}
+					}
+				}
+			}
+			// Then Add the Tails row which is one less then the length of the ship.
+			for (int i = 1; i < blocks.length; i++){
+				switch(myDir){
+					case North:{
+						locations[k] = new Location(myLoc.getx() - i, myLoc.gety() + (blocks.length-1));
+						k++;
+						break;
+					}
+					case East:{
+						locations[k] = new Location(myLoc.getx()-(blocks.length-1), myLoc.gety()-i);
+						k++;
+						break;
+					}
+					case South:{
+						locations[k] = new Location(myLoc.getx()+i, myLoc.gety()-(blocks.length-1));
+						k++;
+						break;
+					}
+					case West:{
+						locations[k] = new Location(myLoc.getx()+(blocks.length-1), myLoc.gety()+i);
+						k++;
+						break;
+					}
+				}
+			}
 		}
-		case(3):
-		case(4):
-		case(5):
-		}
-		
 		return locations;
+		
 	}
 	public Location[] getRotateRightLocations(){
 		if (myLoc == null) return null;
-		Location[] locations = new Location[this.blocks.length];
-		
-		
+		if (blocks.length < 2 || blocks.length >10) return null;
+		Location[] locations = new Location[0];
+		// Account for Destroyer's odd pivot point
+		if (this.blocks.length == 3){
+				locations = new Location[4];
+				switch(myDir){
+					case North:{
+						locations[0] = new Location(myLoc.getx()+1, myLoc.gety());
+						locations[1] = new Location(myLoc.getx()+1, myLoc.gety()+1);	
+						locations[2] = new Location(myLoc.getx()-1, myLoc.gety()+1);
+						locations[3] = new Location(myLoc.getx()-1, myLoc.gety()+2);
+						break;
+					}
+					case East:{
+						locations[0] = new Location(myLoc.getx(), myLoc.gety()+1);
+						locations[1] = new Location(myLoc.getx()-1, myLoc.gety()+1);	
+						locations[2] = new Location(myLoc.getx()-1, myLoc.gety()-1);
+						locations[3] = new Location(myLoc.getx()-2, myLoc.gety()-1);
+						break;
+					}
+					case South:{
+						locations[0] = new Location(myLoc.getx()-1, myLoc.gety());
+						locations[1] = new Location(myLoc.getx()-1, myLoc.gety()-1);	
+						locations[2] = new Location(myLoc.getx()+1, myLoc.gety()-1);
+						locations[3] = new Location(myLoc.getx()+1, myLoc.gety()-2);
+						break;
+					}
+					case West:{
+						locations[0] = new Location(myLoc.getx(), myLoc.gety()-1);
+						locations[1] = new Location(myLoc.getx()+1, myLoc.gety()-1);	
+						locations[2] = new Location(myLoc.getx()+1, myLoc.gety()+1);
+						locations[3] = new Location(myLoc.getx()+2, myLoc.gety()+1);
+						break;
+					}
+				}
+		}
+		// Do all other ships
+		else {
+			// Counter for array position
+			int k = 0; 
+			
+			if (blocks.length == 2) locations = new Location[2];
+			else if (blocks.length == 4) locations = new Location[9];
+			else locations = new Location[14];
+			
+			// Do head through one less then tail. Then do tail at one less then length of ship.
+			for (int i = 0; i < blocks.length -1; i++){
+				// for each position on the ship, add that number of blocks in the correct direction
+				for (int j = 1; j < i+2; j++){
+					switch(myDir){
+						case North:{
+							locations[k] = new Location(myLoc.getx()+j, myLoc.gety()+i);
+							k++;
+							break;
+						}
+						case East:{
+							locations[k] = new Location(myLoc.getx()-i, myLoc.gety()+j);
+							k++;
+							break;
+						}
+						case South:{
+							locations[k] = new Location(myLoc.getx()-j, myLoc.gety()-i);
+							k++;
+							break;
+						}
+						case West:{
+							locations[k] = new Location(myLoc.getx()+i, myLoc.gety()-j);
+							k++;
+							break;
+						}
+					}
+				}
+			}
+			// Then Add the Tails row which is one less then the length of the ship.
+			for (int i = 1; i < blocks.length; i++){
+				switch(myDir){
+					case North:{
+						locations[k] = new Location(myLoc.getx() + i, myLoc.gety() + (blocks.length-1));
+						k++;
+						break;
+					}
+					case East:{
+						locations[k] = new Location(myLoc.getx()-(blocks.length-1), myLoc.gety()+i);
+						k++;
+						break;
+					}
+					case South:{
+						locations[k] = new Location(myLoc.getx()-i, myLoc.gety()-(blocks.length-1));
+						k++;
+						break;
+					}
+					case West:{
+						locations[k] = new Location(myLoc.getx()+(blocks.length-1), myLoc.gety()-i);
+						k++;
+						break;
+					}
+				}
+			}
+		}
 		return locations;
 	}
 	

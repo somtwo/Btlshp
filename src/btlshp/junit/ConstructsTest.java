@@ -174,6 +174,51 @@ public class ConstructsTest extends TestCase{
 		for (int i = 0; i<5; i++){
 			assertTrue(myCruiser.getBlocks()[i].isUntouched());
 		}
+		// Test Rotation on the Cruiser
+		// Left
+		myCruiser.setLocation(new Location (10,10));
+		myCruiser.setDirection(Direction.East);
+		Location[] myLocationsLeft = new Location[14];
+		myLocationsLeft[0]= new Location(10,9);
+		myLocationsLeft[1]= new Location(9,9);
+		myLocationsLeft[2]= new Location(9,8);
+		myLocationsLeft[3]= new Location(8,9);
+		myLocationsLeft[4]= new Location(8,8);
+		myLocationsLeft[5]= new Location(8,7);
+		myLocationsLeft[6]= new Location(7,9);
+		myLocationsLeft[7]= new Location(7,8);
+		myLocationsLeft[8]= new Location(7,7);
+		myLocationsLeft[9]= new Location(7,6);
+		myLocationsLeft[10]= new Location(6,9);
+		myLocationsLeft[11]= new Location(6,8);
+		myLocationsLeft[12]= new Location(6,7);
+		myLocationsLeft[13]= new Location(6,6);
+		Location[] myOtherLocations = myCruiser.getRotateLeftLocations();
+		for(int i = 0; i < myLocationsLeft.length; i++){
+			assertTrue (myLocationsLeft[i].getx() == myOtherLocations[i].getx());
+			assertTrue (myLocationsLeft[i].gety() == myOtherLocations[i].gety());
+		}
+		//Right
+		Location[] myLocationsRight = new Location[14];
+		myLocationsRight[0]= new Location(10,11);
+		myLocationsRight[1]= new Location(9,11);
+		myLocationsRight[2]= new Location(9,12);
+		myLocationsRight[3]= new Location(8,11);
+		myLocationsRight[4]= new Location(8,12);
+		myLocationsRight[5]= new Location(8,13);
+		myLocationsRight[6]= new Location(7,11);
+		myLocationsRight[7]= new Location(7,12);
+		myLocationsRight[8]= new Location(7,13);
+		myLocationsRight[9]= new Location(7,14);
+		myLocationsRight[10]= new Location(6,11);
+		myLocationsRight[11]= new Location(6,12);
+		myLocationsRight[12]= new Location(6,13);
+		myLocationsRight[13]= new Location(6,14);
+		Location[] myOtherLocations2 = myCruiser.getRotateRightLocations();
+		for(int i = 0; i < myLocationsRight.length; i++){
+			assertTrue (myLocationsRight[i].getx() == myOtherLocations2[i].getx());
+			assertTrue (myLocationsRight[i].gety() == myOtherLocations2[i].gety());
+		}
 	}
 	public void testTorpedoBoat(){
 	//Ship myTorpedoBoat = new Ship(owner, false, true, true, false, false, 8, 1, 1, 4, 5, 0, 4)
@@ -212,6 +257,31 @@ public class ConstructsTest extends TestCase{
 		assertTrue(3 == myDestroyer.getBlocks().length);
 		for (int i = 0; i<3; i++){
 			assertTrue(myDestroyer.getBlocks()[i].isUntouched());
+		}
+	// Test Rotation on the Destroyer
+		//Left
+		myDestroyer.setLocation(new Location (10,10));
+		myDestroyer.setDirection(Direction.East);
+		Location[] myLocationsLeft = new Location[4];
+		myLocationsLeft[0]= new Location(10,9);
+		myLocationsLeft[1]= new Location(9,9);
+		myLocationsLeft[2]= new Location(9,11);
+		myLocationsLeft[3]= new Location(8,11);
+		Location[] myOtherLocations = myDestroyer.getRotateLeftLocations();
+		for(int i = 0; i < myLocationsLeft.length; i++){
+			assertTrue (myLocationsLeft[i].getx() == myOtherLocations[i].getx());
+			assertTrue (myLocationsLeft[i].gety() == myOtherLocations[i].gety());
+		}
+		//Right
+		Location[] myLocationsRight = new Location[4];
+		myLocationsRight[0]= new Location(10,11);
+		myLocationsRight[1]= new Location(9,11);
+		myLocationsRight[2]= new Location(9,9);
+		myLocationsRight[3]= new Location(8,9);
+		Location[] myOtherLocations2 = myDestroyer.getRotateRightLocations();
+		for(int i = 0; i < myLocationsLeft.length; i++){
+			assertTrue (myLocationsRight[i].getx() == myOtherLocations2[i].getx());
+			assertTrue (myLocationsRight[i].gety() == myOtherLocations2[i].gety());
 		}
 	}
 
