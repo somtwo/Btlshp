@@ -1,4 +1,4 @@
-package ConstructTestStubs;
+package btlshp.teststubs.construct;
 
 public class Player {
 	/**

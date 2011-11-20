@@ -1,4 +1,4 @@
-package MapTestStubs;
+package btlshp.teststubs.map;
 
 public class UnusedPlayer {
 	/**

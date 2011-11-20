@@ -1,11 +1,11 @@
 package btlshp.turns;
 
-import ConstructTestStubs.Ship;
-import TurnTestStubs.Map;
 import btlshp.entities.Base;
 import btlshp.entities.ConstructBlock;
 import btlshp.entities.Location;
 import btlshp.enums.Direction;
+import btlshp.teststubs.construct.Ship;
+import btlshp.teststubs.turn.Map;
 public interface Turn {
 	/**
 	 * @returns true if the move object represents a successful move, false otherwise.
@@ -345,10 +345,10 @@ class RepairBase implements Turn{
 }
 class RepairShip implements Turn{
 	private Ship s;
-	private ConstructTestStubs.ConstructBlock repairBlock;
+	private btlshp.teststubs.construct.ConstructBlock repairBlock;
 	private boolean success = false;
 
-	RepairShip(Ship s, ConstructTestStubs.ConstructBlock repairBlock) {
+	RepairShip(Ship s, btlshp.teststubs.construct.ConstructBlock repairBlock) {
 		this.s = s;
 		this.repairBlock = repairBlock;
 	}

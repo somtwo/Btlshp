@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import org.junit.*;
 
-import ConstructTestStubs.Ship;
-import TurnTestStubs.Map;
 import btlshp.entities.Base;
 import btlshp.entities.ConstructBlock;
 import btlshp.entities.Location;
-import ConstructTestStubs.Player;
 import btlshp.enums.Direction;
+import btlshp.teststubs.construct.Player;
+import btlshp.teststubs.construct.Ship;
+import btlshp.teststubs.turn.Map;
 import btlshp.turns.Turn;
 import btlshp.turns.TurnFactory;
 import junit.framework.TestCase;
@@ -29,7 +29,7 @@ public class TurnTest extends TestCase {
 		Base b = new Base(null);
 		Location loc = new Location(distance, distance);
 		ConstructBlock repairBaseBlock = new ConstructBlock(b);
-		ConstructTestStubs.ConstructBlock repairBlock = new ConstructTestStubs.ConstructBlock(s);
+		btlshp.teststubs.construct.ConstructBlock repairBlock = new btlshp.teststubs.construct.ConstructBlock(s);
 		
 		t.add(TurnFactory.acceptSurrender());
 		t.add(TurnFactory.confirmPostponeGame());

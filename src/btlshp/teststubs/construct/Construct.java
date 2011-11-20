@@ -1,4 +1,4 @@
-package ConstructTestStubs;
+package btlshp.teststubs.construct;
 
 import btlshp.enums.*;
 

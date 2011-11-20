@@ -1,8 +1,8 @@
-package TurnTestStubs;
+package btlshp.teststubs.turn;
 
 import btlshp.entities.Location;
-import ConstructTestStubs.Ship;
 import btlshp.enums.Direction;
+import btlshp.teststubs.construct.Ship;
 
 public class Map {
 
