@@ -17,7 +17,8 @@ public class MapTest extends TestCase{
 	Location myLoc;
 	Map testMap;
 
-	@Before public void setUp() {
+	@Before 
+	public void setUp() {
 		testMap = new Map(leftPlayer, leftPlayer);
 		leftPlayer = new Player(); 
 		rightPlayer = new Player();
