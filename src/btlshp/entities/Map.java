@@ -1,11 +1,16 @@
 package btlshp.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import btlshp.enums.Direction;
 import btlshp.enums.Weapon;
 
-public class Map  {
+public class Map implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6849202817059640136L;
 	private static final int MAPWIDTH = 30;
 	private static final int MAPHEIGHT = 30;
 	ArrayList<Ship> ships;

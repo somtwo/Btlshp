@@ -1,8 +1,12 @@
 package btlshp.entities;
 
+import java.io.Serializable;
+
 import btlshp.enums.Direction;
 
-public class Ship extends Construct {
+public class Ship extends Construct implements Serializable{
+	
+	private static final long serialVersionUID = -4544034641149715119L;
 	private boolean hasGun, hasTorpedo, hasMinePlacement, hasSonar, isArmored;
 	private int     maxForwardMove, maxSideMove, maxBackMove, maxGunRange, maxSonarRange;
 	

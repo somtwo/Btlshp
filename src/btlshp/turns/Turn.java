@@ -6,8 +6,8 @@ import btlshp.entities.Base;
 import btlshp.entities.ConstructBlock;
 import btlshp.entities.Location;
 import btlshp.enums.Direction;
-import btlshp.teststubs.construct.Ship;
-import btlshp.teststubs.turn.Map;
+import btlshp.entities.Ship;
+import btlshp.entities.Map;
 public interface Turn {
 	/**
 	 * @returns true if the move object represents a successful move, false otherwise.
@@ -36,7 +36,7 @@ class Pass implements Turn, Serializable{
 	}
 	@Override
 	public String toString(){
-		return "Pass";
+		return "pass";
 	}
 }
 class RequestPostponeGame implements Turn, Serializable{
@@ -59,7 +59,7 @@ class RequestPostponeGame implements Turn, Serializable{
 	}
 	@Override
 	public String toString(){
-		return "RequestPostponeGame";
+		return "requestPostponeGame";
 	}
 }
 class ConfirmPostponeGame implements Turn, Serializable{
@@ -86,7 +86,7 @@ class ConfirmPostponeGame implements Turn, Serializable{
 	}
 	@Override
 	public String toString(){
-		return "ConfirmPostponeGame";
+		return "confirmPostponeGame";
 	}
 }
 class LoadGameState implements Turn, Serializable{
@@ -110,7 +110,7 @@ class LoadGameState implements Turn, Serializable{
 	}
 	@Override
 	public String toString(){
-		return "LoadGameState";
+		return "loadGameState";
 	}
 }
 class SaveGameState implements Turn{
@@ -128,7 +128,7 @@ class SaveGameState implements Turn{
 	}
 	@Override
 	public String toString(){
-		return "SaveGameState";
+		return "saveGameState";
 	}
 	
 }
@@ -157,7 +157,7 @@ class RequestSurrender implements Turn, Serializable{
 	}
 	@Override
 	public String toString(){
-		return "RequestSurrender";
+		return "requestSurrender";
 	}
 }
 class AcceptSurrender implements Turn, Serializable{
@@ -181,7 +181,7 @@ class AcceptSurrender implements Turn, Serializable{
 	}
 	@Override
 	public String toString(){
-		return "AcceptSurrender";
+		return "acceptSurrender";
 	}
 }
 class MoveShip implements Turn, Serializable{
@@ -215,11 +215,11 @@ class MoveShip implements Turn, Serializable{
 
 	@Override
 	public boolean wasSuccessful() {
-		return success;
+		return true;
 	}
 	@Override
 	public String toString(){
-		return "MoveShip";
+		return "moveShip";
 	}
 }
 class PlaceMine implements Turn, Serializable{
@@ -254,7 +254,7 @@ class PlaceMine implements Turn, Serializable{
 	}
 	@Override
 	public String toString(){
-		return "PlaceMine";
+		return "placeMine";
 	}
 }
 class TakeMine implements Turn, Serializable{
@@ -289,7 +289,7 @@ class TakeMine implements Turn, Serializable{
 	}
 	@Override
 	public String toString(){
-		return "TakeMine";
+		return "takeMine";
 	}
 }
 class LaunchTorpedo implements Turn, Serializable{
@@ -302,9 +302,9 @@ class LaunchTorpedo implements Turn, Serializable{
 	private boolean success = false;
 
 
-	LaunchTorpedo(Map m, Ship s) {
-		this.m = m;
-		this.s = s;
+	LaunchTorpedo(Map m2, Ship s2) {
+		this.m = m2;
+		this.s = s2;
 	}
 
 	@Override
@@ -324,7 +324,7 @@ class LaunchTorpedo implements Turn, Serializable{
 	}
 	@Override
 	public String toString(){
-		return "LaunchTorpedo";
+		return "launchTorpedo";
 	}
 }
 
@@ -361,7 +361,7 @@ class Shoot implements Turn, Serializable{
 	}
 	@Override
 	public String toString(){
-		return "Shoot";
+		return "shoot";
 	}
 }
 class RepairBase implements Turn, Serializable{
@@ -390,7 +390,7 @@ class RepairBase implements Turn, Serializable{
 	}
 	@Override
 	public String toString(){
-		return "RepairBase";
+		return "repairBase";
 	}
 }
 class RepairShip implements Turn, Serializable{
@@ -399,10 +399,10 @@ class RepairShip implements Turn, Serializable{
 	 */
 	private static final long serialVersionUID = 89817140305258661L;
 	private Ship s;
-	private btlshp.teststubs.construct.ConstructBlock repairBlock;
+	private ConstructBlock repairBlock;
 	private boolean success = false;
 
-	RepairShip(Ship s, btlshp.teststubs.construct.ConstructBlock repairBlock) {
+	RepairShip(Ship s, ConstructBlock repairBlock) {
 		this.s = s;
 		this.repairBlock = repairBlock;
 	}
@@ -422,6 +422,6 @@ class RepairShip implements Turn, Serializable{
 	
 	@Override
 	public String toString(){
-		return "RepairShip";
+		return "repairShip";
 	}
 }

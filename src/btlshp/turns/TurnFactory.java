@@ -1,11 +1,8 @@
 package btlshp.turns;
 
-import btlshp.entities.Base;
-import btlshp.entities.ConstructBlock;
-import btlshp.entities.Location;
+import btlshp.entities.*;
 import btlshp.enums.Direction;
-import btlshp.teststubs.construct.Ship;
-import btlshp.teststubs.turn.Map;
+
 
 public final class TurnFactory {
 	/**
@@ -89,7 +86,7 @@ public final class TurnFactory {
 	* @param s ship to launch a torpedo from
 	* @return true if torpedo launched
 	*/
-	public static LaunchTorpedo launchTorpedo(Map m, Ship s) {
+	public static LaunchTorpedo launchTorpedo(btlshp.entities.Map m, btlshp.entities.Ship s) {
 		return new LaunchTorpedo(m, s);
 	}
 
@@ -108,7 +105,7 @@ public final class TurnFactory {
 	* @param s ship to be repaired
 	* @return the resulting turn object.
 	*/
-	public static RepairShip repairShip(btlshp.teststubs.construct.ConstructBlock repairBlock, Ship s) {
+	public static RepairShip repairShip(ConstructBlock repairBlock, Ship s) {
 		return new RepairShip(s, repairBlock);
 	}
 

@@ -1,7 +1,13 @@
 package btlshp.entities;
 
-public class Base extends Construct {
+import java.io.Serializable;
 
+public class Base extends Construct implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2521390657646600415L;
 	/**
 	* Constructor for Base
 	* Returns the Base Constructed

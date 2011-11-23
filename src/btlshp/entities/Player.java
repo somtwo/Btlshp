@@ -1,7 +1,9 @@
 package btlshp.entities;
+import java.io.Serializable;
 import java.util.ArrayList;
-public class Player {
+public class Player implements Serializable {
 	
+	private static final long serialVersionUID = -3335146204678437423L;
 	/**
 	 * Instance variables
 	 */
