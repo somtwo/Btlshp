@@ -38,7 +38,7 @@ public class TurnTest extends TestCase {
 		t.add(TurnFactory.acceptSurrender());
 		t.add(TurnFactory.confirmPostponeGame());
 		t.add(TurnFactory.launchTorpedo(m, s));
-		t.add(TurnFactory.loadGameState());
+		t.add(TurnFactory.loadGameState(null));
 		t.add(TurnFactory.saveGameState());
 		t.add(TurnFactory.moveShip(m, s, dir, distance1));
 		t.add(TurnFactory.pass());
@@ -112,7 +112,5 @@ public class TurnTest extends TestCase {
 			}
 		}
 	}
-	public void testSaveandLoad(){
-		
-	}
+	
 }

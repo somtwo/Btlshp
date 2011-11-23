@@ -39,10 +39,11 @@ public final class TurnFactory {
 
 	/**
 	* Factory method to create a turn representing the start of a previously saved game.
+	* @param f filename of the saved game
 	* @return the resulting turn object.
 	*/
-	public static LoadGameState loadGameState() {
-		return new LoadGameState();
+	public static LoadGameState loadGameState(String f) {
+		return new LoadGameState(f);
 	}
 	/**
 	 * Factory method to create a turn representing the saving of game state

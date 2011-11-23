@@ -8,6 +8,7 @@ import btlshp.entities.Location;
 import btlshp.enums.Direction;
 import btlshp.entities.Ship;
 import btlshp.entities.Map;
+import java.io.*;
 public interface Turn {
 	/**
 	 * @returns true if the move object represents a successful move, false otherwise.
@@ -96,10 +97,26 @@ class LoadGameState implements Turn, Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 4870988534077315987L;
+	private String filePath;
+	/**
+	 * 
+	 * @param f location of saved game file
+	 */
+	public LoadGameState(String f){
+		filePath = f;
+	}
 	@Override
 	public void executeTurn() {
-		// TODO Implementation IO dependent
-		
+			FileInputStream fileIn = null;
+			ObjectInputStream objIn = null;
+			try{
+				fileIn = new FileInputStream(filePath);
+				objIn = new ObjectInputStream(fileIn);
+				fileIn.close();
+			}catch(IOException e){
+				System.err.println(e.getMessage());
+			}
+			
 	}
 
 
