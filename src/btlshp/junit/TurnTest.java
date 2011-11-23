@@ -1,5 +1,6 @@
 package btlshp.junit;
 
+import java.io.*;
 import java.util.ArrayList;
 
 import org.junit.*;
@@ -72,5 +73,34 @@ public class TurnTest extends TestCase {
 		assertEquals(t.get(11).toString(),"RequestSurrender");
 		assertEquals(t.get(12).toString(),"Shoot");
 		assertEquals(t.get(13).toString(),"TakeMine");
+	}
+	public void testSerialize(){
+		String filename = "turn.ser";
+		FileOutputStream fileout = null;
+		ObjectOutputStream objout = null;
+		FileInputStream filein = null;
+		ObjectInputStream objin = null;
+		Turn passTurn = TurnFactory.pass();
+		Turn newPassTurn = null;
+		try{
+			fileout = new FileOutputStream(filename);
+			objout = new ObjectOutputStream(fileout);
+			objout.writeObject(passTurn);
+			fileout.close();
+		}catch(IOException e){
+			System.err.println(e.getMessage());
+		}
+		
+		try{
+			filein = new FileInputStream(filename);
+			objin = new ObjectInputStream(filein);
+			newPassTurn = (Turn) objin.readObject();
+			filein.close();
+		}catch(IOException e){
+			System.err.println(e.getMessage());
+		}
+		catch(ClassNotFoundException e){
+			System.err.println(e.getMessage());
+		}
 	}
 }

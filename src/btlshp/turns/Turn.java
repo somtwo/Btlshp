@@ -1,5 +1,7 @@
 package btlshp.turns;
 
+import java.io.Serializable;
+
 import btlshp.entities.Base;
 import btlshp.entities.ConstructBlock;
 import btlshp.entities.Location;
@@ -19,7 +21,11 @@ public interface Turn {
 	void executeTurn();
 }
 
-class Pass implements Turn{
+class Pass implements Turn, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3359745261868508357L;
 	@Override
 	public void executeTurn() {//Does no work
 	}
@@ -33,7 +39,11 @@ class Pass implements Turn{
 		return "Pass";
 	}
 }
-class RequestPostponeGame implements Turn{
+class RequestPostponeGame implements Turn, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2537600636201002718L;
 	@Override
 	/**
 	 * Opponent would like to PostPone Game
@@ -52,9 +62,13 @@ class RequestPostponeGame implements Turn{
 		return "RequestPostponeGame";
 	}
 }
-class ConfirmPostponeGame implements Turn{
+class ConfirmPostponeGame implements Turn, Serializable{
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7601913526703183133L;
 	@Override
 	/**
 	 * Opponent accepted postponing game
@@ -75,9 +89,13 @@ class ConfirmPostponeGame implements Turn{
 		return "ConfirmPostponeGame";
 	}
 }
-class LoadGameState implements Turn{
+class LoadGameState implements Turn, Serializable{
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4870988534077315987L;
 	@Override
 	public void executeTurn() {
 		// TODO Implementation IO dependent
@@ -114,9 +132,13 @@ class SaveGameState implements Turn{
 	}
 	
 }
-class RequestSurrender implements Turn{
+class RequestSurrender implements Turn, Serializable{
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4395558489216020334L;
 	@Override
 	/**
 	 * Opponent requests to quit(surrender) game
@@ -138,7 +160,11 @@ class RequestSurrender implements Turn{
 		return "RequestSurrender";
 	}
 }
-class AcceptSurrender implements Turn{
+class AcceptSurrender implements Turn, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8163598235191879797L;
 	@Override
 	/**
 	 * Opponent has accepted request to surrender
@@ -158,7 +184,11 @@ class AcceptSurrender implements Turn{
 		return "AcceptSurrender";
 	}
 }
-class MoveShip implements Turn{
+class MoveShip implements Turn, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4599021282070269467L;
 	private Ship s;
 	private Direction dir;
 	private int distance;
@@ -192,7 +222,11 @@ class MoveShip implements Turn{
 		return "MoveShip";
 	}
 }
-class PlaceMine implements Turn{
+class PlaceMine implements Turn, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4336837927576289067L;
 	private Map m;
 	private Location loc;
 	private Ship s;
@@ -223,7 +257,11 @@ class PlaceMine implements Turn{
 		return "PlaceMine";
 	}
 }
-class TakeMine implements Turn{
+class TakeMine implements Turn, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1991458862311470623L;
 	private Location loc;
 	private Ship s;
 	private Map m;
@@ -254,7 +292,11 @@ class TakeMine implements Turn{
 		return "TakeMine";
 	}
 }
-class LaunchTorpedo implements Turn{
+class LaunchTorpedo implements Turn, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1790493199271040630L;
 	private Map m;
 	private Ship s;
 	private boolean success = false;
@@ -286,8 +328,12 @@ class LaunchTorpedo implements Turn{
 	}
 }
 
-class Shoot implements Turn{
+class Shoot implements Turn, Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -605750640559980738L;
 	private Map m;
 	private Ship s;
 	private Location loc;
@@ -318,8 +364,12 @@ class Shoot implements Turn{
 		return "Shoot";
 	}
 }
-class RepairBase implements Turn{
+class RepairBase implements Turn, Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3486672126675014858L;
 	private ConstructBlock repairBlock;
 	private Base b;
 	private boolean success = false;
@@ -343,7 +393,11 @@ class RepairBase implements Turn{
 		return "RepairBase";
 	}
 }
-class RepairShip implements Turn{
+class RepairShip implements Turn, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 89817140305258661L;
 	private Ship s;
 	private btlshp.teststubs.construct.ConstructBlock repairBlock;
 	private boolean success = false;
