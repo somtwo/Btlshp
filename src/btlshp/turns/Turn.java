@@ -1,5 +1,7 @@
 package btlshp.turns;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 
 import btlshp.entities.Base;
@@ -131,10 +133,24 @@ class LoadGameState implements Turn, Serializable{
 	}
 }
 class SaveGameState implements Turn{
+	
 
 	@Override
-	public void executeTurn() {
+	public void executeTurn()  {
 		// TODO Auto-generated method stub
+		ObjectOutputStream objOut = null;
+		FileOutputStream fileOut = null;
+		try {
+			fileOut = new FileOutputStream("game.dat");
+			objOut = new ObjectOutputStream(fileOut);
+			
+			// uncertain what object is needed to save
+			
+			objOut.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
