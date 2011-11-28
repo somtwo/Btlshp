@@ -132,9 +132,17 @@ class LoadGameState implements Turn, Serializable{
 		return "loadGameState";
 	}
 }
-class SaveGameState implements Turn{
+class SaveGameState implements Turn, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2354631655310067958L;
+	private Map saveGame;
 	
-
+	public SaveGameState(Map map)
+	{
+		saveGame = map;
+	}
 	@Override
 	public void executeTurn()  {
 		// TODO Auto-generated method stub
@@ -145,7 +153,7 @@ class SaveGameState implements Turn{
 			objOut = new ObjectOutputStream(fileOut);
 			
 			// uncertain what object is needed to save
-			
+			objOut.writeObject(saveGame);
 			objOut.close();
 			
 		} catch (IOException e) {

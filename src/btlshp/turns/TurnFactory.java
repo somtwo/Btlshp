@@ -49,8 +49,8 @@ public final class TurnFactory {
 	 * Factory method to create a turn representing the saving of game state
 	 * @return the resulting turn object
 	 */
-	public static SaveGameState saveGameState(){
-		return new SaveGameState();
+	public static SaveGameState saveGameState(Map map){
+		return new SaveGameState(map);
 	}
 	/**
 	 * Move ship in a certain direction

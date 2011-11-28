@@ -39,7 +39,7 @@ public class TurnTest extends TestCase {
 		t.add(TurnFactory.confirmPostponeGame());
 		t.add(TurnFactory.launchTorpedo(m, s));
 		t.add(TurnFactory.loadGameState(null));
-		t.add(TurnFactory.saveGameState());
+		t.add(TurnFactory.saveGameState(m));
 		t.add(TurnFactory.moveShip(m, s, dir, distance1));
 		t.add(TurnFactory.pass());
 		t.add(TurnFactory.placeMine(m, s, loc));
