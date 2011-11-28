@@ -149,7 +149,7 @@ class SaveGameState implements Turn, Serializable{
 		ObjectOutputStream objOut = null;
 		FileOutputStream fileOut = null;
 		try {
-			fileOut = new FileOutputStream("game.dat");
+			fileOut = new FileOutputStream("..Dropbox/Btlshp/game.dat");
 			objOut = new ObjectOutputStream(fileOut);
 			
 			// uncertain what object is needed to save
