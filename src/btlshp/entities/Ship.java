@@ -262,7 +262,7 @@ public class Ship extends Construct implements Serializable{
 				int colHeight = blocks.length - x;
 				
 				// for each position on the ship, add that number of blocks in the correct direction
-				for (int y = 0; y < colHeight; y--) {
+				for (int y = 0; y < colHeight; y++) {
 					turnLeftArea.add(-x, y - colHeight, blocks[y]);
 				}
 			}
@@ -291,7 +291,7 @@ public class Ship extends Construct implements Serializable{
 				int colHeight = blocks.length - x;
 				
 				// for each position on the ship, add that number of blocks in the correct direction
-				for (int y = 0; y < colHeight; y--) {
+				for (int y = 0; y < colHeight; y++) {
 					turnRightArea.add(x, y - colHeight, blocks[y]);
 				}
 			}

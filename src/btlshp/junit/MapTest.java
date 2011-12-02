@@ -42,8 +42,8 @@ public class MapTest extends TestCase{
 		assertTrue(rightBase.getBlocks().length == 10);
 		
 		for(int i = 0; i < 10; ++i) {
-			assertTrue(testMap.getMapNode(0, 14 + i).block == leftBase.getBlocks()[i]);
-			assertTrue(testMap.getMapNode(29, 14 + i).block == rightBase.getBlocks()[i]);
+			assertEquals(testMap.getMapNode(0, 10 + i).block, leftBase.getBlocks()[i]);
+			assertEquals(testMap.getMapNode(29, 10 + i).block, rightBase.getBlocks()[i]);
 		}
 		
 		Ship[] ships = testMap.getShips();
@@ -154,9 +154,10 @@ public class MapTest extends TestCase{
 		Ship mineShip = Ship.buildMineSweeper(leftPlayer);
 		
 		testMap.addShip(mineShip);
+		testMap.placeShip(mineShip, 0, 0, Direction.South);
 		
 		assertTrue(mineShip.canPlaceMine());
-		Location mineLoc = new Location(0, 0);
+		Location mineLoc = new Location(1, 1);
 
 //		pass if mine can be placed into empty place and is placed, fail if not
 		assertTrue(testMap.placeMine(mineShip, mineLoc));
@@ -176,9 +177,9 @@ public class MapTest extends TestCase{
 		testMap.addShip(mineShip);
 		testMap.addShip(otherMineShip);
 		
-		Location mineLoc = new Location(0, 0);
-		Location mineShipLoc = new Location(1,0);
-		Direction MineShipDir = Direction.North;
+		Location mineLoc = new Location(1, 1);
+		Location mineShipLoc = new Location(0,0);
+		Direction MineShipDir = Direction.South;
 //		fail if the sub can pick up a mine out of range, pass if not
 		testMap.placeMine(mineShip, mineLoc);
 		assertFalse(testMap.pickupMine(mineShip, mineLoc));		

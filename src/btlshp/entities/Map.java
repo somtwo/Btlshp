@@ -93,7 +93,7 @@ public class Map implements Serializable {
 		int y = (MAPHEIGHT - blocks.length) / 2;
 		
 		for(int i = 0; i < blocks.length; ++i)
-			placeBlock(nodes[x][y + i], blocks[i]);
+			placeBlock(getMapNode(x, y + i), blocks[i]);
 	}
 	
 	
@@ -101,12 +101,13 @@ public class Map implements Serializable {
 		// Create the left-player base and ships
 		leftBase = new Base(leftPlayer);
 		placeBase(leftBase, 0);
-		// TODO: Ships
 		
 		// Create the left-player base and ships
 		rightBase = new Base(rightPlayer);
 		placeBase(rightBase, MAPWIDTH - 1);
+		
 		// TODO: Ships
+		ships = new ArrayList<Ship>();
 	}
 	
 	/**
@@ -257,6 +258,13 @@ public class Map implements Serializable {
 	public MapNode getMapNode(int x, int y) {
 		return nodes[y][x];
 	}
+	
+	
+	private boolean insideMap(int x, int y) {
+		if(x < 0 || x >= MAPWIDTH || y < 0 || y > MAPHEIGHT)
+			return false;
+		return true;
+	}
 	        	
 	/**
 	* Checks to see if a ship movement can be carried out.
@@ -285,6 +293,9 @@ public class Map implements Serializable {
 			y += deltay;
 			
 			for(int i = 0; i < it.size(); ++i) {
+				if(!insideMap(it.getx(i), it.gety(i)))
+					return false;
+				
 				Block b = getMapNode(it.getx(i), it.gety(i)).block;
 				
 				if(b == null || b instanceof MineBlock)
@@ -376,7 +387,10 @@ public class Map implements Serializable {
 			
 			// Check adjacent squares for mines
 			for(int i = 0; i < adjIt.size(); ++i) {
-				MapNode n = getMapNode(adjIt.getx(i), adjIt.gety(i));
+				if(!insideMap(it.getx(i), it.gety(i)))
+					continue;
+				
+				MapNode n = getMapNode(it.getx(i), it.gety(i));
 				Block b = n.block;
 				
 				if(!(b instanceof MineBlock))
@@ -389,6 +403,10 @@ public class Map implements Serializable {
 			
 			// Now for the body.
 			for(int i = 0; i < it.size(); ++i) {
+				if(!insideMap(it.getx(i), it.gety(i))) {
+					canContinue = false; break;
+				}
+				
 				MapNode n = getMapNode(it.getx(i), it.gety(i));
 				Block b = n.block;
 				
@@ -509,7 +527,6 @@ public class Map implements Serializable {
 	*/
 	public boolean placeMine(Ship s, Location loc) {
 		MapNode  n = getMapNode(loc);
-		Location sloc = s.getLocation();
 		
 		if(!s.canPlaceMine() || n.block != null || s.getPlayer().numberOfMines() == 0)
 			return false;
