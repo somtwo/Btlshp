@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import btlshp.enums.Direction;
 import btlshp.enums.Weapon;
+import btlshp.utility.NodeIterator;
 
 public class Map implements Serializable {
 	/**
@@ -189,23 +190,27 @@ public class Map implements Serializable {
 	 * @param dir   The direction the ship should be facing.
 	 */
 	public void placeShip(Ship s, Location tail, Direction dir) {
-		ConstructBlock [] blocks = s.getBlocks();
-		int x, y, min;
+		placeShip(s, tail.getx(), tail.gety(), dir);
+	}
+	
+	
+	/**
+	 * Places the ship in the given location and facing the given direction. Links the map nodes to the ship blocks
+	 * @param s     Ship to be placed.
+	 * @param x     The x-coordinate of the tail of the ship
+	 * @param y     The y-coordinate of the tail of the ship
+	 * @param dir   The direction the ship should be facing.
+	 */
+	public void placeShip(Ship s, int x, int y, Direction dir) {
+		NodeIterator it = s.getCoreIterator();
+		it.setOrigin(x, y);
+		it.rotate(dir);
 		
-		if(dir == Direction.North || dir == Direction.South) {
-			x = tail.getx();
-			
-			for(y = min = s.gety1(); y <= s.gety2(); ++y)
-				placeBlock(getMapNode(x, y), blocks[y - min]);
+		for(int i = 0; i < it.size(); ++i) {
+			placeBlock(getMapNode(it.getx(i), it.gety(i)), it.getBlock(i));
 		}
-		else {
-			y = tail.gety();
-			
-			for(x = min = s.getx1(); x <= s.getx2(); ++x)
-				placeBlock(getMapNode(x, y), blocks[x - min]);
-		}
-		
-		s.setLocation(tail);
+
+		s.setLocation(new Location(x, y));
 		s.setDirection(dir);
 	}
 	
@@ -215,22 +220,15 @@ public class Map implements Serializable {
 	 * @param s
 	 */
 	public void unplaceShip(Ship s) {
-		ConstructBlock [] blocks = s.getBlocks();
 		Direction dir = s.getDirection();
 		Location  loc = s.getLocation();
-		int x, y, min;
+
+		NodeIterator it = s.getCoreIterator();
+		it.setOrigin(loc);
+		it.rotate(dir);
 		
-		if(dir == Direction.North || dir == Direction.South) {
-			x = loc.getx();
-			
-			for(y = min = s.gety1(); y <= s.gety2(); ++y)
-				unplaceBlock(getMapNode(x, y), blocks[y - min]);
-		}
-		else {
-			y = loc.gety();
-			
-			for(x = min = s.getx1(); x <= s.getx2(); ++x)
-				unplaceBlock(getMapNode(x, y), blocks[x - min]);
+		for(int i = 0; i < it.size(); ++i) {
+			unplaceBlock(getMapNode(it.getx(i), it.gety(i)), it.getBlock(i));
 		}
 	}
 	        	
@@ -268,9 +266,42 @@ public class Map implements Serializable {
 	* @return true if the ship movement can be carried out.
 	*/
 	public boolean canMove(Ship s, Direction dir, int blocks) {
-		Location   loc = s.getLocation();
-		Direction sdir = s.getDirection();
-		int x1, x2, y1, y2, x, y;	
+		Location      loc = s.getLocation();
+		NodeIterator  it = s.getCoreIterator();
+		int           x, y, deltax, deltay;
+		
+		x = loc.getx();
+		y = loc.gety();
+		
+		deltax = (dir == Direction.West) ? -1 : (dir == Direction.East) ? 1 : 0;
+		deltay = (dir == Direction.North) ? -1 : (dir == Direction.South) ? 1 : 0;
+		
+		it.rotate(s.getDirection());
+
+		for(int moveCount = 0; moveCount < blocks; ++moveCount)
+		{
+			it.setOrigin(x, y);
+			x += deltax;
+			y += deltay;
+			
+			for(int i = 0; i < it.size(); ++i) {
+				Block b = getMapNode(it.getx(i), it.gety(i)).block;
+				
+				if(b == null || b instanceof MineBlock)
+					continue;
+				
+				if(b instanceof ConstructBlock) {
+					ConstructBlock cb = (ConstructBlock)b;
+					
+					if(cb.myConstruct != s)
+						return false;
+				}
+			}
+		}
+		return true;
+		
+		// This is what this function used to look like
+		/*int x1, x2, y1, y2, x, y;	
 		
 		x1 = s.getx1(); x2 = s.getx2();
 		y1 = s.gety1(); y2 = s.gety2();
@@ -311,7 +342,7 @@ public class Map implements Serializable {
 				}
 			}
 		}
-		return true;
+		return true;*/
 	}
 	        	
 	/**
@@ -323,7 +354,69 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public int move(Ship s, Direction dir, int blocks) {
-		Location   loc = s.getLocation();
+		Location      loc = s.getLocation();
+		NodeIterator  it = s.getCoreIterator();
+		NodeIterator  adjIt = s.getSurroundingIterator();
+		int           x, y, deltax, deltay, moveCount;
+		boolean		  canContinue = true;
+		
+		x = loc.getx();
+		y = loc.gety();
+		
+		deltax = (dir == Direction.West) ? -1 : (dir == Direction.East) ? 1 : 0;
+		deltay = (dir == Direction.North) ? -1 : (dir == Direction.South) ? 1 : 0;
+		
+		it.rotate(s.getDirection());
+
+		for(moveCount = 0; moveCount < blocks; ++moveCount)
+		{
+			x += deltax;
+			y += deltay;
+			it.setOrigin(x, y);
+			
+			// Check adjacent squares for mines
+			for(int i = 0; i < adjIt.size(); ++i) {
+				MapNode n = getMapNode(adjIt.getx(i), adjIt.gety(i));
+				Block b = n.block;
+				
+				if(!(b instanceof MineBlock))
+					continue;
+				
+				adjIt.getBlock(i).takeHit(Weapon.Mine);
+				unplaceBlock(n, b);
+				canContinue = false;
+			}
+			
+			// Now for the body.
+			for(int i = 0; i < it.size(); ++i) {
+				MapNode n = getMapNode(it.getx(i), it.gety(i));
+				Block b = n.block;
+				
+				if(b instanceof MineBlock) {
+					canContinue = false;
+					adjIt.getBlock(i).takeHit(Weapon.Mine);
+					unplaceBlock(n, b);
+				}
+				else if(b instanceof ConstructBlock) {
+					ConstructBlock cb = (ConstructBlock)b;
+					
+					if(cb.myConstruct != s)
+						canContinue = false;
+				}
+			}
+			
+			if(canContinue) {
+				unplaceShip(s);
+				placeShip(s, x, y, s.getDirection());
+			}
+			else
+				break;
+		}
+		
+		return moveCount;
+		
+		// The code below is the old code and it doesn't even check adjacent blocks!!!
+		/*Location   loc = s.getLocation();
 		Direction sdir = s.getDirection();
 		int x1, x2, y1, y2, x, y;	
 		
@@ -380,7 +473,7 @@ public class Map implements Serializable {
 		else if(dir == Direction.West) {
 			s.setLocation(new Location(loc.getx() + i, loc.gety()));
 		}
-		return i;
+		return i;*/
 	}
 	        	
 	/**
@@ -415,7 +508,9 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public boolean placeMine(Ship s, Location loc) {
-		MapNode n = getMapNode(loc);
+		MapNode  n = getMapNode(loc);
+		Location sloc = s.getLocation();
+		
 		if(!s.canPlaceMine() || n.block != null || s.getPlayer().numberOfMines() == 0)
 			return false;
 		
@@ -423,7 +518,7 @@ public class Map implements Serializable {
 		   loc.gety() < s.gety1() - 1 || loc.gety() > s.gety2() + 1)
 			return false;
 		
-		n.block = new MineBlock();
+		placeBlock(n, new MineBlock());
 		s.getPlayer().removeMine();
 		return true;
 	}
@@ -446,7 +541,7 @@ public class Map implements Serializable {
 		   loc.gety() < s.gety1() - 1 || loc.gety() > s.gety2() + 1)
 			return false;
 		
-		n.block = null;
+		unplaceBlock(n, b);
 		s.getPlayer().addMine();
 		return true;
 	}

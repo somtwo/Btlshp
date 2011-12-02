@@ -3,12 +3,22 @@ package btlshp.entities;
 import java.io.Serializable;
 
 import btlshp.enums.Direction;
+import btlshp.utility.NodeIterator;
 
 public class Ship extends Construct implements Serializable{
 	
 	private static final long serialVersionUID = -4544034641149715119L;
-	private boolean hasGun, hasTorpedo, hasMinePlacement, hasSonar, isArmored;
-	private int     maxForwardMove, maxSideMove, maxBackMove, maxGunRange, maxSonarRange;
+	
+	// Behavior flags.
+	private static final int  isArmored = 0x1;
+	private static final int  hasGun = 0x2;
+	private static final int  hasTorpedo = 0x4;
+	private static final int  hasMinePlacement = 0x8;
+	private static final int  hasSonar = 0x10;
+	
+	private int          flags;
+	private int          maxForwardMove, maxSideMove, maxBackMove, maxGunRange, maxSonarRange;
+	private NodeIterator coreArea, adjacentArea, radarArea, turnLeftArea, turnRightArea, firingArea;
 	
 	/**
 	* Constructor for Ship
@@ -16,19 +26,17 @@ public class Ship extends Construct implements Serializable{
 	* @param owner   Player the base belongs to.
 	* @param blocks  The blocks to use for the given ship.
 	*/
-	private Ship(Player owner, boolean isArmored, boolean gun, boolean torpedo, boolean mine, boolean Sonar, int forward, int side, int back, int gunRange, int radarRange, int sonarRange, int numberOfBlocks) {
+	private Ship(Player owner, int shipFlags, int forward, int side, int back, int gunRange, int radarRange, int sonarRange, int numberOfBlocks) {
 		pl = owner;
-		hasGun = gun;
-		hasTorpedo = torpedo;
-		hasMinePlacement = mine;
-		hasSonar = Sonar;
+		flags = shipFlags;
 		maxForwardMove = forward;
 		maxSideMove = side;
 		maxBackMove = back;
 		maxGunRange = gunRange;
 		maxSonarRange = sonarRange;
 		maxRadarRange = radarRange;
-		if (isArmored){
+		
+		if (hasArmor()) {
 			blocks = new ArmoredConstructBlock[numberOfBlocks];
 			for (int i = 0; i<numberOfBlocks ; i++){
 				blocks[i] = new ArmoredConstructBlock(this);
@@ -40,6 +48,82 @@ public class Ship extends Construct implements Serializable{
 				blocks[i] = new ConstructBlock(this);
 			}	
 		}
+		
+		buildLeftRotationIterator();
+		buildRightRotationIterator();
+		buildCoreIterator();
+		buildAdjacentIterator();
+		
+		if(hasSonar())
+			buildSonarIterator();
+		else
+			buildRadarIterator();
+		
+		if(canFireGun())
+			buildFiringArea();
+	}
+	
+	
+	//	private NodeIterator coreArea, adjacentArea, radarArea, turnLeftArea, turnRightArea, firingArea;
+	
+	/**
+	 * Returns an iterator that can be used to iterate over the map blocks that will consist of the
+	 * ships core area.
+	 * 
+	 * @return NodeIterator object.
+	 */
+	public NodeIterator getCoreIterator() {
+		return coreArea;
+	}
+	
+	/**
+	 * Returns an iterator that can be used to iterate over the map blocks directly adjacent the ships
+	 * body.
+	 * 
+	 * @return NodeIterator object.
+	 */
+	public NodeIterator getSurroundingIterator() {
+		return adjacentArea;
+	}
+	
+	/**
+	 * Returns an iterator that can be used to iterate over the map blocks within this ships radar.
+	 * 
+	 * @return NodeIterator object.
+	 */
+	public NodeIterator getRadarIterator() {
+		return radarArea;
+	}
+	
+	
+	/**
+	 * Returns an iterator that can be used to iterate over the map blocks within the ships firing range.
+	 * 
+	 * @return NodeIterator object.
+	 */
+	public NodeIterator getFiringIterator() {
+		return firingArea;
+	}
+	
+	
+	
+	/**
+	 * Returns an iterator that can be used to iterate over the map blocks covered when the ship turns left
+	 * 
+	 * @return NodeIterator object.
+	 */
+	public NodeIterator getLeftRotationIterator() {
+		return turnLeftArea;
+	}
+	
+	
+	/**
+	 * Returns an iterator that can be used to iterate over the map blocks covered when the ship turns right
+	 * 
+	 * @return NodeIterator object.
+	 */
+	public NodeIterator getRightRotationIterator() {
+		return turnRightArea;
 	}
 	
 	/**
@@ -47,7 +131,7 @@ public class Ship extends Construct implements Serializable{
 	 * @returns true if the ship has a gun to fire, false otherwise
 	 */
 	public boolean canFireGun() {
-		return hasGun;
+		return (flags & hasGun) == hasGun;
 	}
 	
 	/**
@@ -86,7 +170,7 @@ public class Ship extends Construct implements Serializable{
 	 * @returns true if the ship can fire a torpedo, false otherwise
 	 */
 	public boolean canFireTorpedo() {
-		return hasTorpedo;
+		return (flags & hasTorpedo) == hasTorpedo;
 	}
 
 	/**
@@ -94,7 +178,7 @@ public class Ship extends Construct implements Serializable{
 	 * @returns true if the ship can place a mine, false otherwise
 	 */
 	public boolean canPlaceMine() {
-		return hasMinePlacement;
+		return (flags & hasMinePlacement) == hasMinePlacement;
 	}
 
 	/**
@@ -102,14 +186,14 @@ public class Ship extends Construct implements Serializable{
 	 * @returns true if the ship can pick up a mine, false otherwise
 	 */
 	boolean canPickUpMine() {
-		return hasMinePlacement;
+		return (flags & hasMinePlacement) == hasMinePlacement;
 	}
 	
 	/**
 	 * @return true if this ship has Sonar capability, false otherwise
 	 */
 	public boolean hasSonar(){
-		return hasSonar;
+		return (flags & hasSonar) == hasSonar;
 	}
 	
 	/**
@@ -123,15 +207,14 @@ public class Ship extends Construct implements Serializable{
 	 * @return true if the ship is constructed with armored blocks, false otherwise.
 	 */
 	boolean hasArmor(){
-		return isArmored;
+		return (flags & isArmored) == isArmored;
 	}
 	/**
 	* Factory method for Cruiser
 	* @returns the Ship Constructed
 	*/
 	public static Ship buildCruiser(Player owner) {
-		Ship myCruiser = new Ship(owner, false, true, false, false, false, 10, 1, 1, 5, 6, 0, 5);
-		return myCruiser;
+		return new Ship(owner, hasGun, 10, 1, 1, 5, 6, 0, 5);
 	}
 
 	/**
@@ -139,8 +222,7 @@ public class Ship extends Construct implements Serializable{
 	* @returns the Ship Constructed
 	*/
 	public static Ship buildTorpedoBoat(Player owner) {
-		Ship myTorpedoBoat = new Ship(owner, false, true, true, false, false, 8, 1, 1, 4, 5, 0, 4);
-		return myTorpedoBoat;
+		return new Ship(owner, hasGun|hasTorpedo, 8, 1, 1, 4, 5, 0, 4);
 	}
 	// private Ship(Player owner, boolean isArmored, boolean gun, boolean torpedo, boolean mine, boolean Sonar, int forward, int side, int back, int gunRange, int radarRange, int sonarRange, int numberOfBlocks) {
 	/**
@@ -148,8 +230,7 @@ public class Ship extends Construct implements Serializable{
 	* @returns the Ship Constructed
 	*/
 	public static Ship buildDestroyer(Player owner) {
-		Ship myDestroyer = new Ship(owner, false, false, true, false, false, 6, 1, 1, 0, 4, 0, 3);
-		return myDestroyer;
+		return new Ship(owner, hasTorpedo, 6, 1, 1, 0, 4, 0, 3);
 	}
 
 	/**
@@ -157,222 +238,153 @@ public class Ship extends Construct implements Serializable{
 	* @returns the Ship Constructed
 	*/
 	public static Ship buildMineSweeper(Player owner) {
-		Ship myMineSweeper = new Ship(owner, true, false, false, true, true, 4, 1, 1, 0, 2, 2, 2);
-		return myMineSweeper;
+		return new Ship(owner, hasMinePlacement|isArmored, 4, 1, 1, 0, 2, 2, 2);
 	}
 
 	public Player getPlayer() {
 		return pl;
 	}
-	public Location[] getRotateLeftLocations(){
-		if (myLoc == null) return null;
-		if (blocks.length < 2 || blocks.length >5) return null;
-		Location[] locations = new Location[0];
-		// Account for Destroyer's odd pivot point
-		if (this.blocks.length == 3){
-				locations = new Location[4];
-				switch(myDir){
-					case North:{
-						locations[0] = new Location(myLoc.getx()-1, myLoc.gety());
-						locations[1] = new Location(myLoc.getx()-1, myLoc.gety()+1);	
-						locations[2] = new Location(myLoc.getx()+1, myLoc.gety()+1);
-						locations[3] = new Location(myLoc.getx()+1, myLoc.gety()+2);
-						break;
-					}
-					case East:{
-						locations[0] = new Location(myLoc.getx(), myLoc.gety()-1);
-						locations[1] = new Location(myLoc.getx()-1, myLoc.gety()-1);	
-						locations[2] = new Location(myLoc.getx()-1, myLoc.gety()+1);
-						locations[3] = new Location(myLoc.getx()-2, myLoc.gety()+1);
-						break;
-					}
-					case South:{
-						locations[0] = new Location(myLoc.getx()+1, myLoc.gety());
-						locations[1] = new Location(myLoc.getx()+1, myLoc.gety()-1);	
-						locations[2] = new Location(myLoc.getx()-1, myLoc.gety()-1);
-						locations[3] = new Location(myLoc.getx()-1, myLoc.gety()-2);
-						break;
-					}
-					case West:{
-						locations[0] = new Location(myLoc.getx(), myLoc.gety()+1);
-						locations[1] = new Location(myLoc.getx()+1, myLoc.gety()+1);	
-						locations[2] = new Location(myLoc.getx()+1, myLoc.gety()-1);
-						locations[3] = new Location(myLoc.getx()+2, myLoc.gety()-1);
-						break;
-					}
-				}
-		}
-		// Do all other ships
-		else {
-			// Counter for array position
-			int k = 0; 
-			
-			if (blocks.length == 2) locations = new Location[2];
-			else if (blocks.length == 4) locations = new Location[9];
-			else if (blocks.length == 5) locations = new Location[14];
-			else locations = new Location[1000];
-			
-			// Do head through one less then tail. Then do tail at one less then length of ship.
-			for (int i = 0; i < blocks.length -1; i++){
-				// for each position on the ship, add that number of blocks in the correct direction
-				for (int j = 1; j < i+2; j++){
-					switch(myDir){
-						case North:{
-							locations[k] = new Location(myLoc.getx()-j, myLoc.gety()+i);
-							k++;
-							break;
-						}
-						case East:{
-							locations[k] = new Location(myLoc.getx()-i, myLoc.gety()-j);
-							k++;
-							break;
-						}
-						case South:{
-							locations[k] = new Location(myLoc.getx()+j, myLoc.gety()-i);
-							k++;
-							break;
-						}
-						case West:{
-							locations[k] = new Location(myLoc.getx()+i, myLoc.gety()+j);
-							k++;
-							break;
-						}
-					}
-				}
-			}
-			// Then Add the Tails row which is one less then the length of the ship.
-			for (int i = 1; i < blocks.length; i++){
-				switch(myDir){
-					case North:{
-						locations[k] = new Location(myLoc.getx() - i, myLoc.gety() + (blocks.length-1));
-						k++;
-						break;
-					}
-					case East:{
-						locations[k] = new Location(myLoc.getx()-(blocks.length-1), myLoc.gety()-i);
-						k++;
-						break;
-					}
-					case South:{
-						locations[k] = new Location(myLoc.getx()+i, myLoc.gety()-(blocks.length-1));
-						k++;
-						break;
-					}
-					case West:{
-						locations[k] = new Location(myLoc.getx()+(blocks.length-1), myLoc.gety()+i);
-						k++;
-						break;
-					}
-				}
-			}
-		}
-		return locations;
+	
+	
+	private void buildLeftRotationIterator() {
+		turnLeftArea = new NodeIterator(null);
 		
-	}
-	public Location[] getRotateRightLocations(){
-		if (myLoc == null) return null;
-		if (blocks.length < 2 || blocks.length >10) return null;
-		Location[] locations = new Location[0];
 		// Account for Destroyer's odd pivot point
-		if (this.blocks.length == 3){
-				locations = new Location[4];
-				switch(myDir){
-					case North:{
-						locations[0] = new Location(myLoc.getx()+1, myLoc.gety());
-						locations[1] = new Location(myLoc.getx()+1, myLoc.gety()+1);	
-						locations[2] = new Location(myLoc.getx()-1, myLoc.gety()+1);
-						locations[3] = new Location(myLoc.getx()-1, myLoc.gety()+2);
-						break;
-					}
-					case East:{
-						locations[0] = new Location(myLoc.getx(), myLoc.gety()+1);
-						locations[1] = new Location(myLoc.getx()-1, myLoc.gety()+1);	
-						locations[2] = new Location(myLoc.getx()-1, myLoc.gety()-1);
-						locations[3] = new Location(myLoc.getx()-2, myLoc.gety()-1);
-						break;
-					}
-					case South:{
-						locations[0] = new Location(myLoc.getx()-1, myLoc.gety());
-						locations[1] = new Location(myLoc.getx()-1, myLoc.gety()-1);	
-						locations[2] = new Location(myLoc.getx()+1, myLoc.gety()-1);
-						locations[3] = new Location(myLoc.getx()+1, myLoc.gety()-2);
-						break;
-					}
-					case West:{
-						locations[0] = new Location(myLoc.getx(), myLoc.gety()-1);
-						locations[1] = new Location(myLoc.getx()+1, myLoc.gety()-1);	
-						locations[2] = new Location(myLoc.getx()+1, myLoc.gety()+1);
-						locations[3] = new Location(myLoc.getx()+2, myLoc.gety()+1);
-						break;
-					}
-				}
+		if(blocks.length == 3) {
+			turnLeftArea.add(-1, 0,   blocks[0]);
+			turnLeftArea.add(-1, -1,  blocks[0]);	
+			turnLeftArea.add( 1, 0,   blocks[2]);
+			turnLeftArea.add( 1, 1,   blocks[2]);
 		}
-		// Do all other ships
 		else {
-			// Counter for array position
-			int k = 0; 
-			
-			if (blocks.length == 2) locations = new Location[2];
-			else if (blocks.length == 4) locations = new Location[9];
-			else locations = new Location[14];
-			
 			// Do head through one less then tail. Then do tail at one less then length of ship.
-			for (int i = 0; i < blocks.length -1; i++){
+			for (int x = 1; x < blocks.length; x++){
+				int colHeight = blocks.length - x;
+				
 				// for each position on the ship, add that number of blocks in the correct direction
-				for (int j = 1; j < i+2; j++){
-					switch(myDir){
-						case North:{
-							locations[k] = new Location(myLoc.getx()+j, myLoc.gety()+i);
-							k++;
-							break;
-						}
-						case East:{
-							locations[k] = new Location(myLoc.getx()-i, myLoc.gety()+j);
-							k++;
-							break;
-						}
-						case South:{
-							locations[k] = new Location(myLoc.getx()-j, myLoc.gety()-i);
-							k++;
-							break;
-						}
-						case West:{
-							locations[k] = new Location(myLoc.getx()+i, myLoc.gety()-j);
-							k++;
-							break;
-						}
-					}
+				for (int y = 0; y < colHeight; y--) {
+					turnLeftArea.add(-x, y - colHeight, blocks[y]);
 				}
 			}
 			// Then Add the Tails row which is one less then the length of the ship.
-			for (int i = 1; i < blocks.length; i++){
-				switch(myDir){
-					case North:{
-						locations[k] = new Location(myLoc.getx() + i, myLoc.gety() + (blocks.length-1));
-						k++;
-						break;
-					}
-					case East:{
-						locations[k] = new Location(myLoc.getx()-(blocks.length-1), myLoc.gety()+i);
-						k++;
-						break;
-					}
-					case South:{
-						locations[k] = new Location(myLoc.getx()-i, myLoc.gety()-(blocks.length-1));
-						k++;
-						break;
-					}
-					case West:{
-						locations[k] = new Location(myLoc.getx()+(blocks.length-1), myLoc.gety()-i);
-						k++;
-						break;
-					}
-				}
+			for (int i = 0; i < blocks.length - 1; i++) {
+				turnLeftArea.add(1 - blocks.length + i, 0, blocks[i]);
 			}
 		}
-		return locations;
+	}
+
+	
+	private void buildRightRotationIterator() {
+		turnRightArea = new NodeIterator(null);
+		
+		// Account for Destroyer's odd pivot point
+		if (blocks.length == 3) {
+			turnRightArea.add(-1, 0,   blocks[0]);
+			turnRightArea.add(-1, 1,   blocks[0]);	
+			turnRightArea.add( 1, 0,   blocks[2]);
+			turnRightArea.add( 1, -1,  blocks[2]);
+		}
+		// Do all other ships
+		else {
+			// Do head through one less then tail. Then do tail at one less then length of ship.
+			for (int x = 1; x < blocks.length; x++){
+				int colHeight = blocks.length - x;
+				
+				// for each position on the ship, add that number of blocks in the correct direction
+				for (int y = 0; y < colHeight; y--) {
+					turnRightArea.add(x, y - colHeight, blocks[y]);
+				}
+			}
+			// Then Add the Tails row which is one less then the length of the ship.
+			for (int i = 0; i < blocks.length - 1; i++) {
+				turnRightArea.add(blocks.length - 1 - i, 0, blocks[i]);
+			}
+		}
 	}
 	
+	
+	private void buildCoreIterator() {
+		// Account for Destroyer's odd pivot point
+		int offset = (blocks.length == 3) ? 1 : blocks.length - 1;
+		
+		coreArea = new NodeIterator(null);
+		
+		for(int i = 0; i < blocks.length; ++i)
+			coreArea.add(0, i - offset, blocks[i]);
+	}
+	
+	
+	private void buildAdjacentIterator() {
+		// Account for Destroyer's odd pivot point
+		int offset = (blocks.length == 3) ? 1 : blocks.length - 1;
+		
+		adjacentArea = new NodeIterator(null);
+		
+		// Add the area along the sides
+		for(int i = 0; i < blocks.length; ++i) {
+			adjacentArea.add(-1, i - offset, blocks[i]);
+			adjacentArea.add( 1, i - offset, blocks[i]);
+		}
+		
+		// Add the head and tail.
+		adjacentArea.add(0, 1,             blocks[blocks.length - 1]);
+		adjacentArea.add(0, blocks.length, blocks[0]);
+	}
+	
+	
+	private void buildRadarIterator() {
+		int x, y, offset;
+		
+		radarArea = new NodeIterator(null);
+		
+		// Do in front of the ship
+		for(x = -1; x < 2; x++) {
+			for(y = 0; y < maxRadarRange; y++) {
+				radarArea.add(x, -blocks.length - y, null);
+			}
+		}
+		
+		// Account for the destroyers weird turn axis
+		offset = blocks.length == 3 ? -1 : 0;
+		
+		// Do along side the ship
+		for(y = 1; y < blocks.length; ++y) {
+			radarArea.add(-1, offset - y, null);
+			radarArea.add(1, offset - y, null);
+		}
+	}
+	
+	private void buildSonarIterator() {
+		int x, y, ytop, ybot;
+		
+		radarArea = new NodeIterator(null);
+		
+		ytop = blocks.length == 3 ? -1 - maxRadarRange : -blocks.length - maxRadarRange;
+		ybot = blocks.length == 3 ? 1 + maxRadarRange : maxRadarRange;
+		
+		for(x = -maxRadarRange; x <= maxRadarRange; ++x) {
+			for(y = ytop; y <= ybot; ++y) {
+				radarArea.add(x, y, null);
+			}
+		}
+	}
+	
+	
+	private void buildFiringArea() {
+		int x, y, ytop, ybot;
+		
+		firingArea = new NodeIterator(null);
+		
+		ytop = blocks.length == 3 ? -1 - maxGunRange : -blocks.length - maxGunRange;
+		ybot = blocks.length == 3 ? 1 + maxGunRange : maxGunRange;
+		
+		for(x = -maxGunRange; x <= maxGunRange; ++x) {
+			for(y = ytop; y <= ybot; ++y) {
+				firingArea.add(x, y, null);
+			}
+		}
+	}
+
 	
 	/**
 	 * Retruns the left-most column occupied by a ship.
@@ -417,4 +429,5 @@ public class Ship extends Construct implements Serializable{
 		
 		return myLoc.gety();
 	}
+
 }

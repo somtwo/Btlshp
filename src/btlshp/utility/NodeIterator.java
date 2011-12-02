@@ -2,36 +2,37 @@ package btlshp.utility;
 
 import java.util.ArrayList;
 
+import btlshp.entities.ConstructBlock;
 import btlshp.entities.Location;
 import btlshp.enums.Direction;
 
 public class NodeIterator {
-	private ArrayList<Location> offsets;
-	private Location            origin;
-	private Direction			dir;
+	private static class LocationBlock {
+		public LocationBlock(Location l, ConstructBlock b) {
+			block = b;
+			loc = l;
+		}
+		
+		public Location loc;
+		public ConstructBlock block;
+	}
+	
+	private ArrayList<LocationBlock> offsets;
+	private Location                 origin;
+	private Direction                dir;
 	
 	
 	/**
 	 * Creates a NodeIterator with an empty collection.
 	 */
 	public NodeIterator(Location origin) {
-		this.offsets = new ArrayList<Location>();
-		this.origin = new Location(origin);
-		this.dir = Direction.North;
-	}
-
-	
-	/**
-	 * Creates a NodeIterator populated with a list of locations.
-	 * 
-	 * @param locationArray
-	 */
-	public NodeIterator(Location origin, Location [] locationArray)
-	{
-		this(origin);
+		this.offsets = new ArrayList<LocationBlock>();
+		if(origin == null)
+			this.origin = new Location(0, 0);
+		else
+			this.origin = new Location(origin);
 		
-		for (int i = 0; i < locationArray.length; ++i)
-			offsets.add(new Location(locationArray[i].getx() - origin.getx(), locationArray[i].gety() - origin.gety()));
+		this.dir = Direction.North;
 	}
 	
 	/**
@@ -40,11 +41,16 @@ public class NodeIterator {
 	 * @param   l    Node to be added.
 	 * @throws  IllegalArgumentException if l is null
 	 */
-	public void add(Location l) {
+	public void add(Location l, ConstructBlock b) {
 		if(l == null)
 			throw new IllegalArgumentException("NodeIterator.add given a null argument.");
-		
-		offsets.add(new Location(l.getx() - origin.getx(), l.gety() - origin.gety()));
+
+		add(l.getx(), l.gety(), b);
+	}
+	
+	
+	public void add(int x, int y, ConstructBlock b) {
+		offsets.add(new LocationBlock(new Location(x - origin.getx(), y - origin.gety()), b));
 	}
 	
 	
@@ -54,8 +60,17 @@ public class NodeIterator {
 	 * @param origin   new origin for the iterator.
 	 */
 	public void setOrigin(Location origin) {
-		this.origin.setx(origin.getx());
-		this.origin.sety(origin.gety());
+		setOrigin(origin.getx(), origin.gety());
+	}
+	
+	/**
+	 * Sets the origin of the iterator.
+	 * 
+	 * @param origin   new origin for the iterator.
+	 */
+	public void setOrigin(int x, int y) {
+		this.origin.setx(x);
+		this.origin.sety(y);
 	}
 	
 
@@ -76,7 +91,7 @@ public class NodeIterator {
 	 * @return        x component of the location
 	 */
 	public int getx(int index) {
-		return offsets.get(index).getx() + origin.getx();
+		return offsets.get(index).loc.getx() + origin.getx();
 	}
 	
 	
@@ -87,7 +102,18 @@ public class NodeIterator {
 	 * @return        y component of the location
 	 */
 	public int gety(int index) {
-		return offsets.get(index).gety() + origin.gety();
+		return offsets.get(index).loc.gety() + origin.gety();
+	}
+	
+	
+	/**
+	 * Returns the ConstructBlock associated with the location at index in the iterator.
+	 * 
+	 * @param index   index of the element within the given collection
+	 * @return        ConstructBlock associated with the location
+	 */
+	public ConstructBlock getBlock(int index) {
+		return offsets.get(index).block;
 	}
 	
 	
@@ -100,7 +126,7 @@ public class NodeIterator {
 	public void offset(int xOffset, int yOffset)
 	{
 		for(int i = 0; i < offsets.size(); ++i) {
-			Location l = offsets.get(i);
+			Location l = offsets.get(i).loc;
 			
 			l.setx(l.getx() + xOffset);
 			l.sety(l.gety() + yOffset);
@@ -140,7 +166,7 @@ public class NodeIterator {
 	
 	private void rotate90() {
 		for(int i = 0; i < offsets.size(); ++i) {
-			Location l = offsets.get(i);
+			Location l = offsets.get(i).loc;
 			int deltax = l.getx();
 			int deltay = l.gety();
 			
@@ -151,7 +177,7 @@ public class NodeIterator {
 	
 	private void rotate180() {
 		for(int i = 0; i < offsets.size(); ++i) {
-			Location l = offsets.get(i);
+			Location l = offsets.get(i).loc;
 			int deltax = l.getx();
 			int deltay = l.gety();
 			
@@ -162,7 +188,7 @@ public class NodeIterator {
 	
 	private void rotate270() {
 		for(int i = 0; i < offsets.size(); ++i) {
-			Location l = offsets.get(i);
+			Location l = offsets.get(i).loc;
 			int deltax = l.getx();
 			int deltay = l.gety();
 			

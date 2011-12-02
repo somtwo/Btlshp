@@ -3,14 +3,17 @@ package btlshp.junit;
 import org.junit.Before;
 import org.junit.Test;
 
+import btlshp.entities.ConstructBlock;
 import btlshp.entities.Location;
+import btlshp.entities.Ship;
 import btlshp.enums.Direction;
 import btlshp.utility.NodeIterator;
 import junit.framework.TestCase;
 
 public class NodeIteratorTest extends TestCase {
-	NodeIterator testIterator;
-	Location     testLocations[];
+	NodeIterator   testIterator;
+	Location       testLocations[];
+	ConstructBlock testBlocks[];
 	
 	@Before
 	public void setUp() {
@@ -18,7 +21,13 @@ public class NodeIteratorTest extends TestCase {
 		testLocations[0] = new Location(0, 0);
 		testLocations[1] = new Location(15, 3);
 		
-		testIterator = new NodeIterator(testLocations[0], testLocations);
+		testBlocks = new ConstructBlock[2];
+		testBlocks[0] = new ConstructBlock(null);
+		testBlocks[1] = new ConstructBlock(null);
+		
+		testIterator = new NodeIterator(testLocations[0]);
+		testIterator.add(testLocations[0], testBlocks[0]);
+		testIterator.add(testLocations[1], testBlocks[1]);
 	}
 	
 	@Test
@@ -26,8 +35,9 @@ public class NodeIteratorTest extends TestCase {
 		assertEquals(testLocations.length, testIterator.size());
 		
 		for(int i = 0; i < testLocations.length; ++i) {
-			assertTrue(testLocations[i].getx() == testIterator.getx(i) &&
-					   testLocations[i].gety() == testIterator.gety(i));
+			assertTrue(testLocations[i].getx() == testIterator.getx(i));
+			assertTrue(testLocations[i].gety() == testIterator.gety(i));
+			assertTrue(testBlocks[i] == testIterator.getBlock(i));
 		}
 	}
 	
@@ -83,12 +93,13 @@ public class NodeIteratorTest extends TestCase {
 	public void testAdd() {
 		Location l = new Location(1, 2);
 		
-		testIterator.add(l);
+		testIterator.add(l, null);
 		
 		assertEquals(3, testIterator.size());
 
 		assertEquals(l.getx(), testIterator.getx(2));
 		assertEquals(l.gety(), testIterator.gety(2));
+		assertEquals(null,     testIterator.getBlock(2));
 	}
 
 }
