@@ -1,22 +1,28 @@
 package btlshp.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.util.Scanner;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 public class HelpScreen {
 	JFrame        mainFrame;
 	JButton       closeButton;
 	JPanel        buttonPane;
-	JEditorPane   editPane;
+	JLabel        helpLabel;
+	JScrollPane   helpScrollPane;
 	
 	
 	public HelpScreen() {
@@ -25,16 +31,53 @@ public class HelpScreen {
 	public void buildUi() {
 		mainFrame = new JFrame("Btlshp Help");
 		mainFrame.setSize(640, 480);
-		mainFrame.getContentPane().setLayout(new BoxLayout(mainFrame.getContentPane(), BoxLayout.PAGE_AXIS));
+		//mainFrame.getContentPane().setLayout(new BoxLayout(mainFrame.getContentPane(), BoxLayout.PAGE_AXIS));
+		mainFrame.setResizable(false);
 		
-		editPane = new JEditorPane();
-		editPane.setEditable(false);
-		editPane.setPreferredSize(new Dimension(640, 480));
-		editPane.setBackground(mainFrame.getBackground());
-		editPane.setContentType("text/html");
-		editPane.setText("BTLSHP is a turn-based multiplayer game which pits you against one opponent in a battle of wits and strategy.<br /><br />");
-		editPane.setMargin(new Insets(10, 10, 10, 10));
-		mainFrame.add(editPane);
+		helpLabel = new JLabel() {
+			private static final long serialVersionUID = 1493078874270486716L;
+			public Dimension getPreferredSize() {
+				return new Dimension(610, 456);
+			}
+			public Dimension getMinimumSize() {
+				return new Dimension(610, 456);
+			}
+			public Dimension getMaximumSize() {
+				return new Dimension(610, 1000);
+			}
+		};
+		helpLabel.setBackground(mainFrame.getBackground());
+		helpLabel.setHorizontalAlignment(JLabel.CENTER);
+		helpLabel.setVerticalAlignment(JLabel.TOP);
+		
+		try {
+			FileInputStream ins = new FileInputStream("html/help.html");
+			Scanner			scanner = new Scanner(ins);
+			StringBuilder   text = new StringBuilder();			
+
+			while(scanner.hasNextLine()) {
+				text.append(scanner.nextLine() + "\n");
+			}
+			helpLabel.setText(text.toString());
+			ins.close();
+		}
+		catch(Exception ex) {
+			System.out.print(ex.toString());
+		}
+		
+		helpScrollPane = new JScrollPane(helpLabel) {
+			private static final long serialVersionUID = 1L;
+			public Dimension getPreferredSize() {
+				return new Dimension(638, 456);
+			}
+			public Dimension getMinimumSize() {
+				return new Dimension(638, 456);
+			}
+			public Dimension getMaximumSize() {
+				return new Dimension(638, 456);
+			}
+		};
+		mainFrame.add(helpScrollPane, BorderLayout.CENTER);
 		
 		closeButton = new JButton("Close");
 		closeButton.addActionListener(new ActionListener() {
@@ -48,7 +91,7 @@ public class HelpScreen {
 		buttonPane.add(Box.createHorizontalGlue());
 		buttonPane.add(closeButton);
 		
-		mainFrame.add(buttonPane);
+		mainFrame.add(buttonPane, BorderLayout.PAGE_END);
 	}
 	
 	

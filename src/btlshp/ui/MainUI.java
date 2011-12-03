@@ -161,9 +161,4 @@ public class MainUI {
 			}
 		});
 	}
-	
-	
-	public void quit() {
-		System.exit(0);
-	}
 }

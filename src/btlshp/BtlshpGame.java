@@ -64,6 +64,6 @@ public class BtlshpGame {
 			// TODO: The user either has to forfeit or save game.
 		}
 		
-		mainUi.quit();
+		System.exit(0);
 	}
 }
