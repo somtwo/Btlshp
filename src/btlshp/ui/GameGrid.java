@@ -52,6 +52,15 @@ public class GameGrid extends JComponent implements MouseMotionListener {
 	}
 	
 	
+	private void drawDoubleHorizontalLine(Graphics2D g, int y, int x1, int x2) {
+		g.drawLine(x1, y,   x2, y);
+		g.drawLine(x1, y+1, x2, y+1);
+	}
+	
+	private void drawDoubleVerticalLine(Graphics2D g, int x, int y1, int y2) {
+		g.drawLine(x,     y1, x,     y2);
+		g.drawLine(x + 1, y1, x + 1, y2);
+	}
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -61,31 +70,31 @@ public class GameGrid extends JComponent implements MouseMotionListener {
 		// Draw basic grid lines.
 		g2.setColor(gridColor);
 		for(y = 0; y <= 30; ++y) {
-			g2.drawLine(0, y * rowHeight,     getWidth() - 1, y * rowHeight);
-			g2.drawLine(0, y * rowHeight + 1, getWidth() - 1, y * rowHeight + 1);
+			drawDoubleHorizontalLine(g2, y * rowHeight, 0, getWidth() - 1);
 		}
 
 		for(x = 0; x <= 30; ++x) {
-			g2.drawLine(x * colWidth,     0, x * colWidth,     getHeight() - 1);				
-			g2.drawLine(x * colWidth + 1, 0, x * colWidth + 1, getHeight() - 1);				
+			drawDoubleVerticalLine(g2, x * colWidth, 0, getWidth() - 1);		
 		}
 
 		if(showHover) {
 			int hx = hoverx * colWidth;
 			int hy = hovery * rowHeight;
 			
+			// Highlight row/column
+			g2.setColor(new Color(4, 80, 21));
+			drawDoubleVerticalLine(g2, hx,      0, getHeight() - 1);
+			drawDoubleVerticalLine(g2, hx + 16, 0, getHeight() - 1);
+			
+			drawDoubleHorizontalLine(g2, hy,      0, getWidth() - 1);
+			drawDoubleHorizontalLine(g2, hy + 16, 0, getWidth() - 1);
+			
 			g2.setColor(hoverColor);
-			g2.drawLine(hx, hy,     hx + 17, hy);
-			g2.drawLine(hx, hy + 1, hx + 17, hy + 1);
+			drawDoubleHorizontalLine(g2, hy,      hx, hx + 17);
+			drawDoubleHorizontalLine(g2, hy + 16, hx, hx + 17);
 			
-			g2.drawLine(hx, hy + 16, hx + 17, hy + 16);
-			g2.drawLine(hx, hy + 17, hx + 17, hy + 17);
-			
-			g2.drawLine(hx,     hy + 2, hx,     hy + 15);
-			g2.drawLine(hx + 1, hy + 2, hx + 1, hy + 15);
-			
-			g2.drawLine(hx + 16, hy + 2, hx + 16, hy + 15);
-			g2.drawLine(hx + 17, hy + 2, hx + 17, hy + 15);
+			drawDoubleVerticalLine(g2, hx,      hy + 2, hy + 15);
+			drawDoubleVerticalLine(g2, hx + 16, hy + 2, hy + 15);
 		}
 		
 		if(map != null) {

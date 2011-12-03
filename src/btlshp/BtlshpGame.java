@@ -63,7 +63,8 @@ public class BtlshpGame {
 		if(appState == AppState.GameInProgress) {
 			// TODO: The user either has to forfeit or save game.
 		}
-		
-		System.exit(0);
+		else if (mainUi.yesNoCancelDialog("Do you really want to quit?", "Please don't go, the Socialist Commies will win!") == DialogResult.Yes) {
+			System.exit(0);
+		}
 	}
 }
