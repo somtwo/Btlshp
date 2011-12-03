@@ -1,6 +1,8 @@
 package btlshp.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -19,6 +21,7 @@ public class MainUI {
 	protected JMenu       fileMenu;
 	protected JMenuItem[] fileMenuItems;
 	private   Btlshp      game;
+	private   GameGrid    gg;
 	
 	MainUI(Btlshp game) {
 		this.game = game;
@@ -36,7 +39,6 @@ public class MainUI {
 			fileMenuItems[3].setEnabled(true);
 		}
 	}
-	
 	
 	protected void makeMainMenu() {
 		mainMenuBar = new JMenuBar();
@@ -85,6 +87,11 @@ public class MainUI {
 	}
 	
 	
+	protected void makeStatusPane() {
+		
+	}
+	
+	
 	protected void makeGUI() {
 		// Main JFrame
 		mainFrame = new JFrame("BtlShp");
@@ -94,14 +101,23 @@ public class MainUI {
 		dims.width = 640;
 		dims.height = 580;
 		
-		mainFrame.setMinimumSize(dims);
 		mainFrame.setSize(dims);
 		mainFrame.setResizable(false);
+		if(!(mainFrame.getLayout() instanceof BorderLayout))
+			mainFrame.setLayout(new BorderLayout());
 		
 		// Make the menu
 		makeMainMenu();
 		
+		// Make the game grid
+		gg = new GameGrid();
+		mainFrame.add(gg, BorderLayout.CENTER);
+		
+		// Right status pane
+		
+		
 		// Show everything
+		mainFrame.pack();
 		mainFrame.setVisible(true);
 	}
 	
