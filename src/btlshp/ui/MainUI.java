@@ -1,16 +1,21 @@
 package btlshp.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 import btlshp.enums.AppState;
 
@@ -22,9 +27,20 @@ public class MainUI {
 	protected JMenuItem[] fileMenuItems;
 	private   Btlshp      game;
 	private   GameGrid    gg;
+	private   OutputArea  cons;
+	private   JLabel      status;
+	
+	private   Font        proFont;
 	
 	MainUI(Btlshp game) {
 		this.game = game;
+		
+		try {
+			proFont = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/ProFontWindows.ttf"));
+		} 
+		catch (Exception e) {
+			proFont = null;
+		}
 	}
 	
 	protected void updateMainMenu() {
@@ -114,7 +130,19 @@ public class MainUI {
 		mainFrame.add(gg, BorderLayout.CENTER);
 		
 		// Right status pane
+		status = new JLabel();
+		status.setPreferredSize(new Dimension(158, 100));
+		status.setFont(proFont.deriveFont(Font.PLAIN, 12.0f));
+		status.setForeground(new Color(6, 178, 48));
+		status.setBackground(new Color(3, 28, 9));
+		status.setOpaque(true);
+		mainFrame.add(status, BorderLayout.LINE_END);
 		
+		// Bottom console pane.
+		cons = new OutputArea();
+		cons.setFont(status.getFont());
+		mainFrame.add(cons, BorderLayout.PAGE_END);
+		cons.addText("- Welcome to BtlShp! Please start or restore a game!\n");
 		
 		// Show everything
 		mainFrame.pack();

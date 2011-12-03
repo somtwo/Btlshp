@@ -10,6 +10,8 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.JComponent;
 
+import btlshp.entities.Map;
+
 public class GameGrid extends JComponent implements MouseMotionListener {
 	/**
 	 * It's serializable, y0! 
@@ -24,6 +26,8 @@ public class GameGrid extends JComponent implements MouseMotionListener {
 	private int     hoverx, hovery;
 	
 	private int     gridWidth, gridHeight;
+	
+	private Map     map;
 	
 	
 	public GameGrid() {
@@ -43,22 +47,16 @@ public class GameGrid extends JComponent implements MouseMotionListener {
 		
 		showHover = true;
 		hoverx = hovery = 0;
+		
+		map = null;
 	}
 	
 	
 	
-	public void paint(Graphics g) {
-		super.paint(g);
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
 		int        x, y;
-		
-		for(y = 0; y < 30; ++y) {
-			for(x = 0; x < 30; ++x) {
-				// TODO: Select appropriate color
-				g2.setColor(bgColor);
-				g2.fillRect(x * colWidth + 2, y * rowHeight + 2, colWidth - 2, rowHeight - 2);
-			}
-		}
 		
 		// Draw basic grid lines.
 		g2.setColor(gridColor);
@@ -90,7 +88,24 @@ public class GameGrid extends JComponent implements MouseMotionListener {
 			g2.drawLine(hx + 17, hy + 2, hx + 17, hy + 15);
 		}
 		
-		// TODO: Draw graphics for the ships
+		if(map != null) {
+			for(y = 0; y < 30; ++y) {
+				for(x = 0; x < 30; ++x) {
+					// TODO: Select appropriate color
+					g2.setColor(bgColor);
+					g2.fillRect(x * colWidth + 2, y * rowHeight + 2, colWidth - 2, rowHeight - 2);
+				}
+			}
+			// TODO: Draw graphics for the ships
+		}
+		else {
+			g2.setColor(bgColor);
+
+			for(y = 0; y < 30; ++y) {
+				for(x = 0; x < 30; ++x)
+					g2.fillRect(x * colWidth + 2, y * rowHeight + 2, colWidth - 2, rowHeight - 2);
+			}
+		}
 	}
 
 
