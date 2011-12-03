@@ -1,14 +1,18 @@
-package btlshp.ui;
+package btlshp;
+
+import java.io.File;
 
 import btlshp.enums.AppState;
+import btlshp.ui.DialogResult;
+import btlshp.ui.MainUI;
 
-public class Btlshp {
+public class BtlshpGame {
 	private AppState appState;
 	private MainUI   mainUi;
 	
-		public Btlshp() {
+	public BtlshpGame() {
 		appState = AppState.NoGame;
-		mainUi = new MainUI(this);
+		mainUi = new MainUI();
 	}
 	
 	
@@ -30,9 +34,21 @@ public class Btlshp {
 				return;
 		}
 		
-		// TODO: New game
+		File gameDir = mainUi.selectDiretory();
+		
+		if(gameDir != null) {
+			// TODO: New game
+			mainUi.showAlert("Result!", gameDir.getAbsolutePath());
+		}
 	}
 	
+	
+	/**
+	 * HAndles a UI-side help request.
+	 */
+	public void helpScreen() {
+		mainUi.showHelp();
+	}
 	
 	/**
 	 * Gets the current state of the app
@@ -40,5 +56,14 @@ public class Btlshp {
 	 */
 	public AppState getAppState() {
 		return appState;
+	}
+	
+	
+	public void quitGame() {
+		if(appState == AppState.GameInProgress) {
+			// TODO: The user either has to forfeit or save game.
+		}
+		
+		mainUi.quit();
 	}
 }
