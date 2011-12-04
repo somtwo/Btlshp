@@ -32,8 +32,8 @@ public class TurnTest extends TestCase {
 		Base b = new Base(playerOne);
 		Location loc = new Location(distance1, distance2);
 		s.setLocation(loc);
-		ConstructBlock repairBaseBlock = new ConstructBlock(b);
-		ConstructBlock repairBlock = new ConstructBlock(s);
+		ConstructBlock repairBaseBlock = new ConstructBlock(b, null, null);
+		ConstructBlock repairBlock = new ConstructBlock(s, null, null);
 		
 		t.add(TurnFactory.acceptSurrender());
 		t.add(TurnFactory.confirmPostponeGame());

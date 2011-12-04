@@ -2,6 +2,7 @@ package btlshp;
 
 import java.io.File;
 
+import btlshp.entities.Player;
 import btlshp.enums.AppState;
 import btlshp.ui.DialogResult;
 import btlshp.ui.MainUI;
@@ -9,9 +10,11 @@ import btlshp.ui.MainUI;
 public class BtlshpGame {
 	private AppState appState;
 	private MainUI   mainUi;
+	private Player   localPlayer;
 	
 	public BtlshpGame() {
 		appState = AppState.NoGame;
+		localPlayer = null;
 		mainUi = new MainUI();
 	}
 	
@@ -44,7 +47,7 @@ public class BtlshpGame {
 	
 	
 	/**
-	 * HAndles a UI-side help request.
+	 * Handles a UI-side help request.
 	 */
 	public void helpScreen() {
 		mainUi.showHelp();
@@ -59,6 +62,7 @@ public class BtlshpGame {
 	}
 	
 	
+	
 	public void quitGame() {
 		if(appState == AppState.GameInProgress) {
 			// TODO: The user either has to forfeit or save game.
@@ -66,5 +70,11 @@ public class BtlshpGame {
 		else if (mainUi.yesNoCancelDialog("Do you really want to quit?", "Please don't go, the Socialist Commies will win!") == DialogResult.Yes) {
 			System.exit(0);
 		}
+	}
+	
+	
+	
+	public Player getLocalPlayer() {
+		return localPlayer;
 	}
 }

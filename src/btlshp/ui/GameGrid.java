@@ -40,7 +40,8 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	private GameState state;
 	
 	private Dimension size;
-	private Color  bgColor, gridColor, hoverColor;
+	private Color  bgColor, sonarColor, radarColor;
+	private Color  gridColor, hoverColor, hoverLineColor;
 	
 	private boolean showHover;
 	private int     hoverx, hovery;
@@ -65,9 +66,13 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		addMouseListener(this);
 		
 		bgColor = new Color(3, 28, 9);
+		sonarColor = new Color(16, 79, 59);
+		radarColor = new Color(16, 79, 32);
+
 		gridColor = new Color(3, 52, 15);
 		hoverColor = new Color(6, 178, 48);
-		
+		hoverLineColor = new Color(4, 80, 21);
+			
 		showHover = true;
 		hoverx = hovery = 0;
 		
@@ -129,7 +134,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 			int hy = hovery * rowHeight;
 			
 			// Highlight row/column
-			g2.setColor(new Color(4, 80, 21));
+			g2.setColor(hoverLineColor);
 			drawDoubleVerticalLine(g2, hx,      0, getHeight() - 1);
 			drawDoubleVerticalLine(g2, hx + 16, 0, getHeight() - 1);
 			
@@ -145,14 +150,23 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		}
 		
 		if(map != null) {
+			map.updateFrame(thisPlayer);
+			
 			for(y = 0; y < 30; ++y) {
 				for(x = 0; x < 30; ++x) {
-					// TODO: Select appropriate color
-					g2.setColor(bgColor);
+					MapNode n = map.getMapNode(x, y);
+					
+					Color c = n.hasSonar() ? sonarColor : n.hasRadar() ? radarColor : bgColor;
+					
+					g2.setColor(c);
 					g2.fillRect(x * colWidth + 2, y * rowHeight + 2, colWidth - 2, rowHeight - 2);
+					
+					if(n.block != null) {
+						
+					}
 				}
 			}
-			// TODO: Draw graphics for the ships
+			
 		}
 		else {
 			g2.setColor(bgColor);

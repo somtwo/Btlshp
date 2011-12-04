@@ -1,12 +1,14 @@
 package btlshp.entities;
 
 import btlshp.enums.BlockStatus;
+import btlshp.enums.GraphicAlliance;
+import btlshp.enums.GraphicId;
+import btlshp.enums.GraphicPart;
 
 public class ArmoredConstructBlock extends ConstructBlock{
 	
-	public ArmoredConstructBlock(Construct Owner) {
-		super(Owner);
-		// TODO Auto-generated constructor stub
+	public ArmoredConstructBlock(Construct Owner, GraphicId graphicId, GraphicPart graphicPart) {
+		super(Owner, graphicId, graphicPart);
 	}
 
 	/**

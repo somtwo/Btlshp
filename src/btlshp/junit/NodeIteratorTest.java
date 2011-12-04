@@ -22,8 +22,8 @@ public class NodeIteratorTest extends TestCase {
 		testLocations[1] = new Location(15, 3);
 		
 		testBlocks = new ConstructBlock[2];
-		testBlocks[0] = new ConstructBlock(null);
-		testBlocks[1] = new ConstructBlock(null);
+		testBlocks[0] = new ConstructBlock(null, null, null);
+		testBlocks[1] = new ConstructBlock(null, null, null);
 		
 		testIterator = new NodeIterator(testLocations[0]);
 		testIterator.add(testLocations[0], testBlocks[0]);

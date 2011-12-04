@@ -108,8 +108,8 @@ public class MainUI {
 		outputConsole = new OutputArea();
 		outputConsole.setFont(status.getFont());
 		mainFrame.add(outputConsole, BorderLayout.PAGE_END);
-		outputConsole.addText("- Welcome to BtlShp! Please start or restore a game!");
-		outputConsole.addText("BTLSHP by TeamTBD");
+		outputConsole.addLine("- Welcome to BtlShp! Please start or restore a game!");
+		outputConsole.addLine("BTLSHP by TeamTBD");
 		
 		// Make help screen
 		helpScreen = new HelpScreen();

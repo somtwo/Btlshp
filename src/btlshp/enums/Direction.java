@@ -5,16 +5,19 @@ package btlshp.enums;
  * @author Steve
  */
 public enum Direction {
-	North (0),
-	East(1),
-	South(2),
-	West(3);
+	North (0, "n"),
+	East  (1, "e"),
+	South (2, "s"),
+	West  (3, "w");
 	
-	private final int val;
+	private final int    val;
+	private final String suffix;
 	
-	Direction(int val) {
+	Direction(int val, String suffix) {
 		this.val = val;
+		this.suffix = suffix;
 	}
 	
 	public int val() { return val; }
+	public String suffix() { return suffix; }
 }

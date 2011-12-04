@@ -3,6 +3,9 @@ package btlshp.entities;
 import java.io.Serializable;
 
 import btlshp.enums.Direction;
+import btlshp.enums.GraphicAlliance;
+import btlshp.enums.GraphicId;
+import btlshp.enums.GraphicPart;
 import btlshp.utility.NodeIterator;
 
 public class Ship extends Construct implements Serializable{
@@ -40,13 +43,19 @@ public class Ship extends Construct implements Serializable{
 		if (hasArmor()) {
 			blocks = new ArmoredConstructBlock[numberOfBlocks];
 			for (int i = 0; i<numberOfBlocks ; i++){
-				blocks[i] = new ArmoredConstructBlock(this);
+				GraphicPart part = i == 0 ? GraphicPart.Head : 
+	                i == numberOfBlocks - 1 ? GraphicPart.Tail : GraphicPart.Middle;
+	                
+				blocks[i] = new ArmoredConstructBlock(this, GraphicId.Base, part);
 			}	
 		}
 		else {
 			blocks = new ConstructBlock[numberOfBlocks];
 			for (int i = 0; i<numberOfBlocks ; i++){
-				blocks[i] = new ConstructBlock(this);
+				GraphicPart part = i == 0 ? GraphicPart.Head : 
+	                i == numberOfBlocks - 1 ? GraphicPart.Tail : GraphicPart.Middle;
+	                
+				blocks[i] = new ConstructBlock(this, GraphicId.Base, part);
 			}	
 		}
 		

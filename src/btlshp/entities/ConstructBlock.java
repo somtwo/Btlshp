@@ -1,17 +1,28 @@
 package btlshp.entities;
 
+import btlshp.Btlshp;
 import btlshp.enums.BlockStatus;
+import btlshp.enums.GraphicAlliance;
+import btlshp.enums.GraphicId;
+import btlshp.enums.GraphicPart;
 import btlshp.enums.Weapon;
 
 public class ConstructBlock extends Block {
 
-	Construct myConstruct;
+	Construct   myConstruct;
 	BlockStatus myStatus;
 	
 	/**
 	 * Basic Constructor for a Block
 	 */
-	public ConstructBlock(Construct Owner){
+	public ConstructBlock(Construct Owner, GraphicId graphicId, GraphicPart graphicPart) {
+		this.graphicId = graphicId == null ? GraphicId.None : graphicId;
+		this.graphicPart = graphicPart == null ? GraphicPart.None : graphicPart;
+		
+		if(Owner != null && Btlshp.getGame() != null) {
+			graphicAlliance = Owner.pl == Btlshp.getGame().getLocalPlayer() ? GraphicAlliance.Friendly : GraphicAlliance.Unfriendly;
+		}
+		
 		myConstruct = Owner;
 		myStatus = BlockStatus.untouched;
 	}
@@ -77,6 +88,13 @@ public class ConstructBlock extends Block {
 	 */
 	public void repair() {
 		myStatus = BlockStatus.untouched;
-		
 	}
+	
+	
+	
+	@Override
+	public String getGraphicName() {
+		return super.getGraphicName() + myConstruct.getDirection().suffix();
+	}
+	
 }

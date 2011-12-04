@@ -100,6 +100,8 @@ public class Map implements Serializable {
 			shipDir = Direction.West;
 		}
 		
+		p.getBase().setDirection(shipDir);
+		
 		ConstructBlock [] blocks = p.getBase().getBlocks();
 		int ytop = (MAPHEIGHT - blocks.length) / 2;
 		
@@ -109,22 +111,20 @@ public class Map implements Serializable {
 		Ship [] playerShips = p.getShips();
 		
 		for(int i = 0; i < playerShips.length; ++i) {
-			/*// Select a random ship from the array
+			// Select a random ship from the array
 			int startIndex;
-			int shipIndex = startIndex = (int)(Math.random() * ships.length);
+			int shipIndex = startIndex = (int)(Math.random() * playerShips.length);
 			
 			// We might have already placed the ship at shipIndex, so linearly traverse the list
 			// until we find one that we haven't placed yet.
-			while(ships[shipIndex] == null) {
-				shipIndex = (shipIndex + 1) % ships.length;
+			while(playerShips[shipIndex] == null) {
+				shipIndex = (shipIndex + 1) % playerShips.length;
 				if(shipIndex == startIndex)
 					throw new IllegalStateException("Infinite loop detected.");
-			}*/
-			int shipIndex = i;
+			}
 			
 			// TODO: This is a hack for now. A better solution should be found...
 			int offset = 0;
-			
 			if(playerShips[shipIndex].getBlocks().length == 3)
 				offset = shipDir == Direction.East ? 1 : shipDir == Direction.West ? -1 : 0;
 			
@@ -233,8 +233,6 @@ public class Map implements Serializable {
 		it.rotate(dir);
 		
 		for(int i = 0; i < it.size(); ++i) {
-			int fx = it.getx(i);
-			int fy = it.gety(i);
 			placeBlock(getMapNode(it.getx(i), it.gety(i)), it.getBlock(i));
 		}
 
@@ -261,11 +259,40 @@ public class Map implements Serializable {
 	}
 	        	
 	/**
-	* This method cleans up any visibility data from the previous turn and updates the map with the
-	* radar/sonar of the current ship locations.
-	*/
-	public void updateFrame() {
-		// TODO: Determine how to update the blocks for the UI
+	 * This method cleans up any visibility data from the previous turn and updates the map with the
+	 * radar/sonar of the current ship locations.
+	 * 
+	 * @param forPlayer    The player to update radar/sonar for (ie, the local player)
+	 */
+	public void updateFrame(Player forPlayer) {
+		if(forPlayer != leftPlayer && forPlayer != rightPlayer)
+			throw new IllegalArgumentException("forPlayer must be either player one or player two.");
+		
+		for(int y = 0; y < MAPHEIGHT; ++y) {
+			for(int x = 0; x < MAPWIDTH; ++x) {
+				getMapNode(x, y).clearFlags();
+			}
+		}
+		
+		for(int i = 0; i < ships.size(); ++i)
+		{
+			Ship s = ships.get(i);
+			if(s.getPlayer() != forPlayer)
+				continue;
+			
+			if(s.hasSonar()) {
+				NodeIterator it = s.getRadarIterator();
+				
+				for(int p = 0; p < it.size(); ++i)
+					getMapNode(it.getx(i), it.gety(i)).setHasSonar(true);
+			}
+			else {
+				NodeIterator it = s.getRadarIterator();
+				
+				for(int p = 0; p < it.size(); ++i)
+					getMapNode(it.getx(i), it.gety(i)).setHasRadar(true);
+			}
+		}
 	}
 
 	/**
