@@ -17,7 +17,6 @@ public class Map implements Serializable {
 	ArrayList<Ship> ships;
 	MapNode   nodes [][];
 	Player    leftPlayer, rightPlayer;
-	Base      leftBase, rightBase;
 	
 	
 	/**
@@ -25,7 +24,7 @@ public class Map implements Serializable {
 	 * @return
 	 */
 	public Ship[] getShips() {
-		return ships.toArray(null);
+		return ships.toArray(new Ship[0]);
 	}
 	
 	
@@ -34,7 +33,7 @@ public class Map implements Serializable {
 	 * @return
 	 */
 	public Base getLeftBase() {
-		return leftBase;
+		return leftPlayer.getBase();
 	}
 	
 	
@@ -43,7 +42,7 @@ public class Map implements Serializable {
 	 * @return
 	 */
 	public Base getRightBase() {
-		return rightBase;
+		return rightPlayer.getBase();
 	}
 	
 	/**
@@ -86,28 +85,53 @@ public class Map implements Serializable {
 		node.block = null;
 	}
 	
-	
-	
-	private void placeBase(Base b, int x) {
-		ConstructBlock [] blocks = b.getBlocks();
-		int y = (MAPHEIGHT - blocks.length) / 2;
+	private void placeStructures(Player p, boolean isLeft) {
+		Direction  shipDir;
+		int        basex, shipx;
+		
+		if(isLeft) {
+			shipDir = Direction.East;
+			basex = 0;
+			shipx = 1;
+		}
+		else {
+			basex = MAPWIDTH - 1;
+			shipx = MAPWIDTH - 2;
+			shipDir = Direction.West;
+		}
+		
+		ConstructBlock [] blocks = p.getBase().getBlocks();
+		int ytop = (MAPHEIGHT - blocks.length) / 2;
 		
 		for(int i = 0; i < blocks.length; ++i)
-			placeBlock(getMapNode(x, y + i), blocks[i]);
-	}
-	
-	
-	private void createStructures() {
-		// Create the left-player base and ships
-		leftBase = new Base(leftPlayer);
-		placeBase(leftBase, 0);
+			placeBlock(getMapNode(basex, ytop + i), blocks[i]);
 		
-		// Create the left-player base and ships
-		rightBase = new Base(rightPlayer);
-		placeBase(rightBase, MAPWIDTH - 1);
+		Ship [] playerShips = p.getShips();
 		
-		// TODO: Ships
-		ships = new ArrayList<Ship>();
+		for(int i = 0; i < playerShips.length; ++i) {
+			/*// Select a random ship from the array
+			int startIndex;
+			int shipIndex = startIndex = (int)(Math.random() * ships.length);
+			
+			// We might have already placed the ship at shipIndex, so linearly traverse the list
+			// until we find one that we haven't placed yet.
+			while(ships[shipIndex] == null) {
+				shipIndex = (shipIndex + 1) % ships.length;
+				if(shipIndex == startIndex)
+					throw new IllegalStateException("Infinite loop detected.");
+			}*/
+			int shipIndex = i;
+			
+			// TODO: This is a hack for now. A better solution should be found...
+			int offset = 0;
+			
+			if(playerShips[shipIndex].getBlocks().length == 3)
+				offset = shipDir == Direction.East ? 1 : shipDir == Direction.West ? -1 : 0;
+			
+			addShip(playerShips[shipIndex]);
+			placeShip(playerShips[shipIndex], shipx + offset, ytop + i, shipDir);
+			playerShips[shipIndex] = null;
+		}
 	}
 	
 	/**
@@ -117,12 +141,19 @@ public class Map implements Serializable {
 	* @param playerTwo     Player 2 (right side)
 	*/
 	public Map(Player playerOne, Player playerTwo) {
+		ships = new ArrayList<Ship>();
 		leftPlayer = playerOne;
 		rightPlayer = playerTwo;
 		
+		if(playerOne == playerTwo)
+			throw new IllegalArgumentException("Left player and Right player can not be the same player.");
+		
 		createNodes();
-		createStructures();
 		createReefs();
+		
+		// Place bases and ships
+		placeStructures(leftPlayer, true);
+		placeStructures(rightPlayer, false);
 	}
 	        	
 	/**
@@ -133,15 +164,9 @@ public class Map implements Serializable {
 	* @param playerTwo     Player 2 (right side)
 	*/
 	public Map(StoredMap map, Player playerOne, Player playerTwo) {
-		// TODO: Support for loading a stored map.
-		leftPlayer = playerOne;
-		rightPlayer = playerTwo;
-		
-		createNodes();
-		createStructures();
-		createReefs();
+		throw new IllegalStateException("The source is in such a state that this is illegal...");
 	}
-	        	
+
 	
 	
 	/**
@@ -208,6 +233,8 @@ public class Map implements Serializable {
 		it.rotate(dir);
 		
 		for(int i = 0; i < it.size(); ++i) {
+			int fx = it.getx(i);
+			int fy = it.gety(i);
 			placeBlock(getMapNode(it.getx(i), it.gety(i)), it.getBlock(i));
 		}
 
@@ -261,7 +288,7 @@ public class Map implements Serializable {
 	
 	
 	private boolean insideMap(int x, int y) {
-		if(x < 0 || x >= MAPWIDTH || y < 0 || y > MAPHEIGHT)
+		if(x < 0 || x >= MAPWIDTH || y < 0 || y >= MAPHEIGHT)
 			return false;
 		return true;
 	}
@@ -551,7 +578,7 @@ public class Map implements Serializable {
 		MapNode n = getMapNode(loc);
 		MineBlock b = n.block != null && n.block instanceof MineBlock ? (MineBlock)n.block : null;
 		
-		if(!s.canPickUpMine() || b != null || s.getPlayer().numberOfMines() == 0)
+		if(!s.canPickUpMine() || b == null)
 			return false;
 		
 		if(loc.getx() < s.getx1() - 1 || loc.getx() > s.getx2() + 1 ||

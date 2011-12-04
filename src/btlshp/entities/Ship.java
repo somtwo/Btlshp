@@ -35,6 +35,7 @@ public class Ship extends Construct implements Serializable{
 		maxGunRange = gunRange;
 		maxSonarRange = sonarRange;
 		maxRadarRange = radarRange;
+		myLoc = new Location(0, 0);
 		
 		if (hasArmor()) {
 			blocks = new ArmoredConstructBlock[numberOfBlocks];

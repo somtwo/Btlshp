@@ -6,28 +6,50 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
+import btlshp.entities.Base;
+import btlshp.entities.Block;
+import btlshp.entities.ConstructBlock;
 import btlshp.entities.Map;
+import btlshp.entities.MapNode;
+import btlshp.entities.Player;
+import btlshp.entities.Ship;
 
-public class GameGrid extends JComponent implements MouseMotionListener {
-	/**
-	 * It's serializable, y0! 
-	 */
+public class GameGrid extends JComponent implements MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1038483241713085828L;
 	private static final int  rowHeight = 16, colWidth = 16;
+	
+	public enum GameState {
+		WaitingForTurn,
+		TurnStart,
+		MoveShip,
+		RotateShip,
+		FireGun,
+		FireTorpedo,
+		PlaceMine,
+		PickupMine,
+		RepairConstruct
+	};
+	
+	private GameState state;
 	
 	private Dimension size;
 	private Color  bgColor, gridColor, hoverColor;
 	
 	private boolean showHover;
 	private int     hoverx, hovery;
+	private int     pressx, pressy;
 	
 	private int     gridWidth, gridHeight;
 	
 	private Map     map;
+	private Player  thisPlayer;
 	
 	
 	public GameGrid() {
@@ -40,6 +62,7 @@ public class GameGrid extends JComponent implements MouseMotionListener {
 		setMaximumSize(size);
 		
 		addMouseMotionListener(this);
+		addMouseListener(this);
 		
 		bgColor = new Color(3, 28, 9);
 		gridColor = new Color(3, 52, 15);
@@ -49,6 +72,29 @@ public class GameGrid extends JComponent implements MouseMotionListener {
 		hoverx = hovery = 0;
 		
 		map = null;
+		state = GameState.TurnStart;
+	}
+	
+	
+	/**
+	 * Used to set the map for the grid to display.
+	 * 
+	 * @param map           Map to use
+	 * @param thisPlayer    The player using this GameGrid.
+	 * @param state         The current state of the game, typically this should either be TurnStart or WaitingForTurn
+	 */
+	public void setMap(Map map, Player thisPlayer, GameState state) {
+		this.map = map;
+		this.thisPlayer = thisPlayer;
+		this.state = state;
+	}
+	
+	
+	/**
+	 * @return The current state of the game.
+	 */
+	public GameState getGameState() {
+		return state;
 	}
 	
 	
@@ -62,6 +108,7 @@ public class GameGrid extends JComponent implements MouseMotionListener {
 		g.drawLine(x + 1, y1, x + 1, y2);
 	}
 	
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
@@ -116,17 +163,29 @@ public class GameGrid extends JComponent implements MouseMotionListener {
 			}
 		}
 	}
+	
+	
+	private int gridLocX(int x) {
+		int res = (x - 1) / colWidth;
+		return res < 0 ? 0 : res >= gridWidth ? gridWidth - 1 : res;
+	}
+	
+	
+	private int gridLocY(int y) {
+		int res = (y - 1) / rowHeight;
+		return res < 0 ? 0 : res >= gridHeight ? gridHeight - 1 : res;
+	}
 
 
-
-	private void updateHover(Point mouseLoc) {
-		int x = (mouseLoc.x - 1) / 16;
-		int y = (mouseLoc.y - 1) / 16;
+	/**
+	 * Updates the highlighted square in the grid.
+	 * @param mouseLoc    Location the mouse has moved to.
+	 */
+	private void updateHover(Point mouseLoc, boolean forceRepaint) {
+		int x = gridLocX(mouseLoc.x);
+		int y = gridLocY(mouseLoc.y);
 		
-		x = x < 0 ? 0 : x > 29 ? 29 : x;
-		y = y < 0 ? 0 : y > 29 ? 29 : y;
-		
-		if(x != hoverx || y != hovery)
+		if(x != hoverx || y != hovery || forceRepaint)
 			repaint();
 		
 		hoverx = x;
@@ -136,13 +195,67 @@ public class GameGrid extends JComponent implements MouseMotionListener {
 	
 	@Override
 	public void mouseDragged(MouseEvent ev) {
-		updateHover(ev.getPoint());	
 	}
 
 
 
 	@Override
 	public void mouseMoved(MouseEvent ev) {
-		updateHover(ev.getPoint());	
+		updateHover(ev.getPoint(), false);	
+	}
+
+
+	@Override
+	public void mouseClicked(MouseEvent ev) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseEntered(MouseEvent ev) {
+		showHover = true;
+		updateHover(ev.getPoint(), true);
+	}
+
+
+	@Override
+	public void mouseExited(MouseEvent ev) {
+		showHover = false;
+		repaint();
+	}
+
+
+	@Override
+	public void mousePressed(MouseEvent ev) {
+		pressx = ev.getX();
+		pressy = ev.getY();
+	}
+
+
+	@Override
+	public void mouseReleased(MouseEvent ev) {
+		int gridx = gridLocX(pressx);
+		int gridy = gridLocY(pressy);
+		
+		if(map == null)
+			return;
+		
+		Block b = map.getMapNode(gridx, gridy).block;
+		if(b == null || !(b instanceof ConstructBlock))
+			return;
+		
+		ConstructBlock cb = (ConstructBlock)b;
+		if(thisPlayer != cb.getPlayer())
+			return;
+		
+		if((cb.getConstruct()) instanceof Ship) {
+			JPopupMenu m = new ShipPopupMenu((Ship)cb.getConstruct());
+			m.show(this, pressx, pressy);
+		}
+		else if(cb.getConstruct() instanceof Base) {
+			JPopupMenu m = new BasePopupMenu((Base)cb.getConstruct());
+			m.show(this, pressx, pressy);
+		}
 	}
 }

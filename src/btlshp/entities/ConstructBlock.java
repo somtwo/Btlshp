@@ -15,11 +15,21 @@ public class ConstructBlock extends Block {
 		myConstruct = Owner;
 		myStatus = BlockStatus.untouched;
 	}
+	
 	/**
 	 * Passes the Information that this block was hit to it's Construct
 	 */
 	public void takeHit(Weapon weaponUsed){
 		myConstruct.assessDamage(this, weaponUsed);
+	}
+	
+	
+	public Construct getConstruct() {
+		return myConstruct;
+	}
+	
+	public Player getPlayer() {
+		return myConstruct.pl;
 	}
 	
 	/**

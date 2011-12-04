@@ -29,8 +29,8 @@ public class MainUI {
 	private JFrame       mainFrame;
 	private JMenuBar     mainMenuBar;
 	private FileMenu     fileMenu;
-	private GameGrid     gg;
-	private OutputArea   cons;
+	private GameGrid     gameGrid;
+	private OutputArea   outputConsole;
 	private JLabel       status;
 	private Font         proFont;
 	
@@ -67,6 +67,9 @@ public class MainUI {
 	}
 	
 	
+	/**
+	 * Builds the GUI for the main program.
+	 */
 	public void makeGUI() {
 		// Look and feel...
 		try {
@@ -94,18 +97,19 @@ public class MainUI {
 		makeMainMenu();
 		
 		// Make the game grid
-		gg = new GameGrid();
-		mainFrame.add(gg, BorderLayout.CENTER);
+		gameGrid = new GameGrid();
+		mainFrame.add(gameGrid, BorderLayout.CENTER);
 		
 		// Right status pane
 		makeStatusPane();
 		mainFrame.add(status, BorderLayout.LINE_END);
 		
 		// Bottom console pane.
-		cons = new OutputArea();
-		cons.setFont(status.getFont());
-		mainFrame.add(cons, BorderLayout.PAGE_END);
-		cons.addText("- Welcome to BtlShp! Please start or restore a game!\n");
+		outputConsole = new OutputArea();
+		outputConsole.setFont(status.getFont());
+		mainFrame.add(outputConsole, BorderLayout.PAGE_END);
+		outputConsole.addText("- Welcome to BtlShp! Please start or restore a game!");
+		outputConsole.addText("BTLSHP by TeamTBD");
 		
 		// Make help screen
 		helpScreen = new HelpScreen();
@@ -117,6 +121,13 @@ public class MainUI {
 	}
 	
 	
+	/**
+	 * Utility function to display a Yes/No/Cancel dialog for the user.
+	 * 
+	 * @param title    Title of the dialog window
+	 * @param message  Message to be displayed inside the dialog
+	 * @return         Yes, No, or Cancel depending on the users decision.
+	 */
 	public DialogResult yesNoCancelDialog(String title, String message) {
 		int result = JOptionPane.showConfirmDialog(mainFrame, message, title, JOptionPane.YES_NO_CANCEL_OPTION);
 		
@@ -133,11 +144,22 @@ public class MainUI {
 	}
 	
 	
+	/**
+	 * Utility function to show an alert to the player
+	 * 
+	 * @param title    Title of the alert
+	 * @param message  Message inside the alert
+	 */
 	public void showAlert(String title, String message) {
 		JOptionPane.showMessageDialog(mainFrame, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	
+	/**
+	 * Utility function to display a directory selection dialog and allow the user to select a directory.
+	 * 
+	 * @return    File representing the path the user selected, or null if the user canceled.
+	 */
 	public File selectDiretory() {
 		JFileChooser fc = new JFileChooser();
 		
@@ -153,7 +175,9 @@ public class MainUI {
 	}
 	
 	
-	
+	/**
+	 * UI action to display the help screen.
+	 */
 	public void showHelp() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
