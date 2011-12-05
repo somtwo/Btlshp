@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import btlshp.enums.Direction;
 import btlshp.enums.Weapon;
 import btlshp.utility.NodeIterator;
+import btlshp.utility.NodeIteratorAction;
 
 public class Map implements Serializable {
 	/**
@@ -112,7 +113,7 @@ public class Map implements Serializable {
 		
 		for(int i = 0; i < playerShips.length; ++i) {
 			// Select a random ship from the array
-			int startIndex;
+			/*int startIndex;
 			int shipIndex = startIndex = (int)(Math.random() * playerShips.length);
 			
 			// We might have already placed the ship at shipIndex, so linearly traverse the list
@@ -121,7 +122,8 @@ public class Map implements Serializable {
 				shipIndex = (shipIndex + 1) % playerShips.length;
 				if(shipIndex == startIndex)
 					throw new IllegalStateException("Infinite loop detected.");
-			}
+			}*/
+			int shipIndex = i;
 			
 			// TODO: This is a hack for now. A better solution should be found...
 			int offset = 0;
@@ -228,13 +230,14 @@ public class Map implements Serializable {
 	 * @param dir   The direction the ship should be facing.
 	 */
 	public void placeShip(Ship s, int x, int y, Direction dir) {
-		NodeIterator it = s.getCoreIterator();
-		it.setOrigin(x, y);
-		it.rotate(dir);
-		
-		for(int i = 0; i < it.size(); ++i) {
-			placeBlock(getMapNode(it.getx(i), it.gety(i)), it.getBlock(i));
-		}
+		s.getCoreIterator().iterate(this, x, y, dir, new NodeIteratorAction() {
+			public void visit(MapNode n, Block b) {
+				if(n == null)
+					throw new IndexOutOfBoundsException();
+				
+				placeBlock(n, b);
+			}
+		});
 
 		s.setLocation(new Location(x, y));
 		s.setDirection(dir);
@@ -246,16 +249,14 @@ public class Map implements Serializable {
 	 * @param s
 	 */
 	public void unplaceShip(Ship s) {
-		Direction dir = s.getDirection();
-		Location  loc = s.getLocation();
-
-		NodeIterator it = s.getCoreIterator();
-		it.setOrigin(loc);
-		it.rotate(dir);
-		
-		for(int i = 0; i < it.size(); ++i) {
-			unplaceBlock(getMapNode(it.getx(i), it.gety(i)), it.getBlock(i));
-		}
+		s.getCoreIterator().iterate(this, s.getLocation(), s.getDirection(), new NodeIteratorAction() {
+			public void visit(MapNode n, Block b) {
+				if(n == null)
+					throw new IndexOutOfBoundsException();
+			
+				unplaceBlock(n, b);
+			}
+		});
 	}
 	        	
 	/**
@@ -281,16 +282,20 @@ public class Map implements Serializable {
 				continue;
 			
 			if(s.hasSonar()) {
-				NodeIterator it = s.getRadarIterator();
-				
-				for(int p = 0; p < it.size(); ++i)
-					getMapNode(it.getx(i), it.gety(i)).setHasSonar(true);
+				s.getRadarIterator().iterate(this, s.getLocation(), s.getDirection(), new NodeIteratorAction() {
+					public void visit(MapNode n, Block b) {
+						if(n != null)
+							n.setHasSonar(true);
+					}
+				});
 			}
 			else {
-				NodeIterator it = s.getRadarIterator();
-				
-				for(int p = 0; p < it.size(); ++i)
-					getMapNode(it.getx(i), it.gety(i)).setHasRadar(true);
+				s.getRadarIterator().iterate(this, s.getLocation(), s.getDirection(), new NodeIteratorAction() {
+					public void visit(MapNode n, Block b) {
+						if(n != null)
+							n.setHasRadar(true);
+					}
+				});
 			}
 		}
 	}
@@ -310,7 +315,7 @@ public class Map implements Serializable {
 	* @returns The map block at the given location
 	*/
 	public MapNode getMapNode(int x, int y) {
-		return nodes[y][x];
+		return insideMap(x, y) ? nodes[y][x] : null;
 	}
 	
 	
@@ -337,8 +342,6 @@ public class Map implements Serializable {
 		
 		deltax = (dir == Direction.West) ? -1 : (dir == Direction.East) ? 1 : 0;
 		deltay = (dir == Direction.North) ? -1 : (dir == Direction.South) ? 1 : 0;
-		
-		it.rotate(s.getDirection());
 
 		for(int moveCount = 0; moveCount < blocks; ++moveCount)
 		{
@@ -352,7 +355,7 @@ public class Map implements Serializable {
 				
 				Block b = getMapNode(it.getx(i), it.gety(i)).block;
 				
-				if(b == null || b instanceof MineBlock)
+				if(b == null)
 					continue;
 				
 				if(b instanceof ConstructBlock) {

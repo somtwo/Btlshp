@@ -46,7 +46,7 @@ public class Ship extends Construct implements Serializable{
 				GraphicPart part = i == 0 ? GraphicPart.Head : 
 	                i == numberOfBlocks - 1 ? GraphicPart.Tail : GraphicPart.Middle;
 	                
-				blocks[i] = new ArmoredConstructBlock(this, GraphicId.Base, part);
+				blocks[i] = new ArmoredConstructBlock(this, GraphicId.Ship, part);
 			}	
 		}
 		else {
@@ -55,7 +55,7 @@ public class Ship extends Construct implements Serializable{
 				GraphicPart part = i == 0 ? GraphicPart.Head : 
 	                i == numberOfBlocks - 1 ? GraphicPart.Tail : GraphicPart.Middle;
 	                
-				blocks[i] = new ConstructBlock(this, GraphicId.Base, part);
+				blocks[i] = new ConstructBlock(this, GraphicId.Ship, part);
 			}	
 		}
 		
@@ -248,7 +248,7 @@ public class Ship extends Construct implements Serializable{
 	* @returns the Ship Constructed
 	*/
 	public static Ship buildMineSweeper(Player owner) {
-		return new Ship(owner, hasMinePlacement|isArmored, 4, 1, 1, 0, 2, 2, 2);
+		return new Ship(owner, hasSonar|hasMinePlacement|isArmored, 4, 1, 1, 0, 2, 2, 2);
 	}
 
 	public Player getPlayer() {
@@ -369,10 +369,10 @@ public class Ship extends Construct implements Serializable{
 		
 		radarArea = new NodeIterator(null);
 		
-		ytop = blocks.length == 3 ? -1 - maxRadarRange : -blocks.length - maxRadarRange;
-		ybot = blocks.length == 3 ? 1 + maxRadarRange : maxRadarRange;
+		ytop = blocks.length == 3 ? -1 - maxSonarRange : -blocks.length - maxSonarRange;
+		ybot = blocks.length == 3 ? 1 + maxSonarRange : maxSonarRange;
 		
-		for(x = -maxRadarRange; x <= maxRadarRange; ++x) {
+		for(x = -maxSonarRange; x <= maxSonarRange; ++x) {
 			for(y = ytop; y <= ybot; ++y) {
 				radarArea.add(x, y, null);
 			}

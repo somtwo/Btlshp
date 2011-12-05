@@ -29,4 +29,8 @@ public abstract class Block {
 	public String getGraphicName() {
 		return graphicId.getName() + graphicPart.getSuffix() + graphicAlliance.getSuffix();
 	}
+	
+	public GraphicAlliance getAlliance() {
+		return graphicAlliance;
+	}
 }

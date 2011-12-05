@@ -2,6 +2,7 @@ package btlshp;
 
 import java.io.File;
 
+import btlshp.entities.Map;
 import btlshp.entities.Player;
 import btlshp.enums.AppState;
 import btlshp.ui.DialogResult;
@@ -32,7 +33,7 @@ public class BtlshpGame {
 	 * Handles a UI-side new game request.
 	 */
 	public void newGame() {
-		if(appState == AppState.GameInProgress) {
+		if(appState != AppState.NoGame) {
 			if(mainUi.yesNoCancelDialog("Start new game?", "You have to forfeit the current game to start a new one, are you sure?") != DialogResult.Yes)
 				return;
 		}
@@ -40,8 +41,9 @@ public class BtlshpGame {
 		File gameDir = mainUi.selectDiretory();
 		
 		if(gameDir != null) {
-			// TODO: New game
-			mainUi.showAlert("Result!", gameDir.getAbsolutePath());
+			localPlayer = new Player();
+			mainUi.setMap(new Map(localPlayer, new Player()));
+			appState = AppState.LocalTurn;
 		}
 	}
 	
@@ -64,7 +66,7 @@ public class BtlshpGame {
 	
 	
 	public void quitGame() {
-		if(appState == AppState.GameInProgress) {
+		if(appState != AppState.NoGame) {
 			// TODO: The user either has to forfeit or save game.
 		}
 		else if (mainUi.yesNoCancelDialog("Do you really want to quit?", "Please don't go, the Socialist Commies will win!") == DialogResult.Yes) {

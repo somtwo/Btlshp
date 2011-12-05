@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import btlshp.entities.ConstructBlock;
 import btlshp.entities.Location;
+import btlshp.entities.Map;
+import btlshp.entities.MapNode;
 import btlshp.enums.Direction;
 
 public class NodeIterator {
@@ -114,6 +116,45 @@ public class NodeIterator {
 	 */
 	public ConstructBlock getBlock(int index) {
 		return offsets.get(index).block;
+	}
+
+	
+	/**
+	 * Iterates over the given map and performs the given action on all MapNodes. If an iterator goes outside
+	 * the bounds of the map, the action object is still called with null in case this should result in an error.
+	 * 
+	 * @param map     Map to iterate over
+	 * @param origin  Origin of the iteration
+	 * @param dir     Direction of the rotation of the iteration
+	 * @param action  Action to use to visit each node
+	 */
+	public void iterate(Map map, Location origin, Direction dir, NodeIteratorAction action) {
+		iterate(map, origin.getx(), origin.gety(), dir, action);
+	}
+	
+	
+	
+	/**
+	 * Iterates over the given map and performs the given action on all MapNodes. If an iterator goes outside
+	 * the bounds of the map, the action object is still called with null in case this should result in an error.
+	 * 
+	 * @param map     Map to iterate over
+	 * @param x	      x origin of the iteration
+	 * @param y       y origin of the iteration
+	 * @param dir     Direction of the rotation of the iteration
+	 * @param action  Action to use to visit each node
+	 */
+	public void iterate(Map map, int x, int y, Direction dir, NodeIteratorAction action) {
+		setOrigin(x, y);
+		rotate(dir);
+		for(int i = 0; i < offsets.size(); ++i) {
+			LocationBlock lb = offsets.get(i);
+			
+			MapNode n = map.getMapNode(lb.loc.getx() + origin.getx(), lb.loc.gety() + origin.gety());
+			
+			action.visit(n, lb.block);
+		}
+
 	}
 	
 	

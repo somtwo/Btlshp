@@ -8,25 +8,29 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import btlshp.Btlshp;
 import btlshp.entities.Base;
 import btlshp.entities.Block;
 import btlshp.entities.ConstructBlock;
 import btlshp.entities.Map;
 import btlshp.entities.MapNode;
-import btlshp.entities.Player;
 import btlshp.entities.Ship;
+import btlshp.enums.AppState;
+import btlshp.enums.GraphicAlliance;
 
 public class GameGrid extends JComponent implements MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1038483241713085828L;
 	private static final int  rowHeight = 16, colWidth = 16;
 	
-	public enum GameState {
-		WaitingForTurn,
+	public enum GridState {
 		TurnStart,
 		MoveShip,
 		RotateShip,
@@ -37,7 +41,8 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		RepairConstruct
 	};
 	
-	private GameState state;
+	private HashMap<String, BufferedImage> imageCache;
+	private GridState state;
 	
 	private Dimension size;
 	private Color  bgColor, sonarColor, radarColor;
@@ -45,12 +50,10 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	
 	private boolean showHover;
 	private int     hoverx, hovery;
-	private int     pressx, pressy;
 	
 	private int     gridWidth, gridHeight;
 	
 	private Map     map;
-	private Player  thisPlayer;
 	
 	
 	public GameGrid() {
@@ -77,7 +80,9 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		hoverx = hovery = 0;
 		
 		map = null;
-		state = GameState.TurnStart;
+		state = GridState.TurnStart;
+		
+		imageCache = new HashMap<String, BufferedImage>();
 	}
 	
 	
@@ -85,20 +90,18 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	 * Used to set the map for the grid to display.
 	 * 
 	 * @param map           Map to use
-	 * @param thisPlayer    The player using this GameGrid.
-	 * @param state         The current state of the game, typically this should either be TurnStart or WaitingForTurn
 	 */
-	public void setMap(Map map, Player thisPlayer, GameState state) {
+	public void setMap(Map map) {
 		this.map = map;
-		this.thisPlayer = thisPlayer;
-		this.state = state;
+		this.state = GridState.TurnStart;
+		repaint();
 	}
 	
 	
 	/**
 	 * @return The current state of the game.
 	 */
-	public GameState getGameState() {
+	public GridState getGameState() {
 		return state;
 	}
 	
@@ -150,7 +153,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		}
 		
 		if(map != null) {
-			map.updateFrame(thisPlayer);
+			map.updateFrame(Btlshp.getGame().getLocalPlayer());
 			
 			for(y = 0; y < 30; ++y) {
 				for(x = 0; x < 30; ++x) {
@@ -162,7 +165,21 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 					g2.fillRect(x * colWidth + 2, y * rowHeight + 2, colWidth - 2, rowHeight - 2);
 					
 					if(n.block != null) {
+						if(n.block.getAlliance() == GraphicAlliance.Unfriendly && !n.hasSonar() && !n.hasRadar())
+							continue;
 						
+						String imageName = n.block.getGraphicName();
+						
+						BufferedImage img = imageCache.get(imageName);
+						if(img == null) {
+							try {
+								img = ImageIO.read(new File("images/mapgraphics/" + imageName + ".png"));
+								imageCache.put(imageName, img);
+							} catch (Exception e) {}
+						}
+						
+						if(img != null)
+							g2.drawImage(img, x * colWidth, y * rowHeight, null);
 					}
 				}
 			}
@@ -209,6 +226,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	
 	@Override
 	public void mouseDragged(MouseEvent ev) {
+		updateHover(ev.getPoint(), false);	
 	}
 
 
@@ -242,17 +260,15 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 
 	@Override
 	public void mousePressed(MouseEvent ev) {
-		pressx = ev.getX();
-		pressy = ev.getY();
 	}
 
 
 	@Override
 	public void mouseReleased(MouseEvent ev) {
-		int gridx = gridLocX(pressx);
-		int gridy = gridLocY(pressy);
+		int gridx = gridLocX(ev.getX());
+		int gridy = gridLocY(ev.getY());
 		
-		if(map == null)
+		if(map == null || Btlshp.getGame().getAppState() != AppState.LocalTurn)
 			return;
 		
 		Block b = map.getMapNode(gridx, gridy).block;
@@ -260,16 +276,16 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 			return;
 		
 		ConstructBlock cb = (ConstructBlock)b;
-		if(thisPlayer != cb.getPlayer())
+		if(Btlshp.getGame().getLocalPlayer() != cb.getPlayer())
 			return;
 		
 		if((cb.getConstruct()) instanceof Ship) {
 			JPopupMenu m = new ShipPopupMenu((Ship)cb.getConstruct());
-			m.show(this, pressx, pressy);
+			m.show(this, ev.getX(), ev.getY());
 		}
 		else if(cb.getConstruct() instanceof Base) {
 			JPopupMenu m = new BasePopupMenu((Base)cb.getConstruct());
-			m.show(this, pressx, pressy);
+			m.show(this, ev.getX(), ev.getY());
 		}
 	}
 }

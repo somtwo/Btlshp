@@ -21,6 +21,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import btlshp.Btlshp;
+import btlshp.entities.Map;
 import btlshp.enums.AppState;
 
 
@@ -184,5 +185,14 @@ public class MainUI {
 				helpScreen.show();
 			}
 		});
+	}
+	
+	
+	/**
+	 * Handles the UI event when the map changes.
+	 * @param map     New game map.
+	 */
+	public void setMap(Map map) {
+		gameGrid.setMap(map);
 	}
 }

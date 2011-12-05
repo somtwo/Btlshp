@@ -19,10 +19,6 @@ public class ConstructBlock extends Block {
 		this.graphicId = graphicId == null ? GraphicId.None : graphicId;
 		this.graphicPart = graphicPart == null ? GraphicPart.None : graphicPart;
 		
-		if(Owner != null && Btlshp.getGame() != null) {
-			graphicAlliance = Owner.pl == Btlshp.getGame().getLocalPlayer() ? GraphicAlliance.Friendly : GraphicAlliance.Unfriendly;
-		}
-		
 		myConstruct = Owner;
 		myStatus = BlockStatus.untouched;
 	}
@@ -94,7 +90,20 @@ public class ConstructBlock extends Block {
 	
 	@Override
 	public String getGraphicName() {
+		if(myConstruct != null && Btlshp.getGame() != null) {
+			graphicAlliance = myConstruct.pl == Btlshp.getGame().getLocalPlayer() ? GraphicAlliance.Friendly : GraphicAlliance.Unfriendly;
+		}
+		
 		return super.getGraphicName() + myConstruct.getDirection().suffix();
+	}
+	
+	@Override
+	public GraphicAlliance getAlliance() {
+		if(myConstruct != null && Btlshp.getGame() != null) {
+			graphicAlliance = myConstruct.pl == Btlshp.getGame().getLocalPlayer() ? GraphicAlliance.Friendly : GraphicAlliance.Unfriendly;
+		}
+		
+		return graphicAlliance;
 	}
 	
 }
