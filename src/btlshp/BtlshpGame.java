@@ -44,6 +44,7 @@ public class BtlshpGame {
 			localPlayer = new Player();
 			mainUi.setMap(new Map(localPlayer, new Player()));
 			appState = AppState.LocalTurn;
+			mainUi.updateMainMenu();
 		}
 	}
 	
@@ -67,7 +68,7 @@ public class BtlshpGame {
 	
 	public void quitGame() {
 		if(appState != AppState.NoGame) {
-			// TODO: The user either has to forfeit or save game.
+			mainUi.showAlert("Game in progress.", "Please either forfeit or save a game before quitting.");
 		}
 		else if (mainUi.yesNoCancelDialog("Do you really want to quit?", "Please don't go, the Socialist Commies will win!") == DialogResult.Yes) {
 			System.exit(0);

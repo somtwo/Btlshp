@@ -44,6 +44,15 @@ public class MainUI {
 		}
 	}
 	
+	
+	/**
+	 * Used to update what items are available in the file menu when the game state changes.
+	 */
+	public void updateMainMenu() {
+		fileMenu.updateMenuItems();
+	}
+	
+	
 	private void makeMainMenu() {
 		mainMenuBar = new JMenuBar();
 		mainMenuBar.setOpaque(true);
@@ -109,7 +118,7 @@ public class MainUI {
 		outputConsole = new OutputArea();
 		outputConsole.setFont(status.getFont());
 		mainFrame.add(outputConsole, BorderLayout.PAGE_END);
-		outputConsole.addLine("- Welcome to BtlShp! Please start or restore a game!");
+		outputConsole.addLine("Welcome to BtlShp! Please start or restore a game!");
 		outputConsole.addLine("BTLSHP by TeamTBD");
 		
 		// Make help screen

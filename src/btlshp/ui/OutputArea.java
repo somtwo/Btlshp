@@ -22,6 +22,6 @@ public class OutputArea extends JTextArea {
 	
 	
 	public void addLine(String txt) {
-		setText(txt + LE + getText());
+		setText("> " + txt + LE + getText());
 	}
 }
