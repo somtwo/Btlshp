@@ -12,7 +12,7 @@ public class OutputArea extends JTextArea {
 
 	public OutputArea() {
 		setForeground(new Color(6, 178, 48));
-		setBackground(new Color(3, 28, 9));
+		setBackground(new Color(0,0,0));
 		setOpaque(true);
 		setEditable(false);
 		

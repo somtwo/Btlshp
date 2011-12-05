@@ -72,7 +72,7 @@ public class MainUI {
 		status.setPreferredSize(new Dimension(158, 100));
 		status.setFont(proFont.deriveFont(Font.PLAIN, 12.0f));
 		status.setForeground(new Color(6, 178, 48));
-		status.setBackground(new Color(3, 28, 9));
+		status.setBackground(new Color(0, 0, 0));
 		status.setOpaque(true);
 	}
 	

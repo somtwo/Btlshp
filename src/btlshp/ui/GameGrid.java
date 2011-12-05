@@ -74,7 +74,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 
 		gridColor = new Color(3, 52, 15);
 		hoverColor = new Color(6, 178, 48);
-		hoverLineColor = new Color(4, 80, 21);
+		hoverLineColor = new Color(4, 70, 17);
 			
 		showHover = true;
 		hoverx = hovery = 0;
@@ -115,6 +115,32 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		g.drawLine(x,     y1, x,     y2);
 		g.drawLine(x + 1, y1, x + 1, y2);
 	}
+	
+	
+	private boolean displayGraphic(MapNode n) {
+		if(n.block == null)
+			return false;
+		
+		if(n.block.getAlliance() != GraphicAlliance.Unfriendly || n.hasRadar() ||
+				(n.block instanceof ConstructBlock && ((ConstructBlock)n.block).getConstruct() instanceof Base))
+			return true;
+		
+		return false;
+	}
+	
+	
+	
+	private BufferedImage getImage(String imageName) {
+		BufferedImage img = imageCache.get(imageName);
+		if(img == null) {
+			try {
+				img = ImageIO.read(new File("images/mapgraphics/" + imageName + ".png"));
+				imageCache.put(imageName, img);
+			} catch (Exception e) { img = null; }
+		}
+		return img;
+	}
+	
 	
 	@Override
 	public void paintComponent(Graphics g) {
@@ -164,26 +190,14 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 					g2.setColor(c);
 					g2.fillRect(x * colWidth + 2, y * rowHeight + 2, colWidth - 2, rowHeight - 2);
 					
-					if(n.block != null) {
-						if(n.block.getAlliance() == GraphicAlliance.Unfriendly && !n.hasSonar() && !n.hasRadar())
-							continue;
-						
-						String imageName = n.block.getGraphicName();
-						
-						BufferedImage img = imageCache.get(imageName);
-						if(img == null) {
-							try {
-								img = ImageIO.read(new File("images/mapgraphics/" + imageName + ".png"));
-								imageCache.put(imageName, img);
-							} catch (Exception e) {}
-						}
+					if(displayGraphic(n)) {
+						BufferedImage img = getImage(n.block.getGraphicName());
 						
 						if(img != null)
 							g2.drawImage(img, x * colWidth, y * rowHeight, null);
 					}
 				}
 			}
-			
 		}
 		else {
 			g2.setColor(bgColor);
