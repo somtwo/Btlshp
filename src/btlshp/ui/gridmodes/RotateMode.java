@@ -59,7 +59,11 @@ public class RotateMode extends GridMode {
 
 	@Override
 	public void mouseClick(int x, int y) {
-		Btlshp.getGame().outputMessage("Rotate ship action.");
+		MapNode n = map.getMapNode(grid.getHoverx(), grid.getHovery());
+		
+		if(n.actionArea())
+			Btlshp.getGame().outputMessage("Rotate ship action.");
+		
 		grid.cancelAction();
 	}
 

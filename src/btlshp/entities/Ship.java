@@ -20,7 +20,8 @@ public class Ship extends Construct implements Serializable{
 	
 	private int          flags;
 	private int          maxForwardMove, maxSideMove, maxBackMove, maxGunRange, maxSonarRange;
-	private NodeIterator coreArea, adjacentArea, radarArea, turnLeftArea, turnRightArea, firingArea, moveArea;
+	private NodeIterator coreArea, adjacentArea, radarArea, turnLeftArea, turnRightArea, firingArea;
+	private NodeIterator forwardMoveArea, backMoveArea, leftMoveArea, rightMoveArea;
 	
 	/**
 	* Constructor for Ship
@@ -138,12 +139,32 @@ public class Ship extends Construct implements Serializable{
 	
 	
 	/**
-	 * Returns an iterator object that can be used to iterate through all the squares a ship can move through.
-	 * 
-	 * @return NodeIterator object.
+	 * @return an iterator object that can be used to iterate through all the squares a ship can move forward through.
 	 */
-	public NodeIterator getMoveArea() {
-		return moveArea;
+	public NodeIterator getForwardMoveArea() {
+		return forwardMoveArea;
+	}
+	
+	
+	/**
+	 * @return an iterator object that can be used to iterate through all the squares a ship can move backward through.
+	 */
+	public NodeIterator getBackMoveArea() {
+		return backMoveArea;
+	}
+	
+	/**
+	 * @return an iterator object that can be used to iterate through all the squares a ship can move left through.
+	 */
+	public NodeIterator getLeftMoveArea() {
+		return leftMoveArea;
+	}
+	
+	/**
+	 * @return an iterator object that can be used to iterate through all the squares a ship can move right through.
+	 */
+	public NodeIterator getRightMoveArea() {
+		return rightMoveArea;
 	}
 	
 	/**
@@ -409,24 +430,25 @@ public class Ship extends Construct implements Serializable{
 	private void buildMoveIterator() {
 		int x, y;
 		
-		moveArea = new NodeIterator(null);
+		forwardMoveArea = new NodeIterator(null);
+		backMoveArea = new NodeIterator(null);
+		leftMoveArea = new NodeIterator(null);
+		rightMoveArea = new NodeIterator(null);
 		
 		int offset = blocks.length == 3 ? 1 : 0;
 		
 		// Tail
 		for(y = 1; y <= maxBackMove; ++y) {
-			moveArea.add(0, offset + y, null);
+			backMoveArea.add(0, offset + y, null);
 		}
 		for(y = 0; y < blocks.length; ++y) {
 			for(x = 1; x <= maxSideMove; ++x) {
-				moveArea.add(-x, offset - y, null);
-				moveArea.add(x, offset - y, null);
+				leftMoveArea.add(-x, offset - y, null);
+				rightMoveArea.add(x, offset - y, null);
 			}
-			
-			moveArea.add(0, offset - y, null);
 		}
 		for(y = 0; y < maxForwardMove; ++y) {
-			moveArea.add(0, offset - blocks.length - y, null);
+			forwardMoveArea.add(0, offset - blocks.length - y, null);
 		}
 	}
 
