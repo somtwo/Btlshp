@@ -1,6 +1,15 @@
 package btlshp;
 
 import java.io.File;
+<<<<<<< HEAD
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+=======
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+>>>>>>> 82829d1277d2e616cbf11a0a1fdb04a30ef69d41
 
 import btlshp.entities.Map;
 import btlshp.entities.Player;
@@ -105,6 +114,18 @@ public class BtlshpGame {
 		
 		if(f != null) {
 			outputMessage("Save file: " + f.getPath());
+			ObjectOutputStream objOut = null;
+			FileOutputStream fileOut = null;
+			try {
+				fileOut = new FileOutputStream(f.getPath());
+				objOut = new ObjectOutputStream(fileOut);
+				
+				objOut.writeObject(mainUi);
+				objOut.close();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -121,6 +142,23 @@ public class BtlshpGame {
 		
 		if(f != null) {
 			outputMessage("Restore file: " + f.getPath());
+			String filePath = f.getPath();
+			FileInputStream fileIn = null;
+			ObjectInputStream objIn = null;
+			try{
+				fileIn = new FileInputStream(filePath);
+				objIn = new ObjectInputStream(fileIn);
+				fileIn.close();
+				Map loadMap= null;
+				try {
+					loadMap = (Map) objIn.readObject();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+				mainUi.setMap(loadMap);
+			}catch(IOException e){
+				System.err.println(e.getMessage());
+			}
 		}
 	}
 	
