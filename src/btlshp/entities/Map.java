@@ -456,10 +456,10 @@ public class Map implements Serializable {
 			
 			// Check adjacent squares for mines
 			for(int i = 0; i < adjIt.size(); ++i) {
-				if(!insideMap(it.getx(i), it.gety(i)))
+				if(!insideMap(adjIt.getx(i), adjIt.gety(i)))
 					continue;
 				
-				MapNode n = getMapNode(it.getx(i), it.gety(i));
+				MapNode n = getMapNode(adjIt.getx(i), adjIt.gety(i));
 				Block b = n.block;
 				
 				if(!(b instanceof MineBlock))

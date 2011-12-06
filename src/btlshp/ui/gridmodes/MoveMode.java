@@ -5,6 +5,7 @@ import btlshp.entities.Block;
 import btlshp.entities.Map;
 import btlshp.entities.MapNode;
 import btlshp.entities.Ship;
+import btlshp.enums.Direction;
 import btlshp.ui.GameGrid;
 import btlshp.utility.NodeIterator;
 import btlshp.utility.NodeIteratorAction;
@@ -116,18 +117,24 @@ public class MoveMode extends GridMode {
 		
 		if(currentMove == Move.None)
 		{
-			MapNode n = map.getMapNode(grid.getHoverx(), grid.getHovery());
+			MapNode node = map.getMapNode(grid.getHoverx(), grid.getHovery());
 			
-			if(n != null)
-				n.badAction(true);
+			if(node != null)
+				node.badAction(true);
 		}
 	}
 
 	
 	@Override
 	public void mouseClick(int x, int y) {
-		if(currentMove != Move.None)
-			Btlshp.getGame().outputMessage("Move ship action.");
+		int forwardDistance = Math.abs((grid.getHoverx() - x) + (grid.getHovery() - y));
+		Direction shipDirection = ship.getDirection();
+		
+		if(currentMove == Move.Forward && map.canMove(ship, shipDirection, 1)) {
+			map.move(ship, shipDirection, 1);
+		}
+			
+
 		
 		grid.cancelAction();
 	}
