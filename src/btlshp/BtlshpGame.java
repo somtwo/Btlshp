@@ -1,6 +1,9 @@
 package btlshp;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import btlshp.entities.Map;
 import btlshp.entities.Player;
@@ -121,6 +124,23 @@ public class BtlshpGame {
 		
 		if(f != null) {
 			outputMessage("Restore file: " + f.getPath());
+			String filePath = f.getPath();
+			FileInputStream fileIn = null;
+			ObjectInputStream objIn = null;
+			try{
+				fileIn = new FileInputStream(filePath);
+				objIn = new ObjectInputStream(fileIn);
+				fileIn.close();
+				Map loadMap= null;
+				try {
+					loadMap = (Map) objIn.readObject();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+				mainUi.setMap(loadMap);
+			}catch(IOException e){
+				System.err.println(e.getMessage());
+			}
 		}
 	}
 	
