@@ -11,9 +11,11 @@ import btlshp.entities.Base;
 public class BasePopupMenu extends JPopupMenu {
 	private static final long serialVersionUID = -1149025916444288803L;
 
-	private Base target;
+	private GameGrid grid;
+	private Base     target;
 	
-	public BasePopupMenu(Base targetBase) {
+	public BasePopupMenu(GameGrid gameGrid, Base targetBase) {
+		grid = gameGrid;
 		target = targetBase;
 		
 		// Add menu items based on the capabilities of the base

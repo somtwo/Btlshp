@@ -15,16 +15,18 @@ import btlshp.entities.Ship;
 public class ShipPopupMenu extends JPopupMenu {
 	private static final long serialVersionUID = 1500135636069969285L;
 	
-	private Ship target;
+	private final GameGrid grid;
+	private final Ship     target;
 	
-	public ShipPopupMenu(Ship clickedShip) {
+	public ShipPopupMenu(GameGrid gameGrid, Ship clickedShip) {
 		target = clickedShip;
+		grid = gameGrid;
 		
 		// Add menu items based on the capabilities of the ship
 		JMenuItem item = new JMenuItem("Move ship");
 		item.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				// Move the ship
+				grid.startShipMove(target);
 			}
 		});
 		add(item);
@@ -75,7 +77,6 @@ public class ShipPopupMenu extends JPopupMenu {
 			}
 			add(item);
 		}
-		
 		
 		if(target.canPlaceMine()) {
 			item = new JMenuItem("Pick up a mine");

@@ -285,7 +285,7 @@ public class Map implements Serializable {
 				s.getRadarIterator().iterate(this, s.getLocation(), s.getDirection(), new NodeIteratorAction() {
 					public void visit(MapNode n, Block b) {
 						if(n != null)
-							n.setHasSonar(true);
+							n.hasSonar(true);
 					}
 				});
 			}
@@ -293,7 +293,7 @@ public class Map implements Serializable {
 				s.getRadarIterator().iterate(this, s.getLocation(), s.getDirection(), new NodeIteratorAction() {
 					public void visit(MapNode n, Block b) {
 						if(n != null)
-							n.setHasRadar(true);
+							n.hasRadar(true);
 					}
 				});
 			}

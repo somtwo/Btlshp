@@ -3,7 +3,11 @@ package btlshp.entities;
 public class MapNode {
 	public static enum NodeFlag {
 		HasRadar(0x01),
-		HasSonar(0x02);
+		HasSonar(0x02),
+		HasExplosion(0x04),
+		ActionArea(0x08),
+		ActionSquare(0x10),
+		BadAction(0x20);
 		
 		private final int flag;
 		NodeFlag(int f) {
@@ -18,6 +22,14 @@ public class MapNode {
 			return flags | flag;
 		}
 		
+		
+		public int setChecked(boolean checked, int flags) {
+			if(checked)
+				return flags | flag;
+			else
+				return flags & ~flag;
+		}
+		
 		public int uncheck(int flags) {
 			return flags & (~flag);
 		}
@@ -27,12 +39,17 @@ public class MapNode {
 	public  Block block;
 	private int   flags;
 	
-	public MapNode() {			//changed to public for MapTest.java Junit test
-		clearFlags();
+	public MapNode() {
+		flags = 0;
 	}
 	
 	public void clearFlags() {
+		boolean explosion = NodeFlag.HasExplosion.isChecked(flags);
+		
 		flags = 0;
+		if(explosion) {
+			flags = NodeFlag.HasExplosion.check(flags);
+		}
 	}
 	
 	
@@ -40,24 +57,48 @@ public class MapNode {
 		return NodeFlag.HasRadar.isChecked(flags);
 	}
 	
-	
 	public boolean hasSonar() {
 		return NodeFlag.HasSonar.isChecked(flags);
 	}
 	
+	public boolean hasExplosion() {
+		return NodeFlag.HasExplosion.isChecked(flags);
+	}
 	
-	public void setHasRadar(boolean hasRadar) {
-		if(hasRadar)
-			flags = NodeFlag.HasRadar.check(flags);
-		else
-			flags = NodeFlag.HasRadar.uncheck(flags);
+	public boolean actionArea() {
+		return NodeFlag.ActionArea.isChecked(flags);
+	}
+	
+	public boolean actionSquare() {
+		return NodeFlag.ActionSquare.isChecked(flags);
+	}
+	
+	public boolean badAction() {
+		return NodeFlag.BadAction.isChecked(flags);
 	}
 	
 	
-	public void setHasSonar(boolean hasSonar) {
-		if(hasSonar)
-			flags = NodeFlag.HasSonar.check(flags);
-		else
-			flags = NodeFlag.HasSonar.uncheck(flags);
+	public void hasRadar(boolean checked) {
+		flags = NodeFlag.HasRadar.setChecked(checked, flags);
+	}
+	
+	public void hasSonar(boolean checked) {
+		flags = NodeFlag.HasSonar.setChecked(checked, flags);
+	}
+	
+	public void hasExplosion(boolean checked) {
+		flags = NodeFlag.HasExplosion.setChecked(checked, flags);
+	}
+	
+	public void actionArea(boolean checked) {
+		flags = NodeFlag.ActionArea.setChecked(checked, flags);
+	}
+	
+	public void actionSquare(boolean checked) {
+		flags = NodeFlag.ActionSquare.setChecked(checked, flags);
+	}
+	
+	public void badAction(boolean checked) {
+		flags = NodeFlag.BadAction.setChecked(checked, flags);
 	}
 }

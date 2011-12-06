@@ -3,7 +3,6 @@ package btlshp.entities;
 import java.io.Serializable;
 
 import btlshp.enums.Direction;
-import btlshp.enums.GraphicAlliance;
 import btlshp.enums.GraphicId;
 import btlshp.enums.GraphicPart;
 import btlshp.utility.NodeIterator;
@@ -21,7 +20,7 @@ public class Ship extends Construct implements Serializable{
 	
 	private int          flags;
 	private int          maxForwardMove, maxSideMove, maxBackMove, maxGunRange, maxSonarRange;
-	private NodeIterator coreArea, adjacentArea, radarArea, turnLeftArea, turnRightArea, firingArea;
+	private NodeIterator coreArea, adjacentArea, radarArea, turnLeftArea, turnRightArea, firingArea, moveArea;
 	
 	/**
 	* Constructor for Ship
@@ -63,6 +62,7 @@ public class Ship extends Construct implements Serializable{
 		buildRightRotationIterator();
 		buildCoreIterator();
 		buildAdjacentIterator();
+		buildMoveIterator();
 		
 		if(hasSonar())
 			buildSonarIterator();
@@ -134,6 +134,16 @@ public class Ship extends Construct implements Serializable{
 	 */
 	public NodeIterator getRightRotationIterator() {
 		return turnRightArea;
+	}
+	
+	
+	/**
+	 * Returns an iterator object that can be used to iterate through all the squares a ship can move through.
+	 * 
+	 * @return NodeIterator object.
+	 */
+	public NodeIterator getMoveArea() {
+		return moveArea;
 	}
 	
 	/**
@@ -392,6 +402,31 @@ public class Ship extends Construct implements Serializable{
 			for(y = ytop; y <= ybot; ++y) {
 				firingArea.add(x, y, null);
 			}
+		}
+	}
+	
+	
+	private void buildMoveIterator() {
+		int x, y;
+		
+		moveArea = new NodeIterator(null);
+		
+		int offset = blocks.length == 3 ? 1 : 0;
+		
+		// Tail
+		for(y = 1; y <= maxBackMove; ++y) {
+			moveArea.add(0, offset + y, null);
+		}
+		for(y = 0; y < blocks.length; ++y) {
+			for(x = 1; x <= maxSideMove; ++x) {
+				moveArea.add(-x, offset - y, null);
+				moveArea.add(x, offset - y, null);
+			}
+			
+			moveArea.add(0, offset - y, null);
+		}
+		for(y = 0; y < maxForwardMove; ++y) {
+			moveArea.add(0, offset - blocks.length - y, null);
 		}
 	}
 

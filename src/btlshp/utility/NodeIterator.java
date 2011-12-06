@@ -37,6 +37,13 @@ public class NodeIterator {
 		this.dir = Direction.North;
 	}
 	
+	
+	private NodeIterator(NodeIterator other) {
+		this.offsets = other.offsets;
+		this.origin = new Location(other.origin);
+		this.dir = other.dir;
+	}
+	
 	/**
 	 * Adds a location object to the collection of locations this object will iterate over.
 	 * 
@@ -154,7 +161,36 @@ public class NodeIterator {
 			
 			action.visit(n, lb.block);
 		}
-
+	}
+	
+	
+	/**
+	 * Tests to see if a point lies within the iteration area of the iterator.
+	 * 
+	 * @param x       x-position of the point to check
+	 * @param y       y-position of the point to check
+	 * @param origin  origin of the iterator
+	 * @param dir     direction of the iterator
+	 * @return        true if the point given is within the area of the iterator.
+	 */
+	public boolean isPointInside(int x, int y, Location origin, Direction dir)
+	{
+		setOrigin(origin);
+		rotate(dir);
+		
+		for(int i = 0; i < offsets.size(); ++i) {
+			LocationBlock lb = offsets.get(i);
+			
+			if(lb.loc.getx() + origin.getx() == x && lb.loc.gety() + origin.gety() == y)
+				return true;
+		}
+		
+		return false;
+	}
+	
+	
+	public NodeIterator quickClone() {
+		return new NodeIterator(this);
 	}
 	
 	

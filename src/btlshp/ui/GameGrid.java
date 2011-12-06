@@ -25,6 +25,9 @@ import btlshp.entities.MapNode;
 import btlshp.entities.Ship;
 import btlshp.enums.AppState;
 import btlshp.enums.GraphicAlliance;
+import btlshp.ui.gridmodes.GridMode;
+import btlshp.ui.gridmodes.MoveMode;
+import btlshp.ui.gridmodes.NormalMode;
 
 public class GameGrid extends JComponent implements MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1038483241713085828L;
@@ -45,15 +48,18 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	private GridState state;
 	
 	private Dimension size;
-	private Color  bgColor, sonarColor, radarColor;
-	private Color  gridColor, hoverColor, hoverLineColor;
+	private Color     gridColor, hoverColor, hoverLineColor;
+	private Color     bgColor, sonarColor, radarColor, explosionColor;
 	
-	private boolean showHover;
-	private int     hoverx, hovery;
+	private Color     actionAreaColor, actionColor, badColor;
 	
-	private int     gridWidth, gridHeight;
+	private boolean   showHover;
+	private int       hoverx, hovery;
 	
-	private Map     map;
+	private int       gridWidth, gridHeight;
+	
+	private Map       map;
+	private GridMode  mode;
 	
 	
 	public GameGrid() {
@@ -67,14 +73,19 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		
 		addMouseMotionListener(this);
 		addMouseListener(this);
-		
-		bgColor = new Color(3, 28, 9);
-		sonarColor = new Color(16, 79, 59);
-		radarColor = new Color(16, 79, 32);
 
 		gridColor = new Color(3, 52, 15);
 		hoverColor = new Color(6, 178, 48);
 		hoverLineColor = new Color(4, 70, 17);
+		
+		bgColor = new Color(3, 28, 9);
+		sonarColor = new Color(16, 79, 59);
+		radarColor = new Color(16, 79, 32);
+		explosionColor = new Color(192, 0, 0);
+		
+		actionAreaColor = new Color(58, 113, 36);
+		actionColor = new Color(105, 166, 81);
+		badColor = new Color(193, 90, 50);
 			
 		showHover = true;
 		hoverx = hovery = 0;
@@ -83,6 +94,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		state = GridState.TurnStart;
 		
 		imageCache = new HashMap<String, BufferedImage>();
+		mode = null;
 	}
 	
 	
@@ -94,6 +106,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	public void setMap(Map map) {
 		this.map = map;
 		this.state = GridState.TurnStart;
+		this.mode = new NormalMode(this, map);
 		repaint();
 	}
 	
@@ -179,13 +192,16 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		}
 		
 		if(map != null) {
-			map.updateFrame(Btlshp.getGame().getLocalPlayer());
+			mode.highlightCells();
 			
 			for(y = 0; y < 30; ++y) {
 				for(x = 0; x < 30; ++x) {
 					MapNode n = map.getMapNode(x, y);
-					
-					Color c = n.hasSonar() ? sonarColor : n.hasRadar() ? radarColor : bgColor;
+					Color c = n.badAction() ? badColor : n.actionSquare() ? actionColor :
+					          n.actionArea() ? actionAreaColor :
+					          n.hasExplosion() ? explosionColor :
+						      n.hasSonar() ? sonarColor :
+					          n.hasRadar() ? radarColor : bgColor;
 					
 					g2.setColor(c);
 					g2.fillRect(x * colWidth + 2, y * rowHeight + 2, colWidth - 2, rowHeight - 2);
@@ -210,13 +226,44 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	}
 	
 	
-	private int gridLocX(int x) {
+	public int getHoverx() {
+		return hoverx;
+	}
+	
+	
+	public int getHovery() {
+		return hovery;
+	}
+	
+	
+	/**
+	 * Cancels the current mode and returns to regular mode.
+	 */
+	public void cancelAction() {
+		state = GridState.TurnStart;
+		mode = new NormalMode(this, map);
+		repaint();
+	}
+	
+	
+	/**
+	 * Begins a move ship action.
+	 * @param s   Ship to move.
+	 */
+	public void startShipMove(Ship s) {
+		state = GridState.MoveShip;
+		mode = new MoveMode(s, this, map);
+		repaint();
+	}
+	
+	
+	public int gridLocX(int x) {
 		int res = (x - 1) / colWidth;
 		return res < 0 ? 0 : res >= gridWidth ? gridWidth - 1 : res;
 	}
 	
 	
-	private int gridLocY(int y) {
+	public int gridLocY(int y) {
 		int res = (y - 1) / rowHeight;
 		return res < 0 ? 0 : res >= gridHeight ? gridHeight - 1 : res;
 	}
@@ -279,27 +326,9 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 
 	@Override
 	public void mouseReleased(MouseEvent ev) {
-		int gridx = gridLocX(ev.getX());
-		int gridy = gridLocY(ev.getY());
-		
 		if(map == null || Btlshp.getGame().getAppState() != AppState.LocalTurn)
 			return;
 		
-		Block b = map.getMapNode(gridx, gridy).block;
-		if(b == null || !(b instanceof ConstructBlock))
-			return;
-		
-		ConstructBlock cb = (ConstructBlock)b;
-		if(Btlshp.getGame().getLocalPlayer() != cb.getPlayer())
-			return;
-		
-		if((cb.getConstruct()) instanceof Ship) {
-			JPopupMenu m = new ShipPopupMenu((Ship)cb.getConstruct());
-			m.show(this, ev.getX(), ev.getY());
-		}
-		else if(cb.getConstruct() instanceof Base) {
-			JPopupMenu m = new BasePopupMenu((Base)cb.getConstruct());
-			m.show(this, ev.getX(), ev.getY());
-		}
+		mode.mouseClick(ev.getX(), ev.getY());
 	}
 }
