@@ -25,9 +25,14 @@ import btlshp.entities.MapNode;
 import btlshp.entities.Ship;
 import btlshp.enums.AppState;
 import btlshp.enums.GraphicAlliance;
+import btlshp.ui.gridmodes.FireGunMode;
 import btlshp.ui.gridmodes.GridMode;
 import btlshp.ui.gridmodes.MoveMode;
 import btlshp.ui.gridmodes.NormalMode;
+import btlshp.ui.gridmodes.PickupMineMode;
+import btlshp.ui.gridmodes.PlaceMineMode;
+import btlshp.ui.gridmodes.RepairShipMode;
+import btlshp.ui.gridmodes.RotateMode;
 
 public class GameGrid extends JComponent implements MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1038483241713085828L;
@@ -248,11 +253,72 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	
 	/**
 	 * Begins a move ship action.
+	 * 
 	 * @param s   Ship to move.
 	 */
 	public void startShipMove(Ship s) {
 		state = GridState.MoveShip;
 		mode = new MoveMode(s, this, map);
+		repaint();
+	}
+	
+	
+	/**
+	 * Begins a rotate ship action.
+	 * 
+	 * @param s    Ship to rotate
+	 */
+	public void startShipRotate(Ship s) {
+		state = GridState.RotateShip;
+		mode = new RotateMode(s, this, map);
+		repaint();
+	}
+	
+	/**
+	 * Begins a fire guns ship action.
+	 * 
+	 * @param s    ship to fire guns
+	 */
+	public void startFireGun(Ship s) {
+		if(!s.canFireGun())
+			throw new IllegalStateException();
+		
+		state = GridState.FireGun;
+		mode = new FireGunMode(s, this, map);
+		repaint();
+	}
+	
+	/**
+	 * Begins a place a mine ship action.
+	 * 
+	 * @param s    ship to place mine
+	 */
+	public void startPlaceMine(Ship s) {
+		state = GridState.PlaceMine;
+		mode = new PlaceMineMode(s, this, map);
+		repaint();
+	}
+	
+	/**
+	 * Begins a pickup a mine ship action.
+	 * 
+	 * @param s    ship to fire guns
+	 */
+	public void startPickupMine(Ship s) {
+		state = GridState.PickupMine;
+		mode = new PickupMineMode(s, this, map);
+		repaint();
+	}
+	
+	
+	/**
+	 * Begins a repair ship action.
+	 * 
+	 * @param b    base to conduct the repair.
+	 */
+	public void startRepairShip(Base b) {
+		state = GridState.RepairConstruct;
+		mode = new RepairShipMode(b, this, map);
 		repaint();
 	}
 	

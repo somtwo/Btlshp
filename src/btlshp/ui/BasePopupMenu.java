@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import btlshp.Btlshp;
 import btlshp.entities.Base;
 
 public class BasePopupMenu extends JPopupMenu {
@@ -23,7 +24,8 @@ public class BasePopupMenu extends JPopupMenu {
 		if(target.canRepairSelf()) {
 			item.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ev) {
-					// repair the base
+					// TODO: Actually do something there
+					Btlshp.getGame().outputMessage("Repair base!");
 				}
 			});
 		}
@@ -36,7 +38,7 @@ public class BasePopupMenu extends JPopupMenu {
 		if(target.canRepairOther()) {
 			item.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ev) {
-					// Repair ship
+					grid.startRepairShip(target);
 				}
 			});
 		}

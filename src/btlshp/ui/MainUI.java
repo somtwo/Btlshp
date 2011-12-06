@@ -204,4 +204,14 @@ public class MainUI {
 	public void setMap(Map map) {
 		gameGrid.setMap(map);
 	}
+	
+	
+	/**
+	 * Outputs a message to the console.
+	 * 
+	 * @param message
+	 */
+	public void outputMessage(String message) {
+		outputConsole.addLine(message);
+	}
 }

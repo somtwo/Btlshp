@@ -80,4 +80,14 @@ public class BtlshpGame {
 	public Player getLocalPlayer() {
 		return localPlayer;
 	}
+	
+	
+	/**
+	 * Outputs a message to a screen element used to display action messages for the player.
+	 * 
+	 * @param msg
+	 */
+	public void outputMessage(String msg) {
+		mainUi.outputMessage(msg);
+	}
 }

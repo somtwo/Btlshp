@@ -54,6 +54,7 @@ public class MoveMode extends GridMode {
 	
 	@Override
 	public void mouseClick(int x, int y) {
+		Btlshp.getGame().outputMessage("Move ship action.");
 		grid.cancelAction();
 	}
 

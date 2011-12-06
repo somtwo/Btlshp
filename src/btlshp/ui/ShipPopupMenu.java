@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import btlshp.Btlshp;
 import btlshp.entities.Ship;
 
 /**
@@ -34,7 +35,7 @@ public class ShipPopupMenu extends JPopupMenu {
 		item = new JMenuItem("Rotate ship");
 		item.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				// Rotate the ship
+				grid.startShipRotate(target);
 			}
 		});
 		add(item);
@@ -45,7 +46,7 @@ public class ShipPopupMenu extends JPopupMenu {
 			item = new JMenuItem("Fire gun");
 			item.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ev) {
-					// fire the gun
+					grid.startFireGun(target);
 				}
 			});
 			add(item);
@@ -55,7 +56,8 @@ public class ShipPopupMenu extends JPopupMenu {
 			item = new JMenuItem("Fire torpedo");
 			item.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ev) {
-					// fire a torpedo
+					// TODO: actually do something here...
+					Btlshp.getGame().outputMessage("Fire a torpedo!");
 				}
 			});
 			add(item);
@@ -71,7 +73,7 @@ public class ShipPopupMenu extends JPopupMenu {
 			else {
 				item.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent ev) {
-						// place a mine
+						grid.startPlaceMine(target);
 					}
 				});
 			}
@@ -88,7 +90,7 @@ public class ShipPopupMenu extends JPopupMenu {
 			else {
 				item.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent ev) {
-						// pickup a mine
+						grid.startPickupMine(target);
 					}
 				});
 			}

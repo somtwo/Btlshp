@@ -64,7 +64,16 @@ public class Base extends Construct implements Serializable {
 	}
 	
 	
-	public boolean canRepairSelf(){
-		return !this.isDestroyed();
+	public boolean canRepairSelf() {
+		int destroyedBlocks = 0; 
+		
+		// Count good vs. bad (implimented to accomodate a change in the size of the base)
+		for (int i = 0; i < blocks.length; i++){
+			if (blocks[i].isDestroyed()){
+				destroyedBlocks++;
+			}
+		}
+		
+		return destroyedBlocks > 0 && !this.isDestroyed();
 	}
 }
