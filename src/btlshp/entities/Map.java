@@ -9,9 +9,6 @@ import btlshp.utility.NodeIterator;
 import btlshp.utility.NodeIteratorAction;
 
 public class Map implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6849202817059640136L;
 	private static final int MAPWIDTH = 30;
 	private static final int MAPHEIGHT = 30;
@@ -64,6 +61,7 @@ public class Map implements Serializable {
 			}
 		}
 	}
+	
 	
 	private void createReefs() {
 		int width = 10, height = 24;

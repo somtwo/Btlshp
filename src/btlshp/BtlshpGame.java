@@ -1,15 +1,11 @@
 package btlshp;
 
 import java.io.File;
-<<<<<<< HEAD
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-=======
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
->>>>>>> 82829d1277d2e616cbf11a0a1fdb04a30ef69d41
+import java.io.ObjectOutputStream;
 
 import btlshp.entities.Map;
 import btlshp.entities.Player;
