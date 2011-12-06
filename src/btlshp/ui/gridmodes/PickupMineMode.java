@@ -2,8 +2,10 @@ package btlshp.ui.gridmodes;
 
 import btlshp.Btlshp;
 import btlshp.entities.Block;
+import btlshp.entities.Location;
 import btlshp.entities.Map;
 import btlshp.entities.MapNode;
+import btlshp.entities.MineBlock;
 import btlshp.entities.Ship;
 import btlshp.ui.GameGrid;
 import btlshp.utility.NodeIterator;
@@ -45,8 +47,10 @@ public class PickupMineMode extends GridMode {
 	public void mouseClick(int x, int y) {
 		MapNode n = map.getMapNode(grid.getHoverx(), grid.getHovery());
 		
-		if(n != null && n.actionSquare())
+		if(n != null && n.block != null && n.block instanceof MineBlock && n.actionSquare()) {
+			map.pickupMine(ship, new Location(grid.getHoverx(), grid.getHovery()));
 			Btlshp.getGame().outputMessage("Pickup mine action action.");
+		}
 		
 		grid.cancelAction();
 	}
