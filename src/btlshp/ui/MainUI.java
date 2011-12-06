@@ -223,7 +223,9 @@ public class MainUI {
 		gameGrid.setMap(map);
 	}
 	
-	
+	public Map getMap(){
+		return gameGrid.getMap();
+	}
 	/**
 	 * Outputs a message to the console.
 	 * 
