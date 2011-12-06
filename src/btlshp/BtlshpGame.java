@@ -38,7 +38,7 @@ public class BtlshpGame {
 				return;
 		}
 		
-		File gameDir = mainUi.selectDiretory();
+		File gameDir = mainUi.selectDiretory("Chose a hosting location");
 		
 		if(gameDir != null) {
 			localPlayer = new Player();
@@ -65,13 +65,62 @@ public class BtlshpGame {
 	}
 	
 	
-	
+	/**
+	 * Handles a UI-side quit event.
+	 */
 	public void quitGame() {
 		if(appState != AppState.NoGame) {
 			mainUi.showAlert("Game in progress.", "Please either forfeit or save a game before quitting.");
 		}
 		else if (mainUi.yesNoCancelDialog("Do you really want to quit?", "Please don't go, the Socialist Commies will win!") == DialogResult.Yes) {
 			System.exit(0);
+		}
+	}
+	
+	
+	/**
+	 * Handles a UI-side forfeit game event.
+	 */
+	public void forfeitGame() {
+		if(appState != AppState.NoGame &&
+				mainUi.yesNoCancelDialog("Forfeit", "Are you sure you wish to forfeit? This may lead to eternal shame!") == DialogResult.Yes) {
+			
+			// TODO: Send notification
+			localPlayer = null;
+			mainUi.setMap(null);
+			appState = AppState.NoGame;
+			mainUi.updateMainMenu();
+		}
+	}
+	
+	
+	/**
+	 * Handles a UI-side save game event.
+	 */
+	public void saveGame() {
+		if(appState == AppState.NoGame) 
+			return;
+		
+		File f = mainUi.selectSaveFile("Select a file to save");
+		
+		if(f != null) {
+			outputMessage("Save file: " + f.getPath());
+		}
+	}
+	
+	
+	
+	/**
+	 * Handles a UI-side restore game event.
+	 */
+	public void restoreGame() {
+		if(appState == AppState.NoGame) 
+			return;
+		
+		File f = mainUi.selectSaveFile("Select a file to restore from");
+		
+		if(f != null) {
+			outputMessage("Restore file: " + f.getPath());
 		}
 	}
 	

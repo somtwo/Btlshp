@@ -170,12 +170,30 @@ public class MainUI {
 	 * 
 	 * @return    File representing the path the user selected, or null if the user canceled.
 	 */
-	public File selectDiretory() {
+	public File selectDiretory(String title) {
 		JFileChooser fc = new JFileChooser();
 		
-		fc.setDialogTitle("Choose a directory...");
+		fc.setDialogTitle(title);
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		fc.setAcceptAllFileFilterUsed(false);
+		
+		if(fc.showOpenDialog(mainFrame) == JFileChooser.APPROVE_OPTION) {
+			return fc.getSelectedFile();
+		}
+		else 
+			return null;
+	}
+	
+	
+	/**
+	 * Utility function to display a file saving dialog and allow the user to select a directory.
+	 * 
+	 * @return    File representing the path the user selected, or null if the user canceled.
+	 */
+	public File selectSaveFile(String title) {
+		JFileChooser fc = new JFileChooser();
+		
+		fc.setDialogTitle(title);
 		
 		if(fc.showOpenDialog(mainFrame) == JFileChooser.APPROVE_OPTION) {
 			return fc.getSelectedFile();

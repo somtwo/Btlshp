@@ -27,35 +27,70 @@ public class FileMenu extends JMenu {
 		
 		JMenuItem newGameItem = fileMenuItems[0] = new JMenuItem("New");
 		newGameItem.setMnemonic(KeyEvent.VK_N);
-		newGameItem.addActionListener(new FileMenu.NewGameListener());
+		newGameItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ev) {
+				Btlshp.getGame().newGame();
+			}	
+		});
 		add(newGameItem);
 		addSeparator();
 		
 		JMenuItem saveGameItem = fileMenuItems[1] = new JMenuItem("Save");
 		saveGameItem.setMnemonic(KeyEvent.VK_S);
+		saveGameItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ev) {
+				Btlshp.getGame().saveGame();
+			}	
+		});
 		add(saveGameItem);
 		
 		JMenuItem restoreGameItem = fileMenuItems[2] = new JMenuItem("Restore saved game");
 		restoreGameItem.setMnemonic(KeyEvent.VK_O);
+		restoreGameItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ev) {
+				Btlshp.getGame().restoreGame();
+			}	
+		});
 		add(restoreGameItem);
 		addSeparator();
 		
 		
 		JMenuItem forfeitGameItem = fileMenuItems[3] = new JMenuItem("Forfeit current game");
+		forfeitGameItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Btlshp.getGame().forfeitGame();
+			}
+		});
 		add(forfeitGameItem);
 		addSeparator();
 		
 		JMenuItem helpItem = fileMenuItems[4] = new JMenuItem("Help");
 		helpItem.setMnemonic(KeyEvent.VK_H);
-		helpItem.addActionListener(new FileMenu.HelpListener());
+		helpItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ev) {
+				Btlshp.getGame().helpScreen();
+			}	
+		});
 		add(helpItem);
 		addSeparator();
 		
 		JMenuItem quitItem = fileMenuItems[5] = new JMenuItem("Quit");
 		quitItem.setMnemonic(KeyEvent.VK_Q);
-		quitItem.addActionListener(new FileMenu.QuitListener());
+		quitItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Btlshp.getGame().quitGame();
+			}
+		});
 		add(quitItem);
 	}
+	
+	
 	
 	public void updateMenuItems() {
 		if(Btlshp.getGame().getAppState() == AppState.NoGame) {
@@ -70,27 +105,4 @@ public class FileMenu extends JMenu {
 		}
 	}
 	
-	
-	private static class NewGameListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent ev) {
-			Btlshp.getGame().newGame();
-		}	
-	}
-	
-	
-	private static class HelpListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent ev) {
-			Btlshp.getGame().helpScreen();
-		}	
-	}
-	
-	private static class QuitListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			Btlshp.getGame().quitGame();
-		}
-		
-	}
 }
