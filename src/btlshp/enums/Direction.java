@@ -18,6 +18,24 @@ public enum Direction {
 		this.suffix = suffix;
 	}
 	
+	private Direction dirForVal(int value) {
+		return value == 0 ? North :
+		       value == 1 ? East :
+			   value == 2 ? South : West;
+	}
+	
 	public int val() { return val; }
 	public String suffix() { return suffix; }
+	public Direction backwardsDir() {
+		int i = (val + 2) % 4;
+		return dirForVal(i);
+	}
+	public Direction leftDir() {
+		int i = (val - 1) % 4;
+		return dirForVal(i);
+	}
+	public Direction rightDir() {
+		int i = (val + 1) % 4;
+		return dirForVal(i);
+	}
 }
