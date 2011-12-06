@@ -1,7 +1,6 @@
 package btlshp.entities;
 
 import btlshp.enums.BlockStatus;
-import btlshp.enums.GraphicAlliance;
 import btlshp.enums.GraphicId;
 import btlshp.enums.GraphicPart;
 
