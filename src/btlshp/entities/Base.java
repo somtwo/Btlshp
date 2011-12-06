@@ -5,10 +5,13 @@ import java.io.Serializable;
 import btlshp.enums.GraphicAlliance;
 import btlshp.enums.GraphicId;
 import btlshp.enums.GraphicPart;
+import btlshp.utility.NodeIterator;
 
 public class Base extends Construct implements Serializable {
 	private static final long serialVersionUID = -2521390657646600415L;
 	private static final int  BASELENGTH = 10;
+	
+	private NodeIterator repairArea;
 	
 	/**
 	* Constructor for Base
@@ -26,6 +29,8 @@ public class Base extends Construct implements Serializable {
                 
 			blocks[i] = new ConstructBlock(this, GraphicId.Base, part);
 		}
+		
+		buildRepairArea();
 	}
 	
 	
@@ -75,5 +80,22 @@ public class Base extends Construct implements Serializable {
 		}
 		
 		return destroyedBlocks > 0 && !this.isDestroyed();
+	}
+	
+	
+	private void buildRepairArea() {
+		repairArea = new NodeIterator(null);
+		
+		for(int x = -1; x <= blocks.length; ++x)
+			repairArea.add(x, -1, null);
+		
+		repairArea.add(-1, 0, null);
+		repairArea.add(blocks.length, 0, null);
+	}
+	
+	
+	
+	public NodeIterator getRepairArea() {
+		return repairArea;
 	}
 }

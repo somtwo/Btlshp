@@ -84,7 +84,7 @@ public class ShipPopupMenu extends JPopupMenu {
 			item = new JMenuItem("Pick up a mine");
 			
 			// TODO: Actual conditions for graying out the menu item
-			if(target.getPlayer().numberOfMines() != -1) {
+			if(target.getPlayer().numberOfMines() == -1) {
 				item.setEnabled(false);
 			}
 			else {

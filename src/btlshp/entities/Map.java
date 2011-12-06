@@ -89,19 +89,23 @@ public class Map implements Serializable {
 	private void placeStructures(Player p, boolean isLeft) {
 		Direction  shipDir;
 		int        basex, shipx;
+		Location   baseLoc;
 		
 		if(isLeft) {
 			shipDir = Direction.East;
 			basex = 0;
 			shipx = 1;
+			baseLoc = new Location(0, (MAPHEIGHT - p.getBase().getBlocks().length) / 2);
 		}
 		else {
 			basex = MAPWIDTH - 1;
 			shipx = MAPWIDTH - 2;
 			shipDir = Direction.West;
+			baseLoc = new Location(0, (MAPHEIGHT + p.getBase().getBlocks().length) / 2);
 		}
 		
 		p.getBase().setDirection(shipDir);
+		p.getBase().setLocation(baseLoc);
 		
 		ConstructBlock [] blocks = p.getBase().getBlocks();
 		int ytop = (MAPHEIGHT - blocks.length) / 2;

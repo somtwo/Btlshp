@@ -73,6 +73,13 @@ public abstract class Construct {
 			// Error Occurred, Not Checked.
 		}
 	}
+	
+	/**
+	 * @return Player that owns this construct
+	 */
+	public Player getPlayer() {
+		return pl;
+	}
 
 	/**
 	* Computes the repair to the Construct when a block is repaired.

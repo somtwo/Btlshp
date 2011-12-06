@@ -20,7 +20,7 @@ public class Ship extends Construct implements Serializable{
 	
 	private int          flags;
 	private int          maxForwardMove, maxSideMove, maxBackMove, maxGunRange, maxSonarRange;
-	private NodeIterator coreArea, adjacentArea, radarArea, turnLeftArea, turnRightArea, firingArea;
+	private NodeIterator coreArea, adjacentArea, radarArea, turnLeftArea, turnRightArea, firingArea, mineArea;
 	private NodeIterator forwardMoveArea, backMoveArea, leftMoveArea, rightMoveArea;
 	
 	/**
@@ -72,6 +72,8 @@ public class Ship extends Construct implements Serializable{
 		
 		if(canFireGun())
 			buildFiringArea();
+		if(canPlaceMine())
+			buildMineArea();
 	}
 	
 	
@@ -165,6 +167,14 @@ public class Ship extends Construct implements Serializable{
 	 */
 	public NodeIterator getRightMoveArea() {
 		return rightMoveArea;
+	}
+	
+	
+	/**
+	 * @return an iterator object that can be used to iterate through all the squares a ship can place/pickup mines through
+	 */
+	public NodeIterator getMineArea() {
+		return mineArea;
 	}
 	
 	/**
@@ -449,6 +459,23 @@ public class Ship extends Construct implements Serializable{
 		}
 		for(y = 0; y < maxForwardMove; ++y) {
 			forwardMoveArea.add(0, offset - blocks.length - y, null);
+		}
+	}
+	
+	
+	private void buildMineArea() {
+		int x, y;
+		
+		mineArea = new NodeIterator(null);
+		
+		for(x = -1; x < 2; ++x) {
+			mineArea.add(x, -blocks.length, null);
+			mineArea.add(x, 1, null);
+		}
+		
+		for(y = 0; y < blocks.length; ++y) {
+			mineArea.add(-1, -y, null);
+			mineArea.add(1, -y, null);
 		}
 	}
 
