@@ -1,6 +1,9 @@
 package btlshp;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import btlshp.entities.Map;
 import btlshp.entities.Player;
@@ -105,6 +108,18 @@ public class BtlshpGame {
 		
 		if(f != null) {
 			outputMessage("Save file: " + f.getPath());
+			ObjectOutputStream objOut = null;
+			FileOutputStream fileOut = null;
+			try {
+				fileOut = new FileOutputStream(f.getPath());
+				objOut = new ObjectOutputStream(fileOut);
+				
+				objOut.writeObject(mainUi);
+				objOut.close();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
