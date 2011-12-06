@@ -1,21 +1,11 @@
 package btlshp;
 
 import java.io.File;
-<<<<<<< HEAD
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
-=======
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
->>>>>>> d70ea252daf211a6a910a4bcf2d5d4af69500b2f
 import btlshp.entities.Map;
 import btlshp.entities.Player;
 import btlshp.enums.AppState;
@@ -125,7 +115,7 @@ public class BtlshpGame {
 				fileOut = new FileOutputStream(f.getPath());
 				objOut = new ObjectOutputStream(fileOut);
 				
-				objOut.writeObject(mainUi);
+				objOut.writeObject(mainUi.getMap());
 				objOut.close();
 				
 			} catch (IOException e) {
