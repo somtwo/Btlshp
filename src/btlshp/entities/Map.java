@@ -66,8 +66,18 @@ public class Map implements Serializable {
 	}
 	
 	private void createReefs() {
-		// TODO Auto-generated method stub
+		int width = 10, height = 24;
 		
+		int leftx = (MAPWIDTH - width) / 2;
+		int topy = (MAPHEIGHT - height) / 2;
+		
+		for(int i = 0; i < 24; ++i) {
+			int x = leftx + (int)(Math.random() * width);
+			int y = topy + (int)(Math.random() * height);
+			
+			MapNode n = getMapNode(x, y);
+			n.block = new ReefBlock();
+		}
 	}
 
 	
