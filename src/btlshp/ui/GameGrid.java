@@ -114,7 +114,9 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		this.mode = new NormalMode(this, map);
 		repaint();
 	}
-	
+	public Map getMap(){
+		return map;
+	}
 	
 	/**
 	 * @return The current state of the game.
