@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.Serializable;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -25,7 +26,9 @@ import btlshp.entities.Map;
 import btlshp.enums.AppState;
 
 
-public class MainUI {
+public class MainUI implements Serializable{
+	
+	private static final long serialVersionUID = -3781967036180007188L;
 	private HelpScreen   helpScreen;
 	private JFrame       mainFrame;
 	private JMenuBar     mainMenuBar;

@@ -1,5 +1,6 @@
 package btlshp.utility;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import btlshp.entities.ConstructBlock;
@@ -8,8 +9,17 @@ import btlshp.entities.Map;
 import btlshp.entities.MapNode;
 import btlshp.enums.Direction;
 
-public class NodeIterator {
-	private static class LocationBlock {
+public class NodeIterator implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6016688717802273609L;
+
+	private static class LocationBlock implements Serializable {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -7754267034917648392L;
 		public LocationBlock(Location l, ConstructBlock b) {
 			block = b;
 			loc = l;

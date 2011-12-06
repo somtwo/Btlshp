@@ -1,6 +1,12 @@
 package btlshp.entities;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7855842802631651058L;
 	private int x, y;
 	
 	public Location(int x, int y) {

@@ -1,6 +1,13 @@
 package btlshp.entities;
 
-public class MapNode {
+import java.io.Serializable;
+
+public class MapNode implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -723816002578041567L;
+
 	public static enum NodeFlag {
 		HasRadar(0x01),
 		HasSonar(0x02),

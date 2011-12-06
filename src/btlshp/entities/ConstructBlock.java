@@ -1,5 +1,7 @@
 package btlshp.entities;
 
+import java.io.Serializable;
+
 import btlshp.Btlshp;
 import btlshp.enums.BlockStatus;
 import btlshp.enums.GraphicAlliance;
@@ -7,8 +9,12 @@ import btlshp.enums.GraphicId;
 import btlshp.enums.GraphicPart;
 import btlshp.enums.Weapon;
 
-public class ConstructBlock extends Block {
+public class ConstructBlock extends Block implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 475071291959481605L;
 	Construct   myConstruct;
 	BlockStatus myStatus;
 	

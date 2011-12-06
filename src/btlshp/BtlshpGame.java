@@ -121,6 +121,10 @@ public class BtlshpGame {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			localPlayer = null;
+			mainUi.setMap(null);
+			appState = AppState.NoGame;
+			mainUi.updateMainMenu();
 		}
 	}
 	
