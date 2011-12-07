@@ -581,7 +581,6 @@ public class Map implements Serializable {
 
 
 	public Player getLeftPlayer() {
-		// TODO Auto-generated method stub
 		return leftPlayer;
 	}
 }

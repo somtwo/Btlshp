@@ -8,7 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import btlshp.entities.Map;
 import btlshp.entities.Player;
-import btlshp.entities.Ship;
 import btlshp.enums.AppState;
 import btlshp.ui.DialogResult;
 import btlshp.ui.MainUI;
@@ -156,10 +155,6 @@ public class BtlshpGame {
 					e.printStackTrace();
 				}
 				localPlayer = loadMap.getLeftPlayer();
-				Ship[] s = localPlayer.getShips();
-				if(s[0] == null) throw new NullPointerException();
-				Ship s0 = s[0];
-				s0.canFireGun();
 				mainUi.setMap(loadMap);
 				appState = AppState.LocalTurn;
 				mainUi.updateMainMenu();

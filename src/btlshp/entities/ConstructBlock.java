@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import btlshp.Btlshp;
 import btlshp.enums.BlockStatus;
-import btlshp.enums.Direction;
 import btlshp.enums.GraphicAlliance;
 import btlshp.enums.GraphicId;
 import btlshp.enums.GraphicPart;
@@ -100,17 +99,7 @@ public class ConstructBlock extends Block implements Serializable{
 		if(myConstruct != null && Btlshp.getGame() != null) {
 			graphicAlliance = myConstruct.pl == Btlshp.getGame().getLocalPlayer() ? GraphicAlliance.Friendly : GraphicAlliance.Unfriendly;
 		}
-		String x = null;
-		String y = null;
-		try{
-		x = super.getGraphicName();
-		}catch(NullPointerException e){System.err.println("super.getGraphicName()");}
-		try{
-			Direction d = myConstruct.getDirection();
-			y = d.suffix();
-		}catch(NullPointerException e){System.err.println(e.getLocalizedMessage());}
-		return x + y;
-		//return super.getGraphicName() + myConstruct.getDirection().suffix();
+		return super.getGraphicName() + myConstruct.getDirection().suffix();
 	}
 	
 	@Override
