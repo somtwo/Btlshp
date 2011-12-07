@@ -410,7 +410,7 @@ public class Ship extends Construct implements Serializable{
 		
 		radarArea = new NodeIterator(null);
 		
-		ytop = blocks.length == 3 ? -1 - maxSonarRange : -blocks.length - maxSonarRange;
+		ytop = blocks.length == 3 ? 1 - maxSonarRange : -blocks.length - maxSonarRange + 1;
 		ybot = blocks.length == 3 ? 1 + maxSonarRange : maxSonarRange;
 		
 		for(x = -maxSonarRange; x <= maxSonarRange; ++x) {

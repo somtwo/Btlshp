@@ -445,6 +445,7 @@ public class Map implements Serializable {
 					canContinue = false;
 					adjIt.getBlock(i).takeHit(Weapon.Mine);
 					unplaceBlock(n, b);
+					n.hasExplosion(true);
 				}
 				else if(b instanceof ConstructBlock) {
 					ConstructBlock cb = (ConstructBlock)b;

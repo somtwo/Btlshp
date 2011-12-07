@@ -51,12 +51,10 @@ public class MapNode implements Serializable{
 	}
 	
 	public void clearFlags() {
-		boolean explosion = NodeFlag.HasExplosion.isChecked(flags);
+		boolean explosion = hasExplosion();
 		
 		flags = 0;
-		if(explosion) {
-			flags = NodeFlag.HasExplosion.check(flags);
-		}
+		hasExplosion(explosion);
 	}
 	
 	

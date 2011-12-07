@@ -85,7 +85,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		hoverLineColor = new Color(4, 70, 17);
 		
 		bgColor = new Color(2, 20, 6);
-		sonarColor = new Color(16, 79, 59);
+		sonarColor = new Color(0, 90, 90);
 		radarColor = new Color(16, 79, 32);
 		explosionColor = new Color(192, 0, 0);
 		
