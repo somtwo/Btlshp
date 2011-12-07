@@ -1,8 +1,14 @@
 package btlshp.entities;
 
+import java.io.Serializable;
+
 import btlshp.enums.*;
 
-public abstract class Construct {
+public abstract class Construct implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 207342763352324403L;
 	protected Location myLoc;
 	protected Direction myDir;
 	protected ConstructBlock blocks[];
