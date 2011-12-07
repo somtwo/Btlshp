@@ -578,4 +578,10 @@ public class Map implements Serializable {
 	public void fireGuns(Ship s, Location loc) {
 		
 	}
+
+
+	public Player getLeftPlayer() {
+		// TODO Auto-generated method stub
+		return leftPlayer;
+	}
 }

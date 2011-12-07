@@ -1,11 +1,17 @@
 package btlshp.entities;
 
+import java.io.Serializable;
+
 import btlshp.enums.GraphicAlliance;
 import btlshp.enums.GraphicId;
 import btlshp.enums.GraphicPart;
 import btlshp.enums.Weapon;
 
-public abstract class Block {
+public abstract class Block implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5024766800984383104L;
 	protected GraphicId       graphicId;
 	protected GraphicPart     graphicPart;
 	protected GraphicAlliance graphicAlliance;
