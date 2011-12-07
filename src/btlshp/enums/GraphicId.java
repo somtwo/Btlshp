@@ -1,5 +1,6 @@
 package btlshp.enums;
 
+
 public enum GraphicId {
 	None(""),
 	Mine("mine"),

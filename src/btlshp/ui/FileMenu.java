@@ -95,7 +95,7 @@ public class FileMenu extends JMenu {
 	public void updateMenuItems() {
 		if(Btlshp.getGame().getAppState() == AppState.NoGame) {
 			fileMenuItems[1].setEnabled(false);
-			fileMenuItems[2].setEnabled(false);
+			//fileMenuItems[2].setEnabled(false);
 			fileMenuItems[3].setEnabled(false);
 		}
 		else {

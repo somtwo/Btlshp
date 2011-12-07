@@ -134,8 +134,8 @@ public class BtlshpGame {
 	 * Handles a UI-side restore game event.
 	 */
 	public void restoreGame() {
-		if(appState == AppState.NoGame) 
-			return;
+		//if(appState == AppState.NoGame) 
+			//return;
 		
 		File f = mainUi.selectSaveFile("Select a file to restore from");
 		
@@ -147,16 +147,20 @@ public class BtlshpGame {
 			try{
 				fileIn = new FileInputStream(filePath);
 				objIn = new ObjectInputStream(fileIn);
-				fileIn.close();
+				//fileIn.close();
 				Map loadMap= null;
 				try {
 					loadMap = (Map) objIn.readObject();
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				}
+				localPlayer = loadMap.getLeftPlayer();
 				mainUi.setMap(loadMap);
+				appState = AppState.LocalTurn;
+				mainUi.updateMainMenu();
 			}catch(IOException e){
-				System.err.println(e.getMessage());
+				System.err.println("IOException: File Path: "+filePath);
+				e.printStackTrace();
 			}
 		}
 	}
