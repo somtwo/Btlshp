@@ -22,6 +22,7 @@ import btlshp.entities.Block;
 import btlshp.entities.ConstructBlock;
 import btlshp.entities.Map;
 import btlshp.entities.MapNode;
+import btlshp.entities.MineBlock;
 import btlshp.entities.Ship;
 import btlshp.enums.AppState;
 import btlshp.enums.GraphicAlliance;
@@ -83,7 +84,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		hoverColor = new Color(6, 178, 48);
 		hoverLineColor = new Color(4, 70, 17);
 		
-		bgColor = new Color(3, 28, 9);
+		bgColor = new Color(2, 20, 6);
 		sonarColor = new Color(16, 79, 59);
 		radarColor = new Color(16, 79, 32);
 		explosionColor = new Color(192, 0, 0);
@@ -126,6 +127,15 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	}
 	
 	
+	/**
+	 * Fires a torpedo
+	 * @param ship 
+	 */
+	public void fireTorpedo(Ship ship) {
+		
+	}
+	
+	
 	private void drawDoubleHorizontalLine(Graphics2D g, int y, int x1, int x2) {
 		g.drawLine(x1, y,   x2, y);
 		g.drawLine(x1, y+1, x2, y+1);
@@ -140,6 +150,9 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	private boolean displayGraphic(MapNode n) {
 		if(n.block == null)
 			return false;
+		
+		if(n.block instanceof MineBlock) 
+			return n.hasSonar();
 		
 		if(n.block.getAlliance() != GraphicAlliance.Unfriendly || n.hasRadar() ||
 				(n.block instanceof ConstructBlock && ((ConstructBlock)n.block).getConstruct() instanceof Base))

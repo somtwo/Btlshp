@@ -127,8 +127,7 @@ public class MoveMode extends GridMode {
 	
 	@Override
 	public void mouseClick(int x, int y) {
-		int forwardDistance = Math.abs((grid.getHoverx() - ship.getLocation().getx()) + (grid.getHovery() - ship.getLocation().gety
-				()));
+		int forwardDistance = Math.abs((grid.getHoverx() - ship.getLocation().getx()) + (grid.getHovery() - ship.getLocation().gety()));
 		Direction shipDirection = ship.getDirection();
 		
 		if(currentMove == Move.Forward && map.canMove(ship, shipDirection, forwardDistance)) {

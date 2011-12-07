@@ -355,7 +355,10 @@ public class Map implements Serializable {
 		deltax = (dir == Direction.West) ? -1 : (dir == Direction.East) ? 1 : 0;
 		deltay = (dir == Direction.North) ? -1 : (dir == Direction.South) ? 1 : 0;
 
-		for(int moveCount = 0; moveCount < blocks; ++moveCount)
+		it.rotate(s.getDirection());
+		
+		int moveCount;
+		for(moveCount = 0; moveCount < blocks; ++moveCount)
 		{
 			it.setOrigin(x, y);
 			x += deltax;
@@ -363,7 +366,7 @@ public class Map implements Serializable {
 			
 			for(int i = 0; i < it.size(); ++i) {
 				if(!insideMap(it.getx(i), it.gety(i)))
-					return false;
+					break;
 				
 				Block b = getMapNode(it.getx(i), it.gety(i)).block;
 				
@@ -374,55 +377,11 @@ public class Map implements Serializable {
 					ConstructBlock cb = (ConstructBlock)b;
 					
 					if(cb.myConstruct != s)
-						return false;
+						break;
 				}
 			}
 		}
-		return true;
-		
-		// This is what this function used to look like
-		/*int x1, x2, y1, y2, x, y;	
-		
-		x1 = s.getx1(); x2 = s.getx2();
-		y1 = s.gety1(); y2 = s.gety2();
-		
-		for(int i = 0; i < blocks; ++i) {
-			if(dir == Direction.North) {
-				y1--; y2--;
-			}
-			else if(dir == Direction.South) {
-				y1++; y2++;
-			}
-			else if(dir == Direction.East) {
-				x1--; x2--;
-			}
-			else if(dir == Direction.West) {
-				x1++; x2++;
-			}
-			
-			for(y = y1; y <= y2; ++y) {
-				for(x = x1; x <= x2; ++x) {
-					Block b = getMapNode(x, y).block;
-					
-					if(b == null || b instanceof MineBlock)
-						continue;
-					
-					if(b instanceof ConstructBlock) {
-						ConstructBlock [] sblocks = s.getBlocks();
-						boolean           inship = false;
-						
-						for(int it = 0; it < sblocks.length; ++it)
-							if (b == sblocks[it])
-								inship = true;
-						
-						if(inship)
-							continue;
-					}
-					return false;
-				}
-			}
-		}
-		return true;*/
+		return moveCount > 0;
 	}
 	        	
 	/**
@@ -447,12 +406,14 @@ public class Map implements Serializable {
 		deltay = (dir == Direction.North) ? -1 : (dir == Direction.South) ? 1 : 0;
 		
 		it.rotate(s.getDirection());
+		adjIt.rotate(s.getDirection());
 
 		for(moveCount = 0; moveCount < blocks; ++moveCount)
 		{
 			x += deltax;
 			y += deltay;
 			it.setOrigin(x, y);
+			adjIt.setOrigin(x, y);
 			
 			// Check adjacent squares for mines
 			for(int i = 0; i < adjIt.size(); ++i) {
@@ -462,11 +423,12 @@ public class Map implements Serializable {
 				MapNode n = getMapNode(adjIt.getx(i), adjIt.gety(i));
 				Block b = n.block;
 				
-				if(!(b instanceof MineBlock))
+				if(!(b instanceof MineBlock) || s.canPlaceMine())
 					continue;
 				
 				adjIt.getBlock(i).takeHit(Weapon.Mine);
 				unplaceBlock(n, b);
+				n.hasExplosion(true);
 				canContinue = false;
 			}
 			
@@ -490,6 +452,9 @@ public class Map implements Serializable {
 					if(cb.myConstruct != s)
 						canContinue = false;
 				}
+				else if(b != null) {
+					canContinue = false; break;
+				}
 			}
 			
 			if(canContinue) {
@@ -501,66 +466,6 @@ public class Map implements Serializable {
 		}
 		
 		return moveCount;
-		
-		// The code below is the old code and it doesn't even check adjacent blocks!!!
-		/*Location   loc = s.getLocation();
-		Direction sdir = s.getDirection();
-		int x1, x2, y1, y2, x, y;	
-		
-		x1 = s.getx1(); x2 = s.getx2();
-		y1 = s.gety1(); y2 = s.gety2();
-		
-		unplaceShip(s);
-		
-		int i;
-		for(i = 0; i < blocks; ++i) {
-			if(dir == Direction.North) {
-				y1--; y2--;
-			}
-			else if(dir == Direction.South) {
-				y1++; y2++;
-			}
-			else if(dir == Direction.East) {
-				x1--; x2--;
-			}
-			else if(dir == Direction.West) {
-				x1++; x2++;
-			}
-			
-			boolean success = true;
-			for(y = y1; y <= y2; ++y) {
-				for(x = x1; x <= x2; ++x) {
-					Block b = getMapNode(x, y).block;
-					
-					if(b == null)
-						continue;
-					
-					if(b instanceof MineBlock) {
-						unplaceBlock(getMapNode(x, y), b);
-						// TODO: EXPLODE MINE
-					}
-
-					success = false;
-				}
-			}
-			
-			if(!success)
-				break;
-		}
-		
-		if(dir == Direction.North) {
-			s.setLocation(new Location(loc.getx(), loc.gety() - i));
-		}
-		else if(dir == Direction.South) {
-			s.setLocation(new Location(loc.getx(), loc.gety() + i));
-		}
-		else if(dir == Direction.East) {
-			s.setLocation(new Location(loc.getx() - i, loc.gety()));
-		}
-		else if(dir == Direction.West) {
-			s.setLocation(new Location(loc.getx() + i, loc.gety()));
-		}
-		return i;*/
 	}
 	        	
 	/**

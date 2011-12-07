@@ -21,16 +21,7 @@ public class RotateMode extends GridMode {
 	public void highlightCells() {
 		super.highlightCells();
 		
-		NodeIterator it = ship.getCoreIterator();
-		it.iterate(map, ship.getLocation(), ship.getDirection(), new NodeIteratorAction() {
-			@Override
-			public void visit(MapNode n, Block b) {
-				n.actionArea(true);
-			}
-		});		
-		
-		
-		it = ship.getRightRotationIterator();
+		NodeIterator it = ship.getRightRotationIterator();
 		
 		final boolean rightAction = it.isPointInside(grid.getHoverx(), grid.getHovery(), ship.getLocation(), ship.getDirection());
 		it.iterate(map, ship.getLocation(), ship.getDirection(), new NodeIteratorAction() {

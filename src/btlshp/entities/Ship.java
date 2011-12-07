@@ -63,7 +63,7 @@ public class Ship extends Construct implements Serializable{
 		buildRightRotationIterator();
 		buildCoreIterator();
 		buildAdjacentIterator();
-		buildMoveIterator();
+		buildMoveIterators();
 		
 		if(hasSonar())
 			buildSonarIterator();
@@ -388,15 +388,15 @@ public class Ship extends Construct implements Serializable{
 		
 		radarArea = new NodeIterator(null);
 		
+		// Account for the destroyers weird turn axis
+		offset = blocks.length == 3 ? 1 : 0;
+		
 		// Do in front of the ship
 		for(x = -1; x < 2; x++) {
 			for(y = 0; y < maxRadarRange; y++) {
-				radarArea.add(x, -blocks.length - y, null);
+				radarArea.add(x, offset - blocks.length - y, null);
 			}
 		}
-		
-		// Account for the destroyers weird turn axis
-		offset = blocks.length == 3 ? -1 : 0;
 		
 		// Do along side the ship
 		for(y = 1; y < blocks.length; ++y) {
@@ -437,7 +437,7 @@ public class Ship extends Construct implements Serializable{
 	}
 	
 	
-	private void buildMoveIterator() {
+	private void buildMoveIterators() {
 		int x, y;
 		
 		forwardMoveArea = new NodeIterator(null);
@@ -457,8 +457,8 @@ public class Ship extends Construct implements Serializable{
 				rightMoveArea.add(x, offset - y, null);
 			}
 		}
-		for(y = 0; y < maxForwardMove; ++y) {
-			forwardMoveArea.add(0, offset - blocks.length - y, null);
+		for(y = 0; y < maxForwardMove + blocks.length; ++y) {
+			forwardMoveArea.add(0, offset - 1 - y, null);
 		}
 	}
 	
