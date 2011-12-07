@@ -408,31 +408,14 @@ public class Map implements Serializable {
 		it.rotate(s.getDirection());
 		adjIt.rotate(s.getDirection());
 
-		for(moveCount = 0; moveCount < blocks; ++moveCount)
+		for(moveCount = 0; moveCount < blocks && canContinue; ++moveCount)
 		{
 			x += deltax;
 			y += deltay;
 			it.setOrigin(x, y);
 			adjIt.setOrigin(x, y);
 			
-			// Check adjacent squares for mines
-			for(int i = 0; i < adjIt.size(); ++i) {
-				if(!insideMap(adjIt.getx(i), adjIt.gety(i)))
-					continue;
-				
-				MapNode n = getMapNode(adjIt.getx(i), adjIt.gety(i));
-				Block b = n.block;
-				
-				if(!(b instanceof MineBlock) || s.canPlaceMine())
-					continue;
-				
-				adjIt.getBlock(i).takeHit(Weapon.Mine);
-				unplaceBlock(n, b);
-				n.hasExplosion(true);
-				canContinue = false;
-			}
-			
-			// Now for the body.
+			// Check the body
 			for(int i = 0; i < it.size(); ++i) {
 				if(!insideMap(it.getx(i), it.gety(i))) {
 					canContinue = false; break;
@@ -443,9 +426,7 @@ public class Map implements Serializable {
 				
 				if(b instanceof MineBlock) {
 					canContinue = false;
-					adjIt.getBlock(i).takeHit(Weapon.Mine);
-					unplaceBlock(n, b);
-					n.hasExplosion(true);
+					explodeMine(it.getx(i), it.gety(i));
 				}
 				else if(b instanceof ConstructBlock) {
 					ConstructBlock cb = (ConstructBlock)b;
@@ -458,12 +439,26 @@ public class Map implements Serializable {
 				}
 			}
 			
-			if(canContinue) {
-				unplaceShip(s);
-				placeShip(s, x, y, s.getDirection());
-			}
-			else
+			if(!canContinue)
 				break;
+			
+			unplaceShip(s);
+			placeShip(s, x, y, s.getDirection());
+
+			// Check adjacent squares for mines
+			for(int i = 0; i < adjIt.size(); ++i) {
+				if(!insideMap(adjIt.getx(i), adjIt.gety(i)))
+					continue;
+				
+				MapNode n = getMapNode(adjIt.getx(i), adjIt.gety(i));
+				Block b = n.block;
+				
+				if(!(b instanceof MineBlock) || s.canPlaceMine())
+					continue;
+				
+				explodeMine(adjIt.getx(i), adjIt.gety(i));
+				canContinue = false;
+			}
 		}
 		
 		return moveCount;
@@ -537,6 +532,33 @@ public class Map implements Serializable {
 		s.getPlayer().addMine();
 		return true;
 	}
+	
+	
+	private void explodeMine(int mapx, int mapy) {
+		MapNode n = getMapNode(mapx, mapy);
+		
+		if(n == null || n.block == null || !(n.block instanceof MineBlock))
+			return;
+		n.block = null;
+		n.hasExplosion(true);
+		
+		n = getMapNode(mapx - 1, mapy);
+		if(n != null && n.block != null)
+			n.block.takeHit(Weapon.Mine);
+		
+		n = getMapNode(mapx + 1, mapy);
+		if(n != null && n.block != null)
+			n.block.takeHit(Weapon.Mine);
+		
+		n = getMapNode(mapx, mapy + 1);
+		if(n != null && n.block != null)
+			n.block.takeHit(Weapon.Mine);
+		
+		n = getMapNode(mapx, mapy - 1);
+		if(n != null && n.block != null)
+			n.block.takeHit(Weapon.Mine);
+	}
+	
 	        	
 	/**
 	* Fires the torpedo of the given ship. The torpedo will start from the front of the ship and will
