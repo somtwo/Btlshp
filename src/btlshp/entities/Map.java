@@ -125,7 +125,7 @@ public class Map implements Serializable {
 		
 		for(int i = 0; i < playerShips.length; ++i) {
 			// Select a random ship from the array
-			/*int startIndex;
+			int startIndex;
 			int shipIndex = startIndex = (int)(Math.random() * playerShips.length);
 			
 			// We might have already placed the ship at shipIndex, so linearly traverse the list
@@ -134,8 +134,7 @@ public class Map implements Serializable {
 				shipIndex = (shipIndex + 1) % playerShips.length;
 				if(shipIndex == startIndex)
 					throw new IllegalStateException("Infinite loop detected.");
-			}*/
-			int shipIndex = i;
+			}
 			
 			// TODO: This is a hack for now. A better solution should be found...
 			int offset = 0;

@@ -154,7 +154,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		if(n.block instanceof MineBlock) 
 			return n.hasSonar();
 		
-		if(n.block.getAlliance() != GraphicAlliance.Unfriendly || n.hasRadar() ||
+		if(n.block.getAlliance() != GraphicAlliance.Unfriendly || n.hasRadar() || n.hasSonar() ||
 				(n.block instanceof ConstructBlock && ((ConstructBlock)n.block).getConstruct() instanceof Base))
 			return true;
 		

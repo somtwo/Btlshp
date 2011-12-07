@@ -275,7 +275,7 @@ public class Ship extends Construct implements Serializable{
 	public static Ship buildTorpedoBoat(Player owner) {
 		return new Ship(owner, hasGun|hasTorpedo, 8, 1, 1, 4, 5, 0, 4);
 	}
-	// private Ship(Player owner, boolean isArmored, boolean gun, boolean torpedo, boolean mine, boolean Sonar, int forward, int side, int back, int gunRange, int radarRange, int sonarRange, int numberOfBlocks) {
+	// private Ship(Player owner, int flags, int forward, int side, int back, int gunRange, int radarRange, int sonarRange, int numberOfBlocks) {
 	/**
 	* Factory method for Destroyer
 	* @returns the Ship Constructed
@@ -457,7 +457,7 @@ public class Ship extends Construct implements Serializable{
 				rightMoveArea.add(x, offset - y, null);
 			}
 		}
-		for(y = 0; y < maxForwardMove + blocks.length; ++y) {
+		for(y = 0; y < maxForwardMove + blocks.length - 1; ++y) {
 			forwardMoveArea.add(0, offset - 1 - y, null);
 		}
 	}
