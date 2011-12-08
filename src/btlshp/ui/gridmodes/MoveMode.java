@@ -130,12 +130,26 @@ public class MoveMode extends GridMode {
 		int forwardDistance = Math.abs((grid.getHoverx() - ship.getLocation().getx()) + (grid.getHovery() - ship.getLocation().gety()));
 		Direction shipDirection = ship.getDirection();
 		
+		// Move Forward 
 		if(currentMove == Move.Forward && forwardDistance <= ship.getMaxForwardMove() &&
 			map.canMove(ship, shipDirection, forwardDistance)) {
 			map.move(ship, shipDirection, forwardDistance);
 		}
-			
-
+		
+		// Move Backward
+		if(currentMove == Move.Backward && map.canMove(ship, shipDirection.backwardsDir(), 1)) {
+			map.move(ship, shipDirection.backwardsDir(), 1);
+		}
+		
+		// Move Left
+		if(currentMove == Move.Left && map.canMove(ship, shipDirection.leftDir(), 1)) {
+			map.move(ship, shipDirection.leftDir(), 1);
+		}
+		
+		// Move Right
+		if(currentMove == Move.Right && map.canMove(ship, shipDirection.rightDir(), 1)) {
+			map.move(ship, shipDirection.rightDir(), 1);
+		}
 		
 		grid.cancelAction();
 	}
