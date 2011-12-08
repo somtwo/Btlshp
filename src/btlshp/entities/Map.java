@@ -484,7 +484,13 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public void rotateShip(Ship s, Direction newDir) {
+		Location      loc = s.getLocation();
+		int x = loc.getx();
+		int y = loc.gety();
 		
+		unplaceShip(s);
+		placeShip(s,x,y,newDir);
+		return;
 	}
 
 	/**

@@ -134,21 +134,25 @@ public class MoveMode extends GridMode {
 		if(currentMove == Move.Forward && forwardDistance <= ship.getMaxForwardMove() &&
 			map.canMove(ship, shipDirection, forwardDistance)) {
 			map.move(ship, shipDirection, forwardDistance);
+			Btlshp.getGame().outputMessage("Move forward.");
 		}
 		
 		// Move Backward
 		if(currentMove == Move.Backward && map.canMove(ship, shipDirection.backwardsDir(), 1)) {
 			map.move(ship, shipDirection.backwardsDir(), 1);
+			Btlshp.getGame().outputMessage("Move Backwards.");
 		}
 		
 		// Move Left
 		if(currentMove == Move.Left && map.canMove(ship, shipDirection.leftDir(), 1)) {
 			map.move(ship, shipDirection.leftDir(), 1);
+			Btlshp.getGame().outputMessage("Move Left.");
 		}
 		
 		// Move Right
 		if(currentMove == Move.Right && map.canMove(ship, shipDirection.rightDir(), 1)) {
 			map.move(ship, shipDirection.rightDir(), 1);
+			Btlshp.getGame().outputMessage("Move Right.");
 		}
 		
 		grid.cancelAction();
