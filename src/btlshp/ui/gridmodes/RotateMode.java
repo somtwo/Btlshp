@@ -59,13 +59,13 @@ public class RotateMode extends GridMode {
 			// Rotate Left
 			if(isLeftRotate(shipDirection) == true) {
 				map.rotateShip(ship,shipDirection.leftDir());
-				Btlshp.getGame().outputMessage("Rotate ship action.");
+				Btlshp.getGame().outputMessage("Rotate Left ship action.");
 			}
 			
 			// Rotate Right
 			else {
 				map.rotateShip(ship,shipDirection.rightDir());
-				Btlshp.getGame().outputMessage("Rotate ship action.");
+				Btlshp.getGame().outputMessage("Rotate Right ship action.");
 			}
 		}
 		grid.cancelAction();
