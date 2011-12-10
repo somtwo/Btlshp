@@ -47,7 +47,7 @@ public class BtlshpGame {
 			localPlayer = new Player();
 			Map m = new Map(localPlayer, new Player());
 			mainUi.setMap(m);
-			appState = AppState.RemoteTurn;
+			appState = AppState.LocalTurn;
 			ObjectOutputStream objOut = null;
 			FileOutputStream fileOut = null;
 			try {
