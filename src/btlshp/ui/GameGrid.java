@@ -26,6 +26,8 @@ import btlshp.entities.MineBlock;
 import btlshp.entities.Ship;
 import btlshp.enums.AppState;
 import btlshp.enums.GraphicAlliance;
+import btlshp.turns.Turn;
+import btlshp.turns.TurnFactory;
 import btlshp.ui.gridmodes.FireGunMode;
 import btlshp.ui.gridmodes.GridMode;
 import btlshp.ui.gridmodes.MoveMode;
@@ -67,7 +69,6 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	private Map       map;
 	private GridMode  mode;
 	
-	
 	public GameGrid() {
 		gridWidth = gridHeight = 30;
 		
@@ -101,6 +102,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		
 		imageCache = new HashMap<String, BufferedImage>();
 		mode = null;
+		
 	}
 	
 	
@@ -125,14 +127,13 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	public GridState getGameState() {
 		return state;
 	}
-	
-	
 	/**
 	 * Fires a torpedo
 	 * @param ship 
 	 */
 	public void fireTorpedo(Ship ship) {
 		
+
 	}
 	
 	

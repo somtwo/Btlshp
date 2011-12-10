@@ -229,6 +229,7 @@ public class MainUI implements Serializable{
 	public Map getMap(){
 		return gameGrid.getMap();
 	}
+
 	/**
 	 * Outputs a message to the console.
 	 * 

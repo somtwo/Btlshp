@@ -585,7 +585,9 @@ public class Map implements Serializable {
 		
 	}
 
-
+	public Player getRightPlayer(){
+		return rightPlayer;
+	}
 	public Player getLeftPlayer() {
 		return leftPlayer;
 	}

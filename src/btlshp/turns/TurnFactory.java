@@ -6,6 +6,12 @@ import btlshp.enums.Direction;
 
 public final class TurnFactory {
 	/**
+	 * Factory method to create a turn for joing two games
+	 */
+	public static JoinGame joinGame(Map m){
+		return new JoinGame(m);
+	}
+	/**
 	* Factory method to create a turn representing a request to postpone the game.
 	* @return the resulting turn object.
 	*/

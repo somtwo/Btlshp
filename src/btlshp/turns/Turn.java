@@ -10,20 +10,37 @@ import btlshp.enums.Direction;
 import btlshp.entities.Ship;
 import btlshp.entities.Map;
 import java.io.*;
-public interface Turn {
+public abstract class Turn {
+	public boolean writeOut(String filePath, int turnNum){
+		ObjectOutputStream objOut = null;
+		FileOutputStream fileOut = null;
+		try {
+			fileOut = new FileOutputStream(filePath +"/"+ turnNum+".ser");
+			objOut = new ObjectOutputStream(fileOut);
+			
+			objOut.writeObject(this);
+			objOut.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
 	/**
 	 * @returns true if the move object represents a successful move, false otherwise.
 	 */
-	boolean wasSuccessful();
+	abstract boolean wasSuccessful();
 
 	/**
 	 * Executes a given move object representing a move from the other player.
 	 * @throws IllegalStateException If the turn was not successful.
 	 */
-	void executeTurn();
+	abstract void executeTurn();
 }
 
-class Pass implements Turn, Serializable{
+class Pass extends Turn implements Serializable{
 	/**
 	 * 
 	 */
@@ -41,7 +58,29 @@ class Pass implements Turn, Serializable{
 		return "pass";
 	}
 }
-class RequestPostponeGame implements Turn, Serializable{
+class JoinGame extends Turn implements Serializable{
+	private Map m;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6638148998058324549L;
+	public JoinGame(Map m){
+		this.m = m;
+	}
+	@Override
+	public void executeTurn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean wasSuccessful() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+}
+class RequestPostponeGame extends Turn implements Serializable{
 	/**
 	 * 
 	 */
@@ -64,7 +103,7 @@ class RequestPostponeGame implements Turn, Serializable{
 		return "requestPostponeGame";
 	}
 }
-class ConfirmPostponeGame implements Turn, Serializable{
+class ConfirmPostponeGame extends Turn implements Serializable{
 
 
 	/**
@@ -91,7 +130,7 @@ class ConfirmPostponeGame implements Turn, Serializable{
 		return "confirmPostponeGame";
 	}
 }
-class LoadGameState implements Turn, Serializable{
+class LoadGameState extends Turn implements Serializable{
 
 
 	/**
@@ -131,7 +170,7 @@ class LoadGameState implements Turn, Serializable{
 		return "loadGameState";
 	}
 }
-class SaveGameState implements Turn, Serializable{
+class SaveGameState extends Turn implements Serializable{
 	/**
 	 * 
 	 */
@@ -171,7 +210,7 @@ class SaveGameState implements Turn, Serializable{
 	}
 	
 }
-class RequestSurrender implements Turn, Serializable{
+class RequestSurrender extends Turn implements Serializable{
 
 
 	/**
@@ -199,7 +238,7 @@ class RequestSurrender implements Turn, Serializable{
 		return "requestSurrender";
 	}
 }
-class AcceptSurrender implements Turn, Serializable{
+class AcceptSurrender extends Turn implements Serializable{
 	/**
 	 * 
 	 */
@@ -223,7 +262,7 @@ class AcceptSurrender implements Turn, Serializable{
 		return "acceptSurrender";
 	}
 }
-class MoveShip implements Turn, Serializable{
+class MoveShip extends Turn implements Serializable{
 	/**
 	 * 
 	 */
@@ -261,7 +300,7 @@ class MoveShip implements Turn, Serializable{
 		return "moveShip";
 	}
 }
-class PlaceMine implements Turn, Serializable{
+class PlaceMine extends Turn implements Serializable{
 	/**
 	 * 
 	 */
@@ -296,7 +335,7 @@ class PlaceMine implements Turn, Serializable{
 		return "placeMine";
 	}
 }
-class TakeMine implements Turn, Serializable{
+class TakeMine extends Turn implements Serializable{
 	/**
 	 * 
 	 */
@@ -331,7 +370,7 @@ class TakeMine implements Turn, Serializable{
 		return "takeMine";
 	}
 }
-class LaunchTorpedo implements Turn, Serializable{
+class LaunchTorpedo extends Turn implements Serializable{
 	/**
 	 * 
 	 */
@@ -367,7 +406,7 @@ class LaunchTorpedo implements Turn, Serializable{
 	}
 }
 
-class Shoot implements Turn, Serializable{
+class Shoot extends Turn implements Serializable{
 
 	/**
 	 * 
@@ -403,7 +442,7 @@ class Shoot implements Turn, Serializable{
 		return "shoot";
 	}
 }
-class RepairBase implements Turn, Serializable{
+class RepairBase extends Turn implements Serializable{
 
 	/**
 	 * 
@@ -432,7 +471,7 @@ class RepairBase implements Turn, Serializable{
 		return "repairBase";
 	}
 }
-class RepairShip implements Turn, Serializable{
+class RepairShip extends Turn implements Serializable{
 	/**
 	 * 
 	 */

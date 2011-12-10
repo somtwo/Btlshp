@@ -16,7 +16,6 @@ public class BtlshpGame {
 	private AppState appState;
 	private MainUI   mainUi;
 	private Player   localPlayer;
-	
 	public BtlshpGame() {
 		appState = AppState.NoGame;
 		localPlayer = null;
@@ -46,12 +45,51 @@ public class BtlshpGame {
 		
 		if(gameDir != null) {
 			localPlayer = new Player();
-			mainUi.setMap(new Map(localPlayer, new Player()));
-			appState = AppState.LocalTurn;
+			Map m = new Map(localPlayer, new Player());
+			mainUi.setMap(m);
+			appState = AppState.RemoteTurn;
+			ObjectOutputStream objOut = null;
+			FileOutputStream fileOut = null;
+			try {
+				fileOut = new FileOutputStream(gameDir.getAbsolutePath() +"/"+ 0+".ser");
+				objOut = new ObjectOutputStream(fileOut);
+				
+				objOut.writeObject(m);
+				objOut.close();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			mainUi.updateMainMenu();
 		}
 	}
-	
+	public void joinGame(){
+		File gameDir = mainUi.selectDiretory("Choose a shared directory");
+		
+		if(gameDir != null){
+			outputMessage("Joining game " + gameDir.getPath());
+			String filePath = gameDir.getPath()+"/"+0+".ser";
+			FileInputStream fileIn = null;
+			ObjectInputStream objIn = null;
+			try{
+				fileIn = new FileInputStream(filePath);
+				objIn = new ObjectInputStream(fileIn);
+				Map loadMap= null;
+				try {
+					loadMap =(Map) objIn.readObject();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+				localPlayer = loadMap.getRightPlayer();
+				mainUi.setMap(loadMap);
+				appState = AppState.LocalTurn;
+				mainUi.updateMainMenu();
+			}catch(IOException e){
+				System.err.println("IOException: File Path: "+filePath);
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	/**
 	 * Handles a UI-side help request.
@@ -147,7 +185,6 @@ public class BtlshpGame {
 			try{
 				fileIn = new FileInputStream(filePath);
 				objIn = new ObjectInputStream(fileIn);
-				//fileIn.close();
 				Map loadMap= null;
 				try {
 					loadMap = (Map) objIn.readObject();
@@ -170,7 +207,7 @@ public class BtlshpGame {
 	public Player getLocalPlayer() {
 		return localPlayer;
 	}
-	
+
 	
 	/**
 	 * Outputs a message to a screen element used to display action messages for the player.
