@@ -337,17 +337,6 @@ public class Ship extends Construct implements Serializable{
 		}
 		// Do all other ships
 		else {
-<<<<<<< HEAD
-			// Counter for array position
-			int k = 0; 
-			int arraySize = 0;
-			for (int i = 0; i < blocks.length; i++){
-				arraySize = arraySize +i;
-			}
-			arraySize = arraySize + blocks.length -1;
-			locations = new Location[arraySize];
-=======
->>>>>>> 339bef23eb4d6bd53ef1623762e42af245162f07
 			// Do head through one less then tail. Then do tail at one less then length of ship.
 			for (int x = 1; x < blocks.length; x++){
 				int colHeight = blocks.length - x;
