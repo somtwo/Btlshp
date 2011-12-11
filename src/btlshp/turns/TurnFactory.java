@@ -1,13 +1,16 @@
 package btlshp.turns;
 
-import btlshp.entities.Base;
-import btlshp.entities.ConstructBlock;
-import btlshp.entities.Location;
-import TurnTestStubs.Map;
-import ConstructTestStubs.Ship;
+import btlshp.entities.*;
 import btlshp.enums.Direction;
 
+
 public final class TurnFactory {
+	/**
+	 * Factory method to create a turn for joing two games
+	 */
+	public static JoinGame joinGame(Map m){
+		return new JoinGame(m);
+	}
 	/**
 	* Factory method to create a turn representing a request to postpone the game.
 	* @return the resulting turn object.
@@ -42,17 +45,18 @@ public final class TurnFactory {
 
 	/**
 	* Factory method to create a turn representing the start of a previously saved game.
+	* @param f filename of the saved game
 	* @return the resulting turn object.
 	*/
-	public static LoadGameState loadGameState() {
-		return new LoadGameState();
+	public static LoadGameState loadGameState(String f) {
+		return new LoadGameState(f);
 	}
 	/**
 	 * Factory method to create a turn representing the saving of game state
 	 * @return the resulting turn object
 	 */
-	public static SaveGameState saveGameState(){
-		return new SaveGameState();
+	public static SaveGameState saveGameState(Map map){
+		return new SaveGameState(map);
 	}
 	/**
 	 * Move ship in a certain direction
@@ -89,7 +93,7 @@ public final class TurnFactory {
 	* @param s ship to launch a torpedo from
 	* @return true if torpedo launched
 	*/
-	public static LaunchTorpedo launchTorpedo(Map m, Ship s) {
+	public static LaunchTorpedo launchTorpedo(btlshp.entities.Map m, btlshp.entities.Ship s) {
 		return new LaunchTorpedo(m, s);
 	}
 
@@ -108,7 +112,7 @@ public final class TurnFactory {
 	* @param s ship to be repaired
 	* @return the resulting turn object.
 	*/
-	public static RepairShip repairShip(ConstructTestStubs.ConstructBlock repairBlock, Ship s) {
+	public static RepairShip repairShip(ConstructBlock repairBlock, Ship s) {
 		return new RepairShip(s, repairBlock);
 	}
 

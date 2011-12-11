@@ -1,23 +1,37 @@
 package btlshp.entities;
+import java.io.Serializable;
 import java.util.ArrayList;
-public class Player {
+public class Player implements Serializable {
 	
+	private static final long serialVersionUID = -3335146204678437423L;
 	/**
 	 * Instance variables
 	 */
-	private ArrayList<Ship> ship;
-	private int numberOfMine;
-	private int points;
-	private final int MAX_NUM_SHIP = 8; // for default we have 8
+	private ArrayList<Ship> ships;
+	private Base            base;
+	private int             numberOfMines;
+	private int             points;
+	private final int       MAX_NUM_SHIP = 9; // for default we have 9
 	
 	/**
 	 * Default constructor
 	 */
 	public Player() {
 		// Starting value of player
-		ship = new ArrayList<Ship>();
-		numberOfMine = 10;
+		ships = new ArrayList<Ship>();
+		numberOfMines = 10;
 		points = 0;
+		
+		// Create the constructs the player has
+		base = new Base(this);
+		
+		for(int i = 0; i < 2; ++i) {
+			addShip(Ship.buildCruiser(this));
+			addShip(Ship.buildDestroyer(this));
+			addShip(Ship.buildMineSweeper(this));
+			addShip(Ship.buildTorpedoBoat(this));
+		}
+		addShip(Ship.buildTorpedoBoat(this));
 	}
 
 	/**
@@ -27,13 +41,15 @@ public class Player {
 	 */
 	public boolean addShip(Ship s) {
 		boolean shipAdded = false;
-		if (ship.size() < MAX_NUM_SHIP)
+		if (ships.size() < MAX_NUM_SHIP)
 		{
-			ship.add(s);
+			ships.add(s);
 			shipAdded = true;
 		}
 		return shipAdded;
 	}
+	
+	
 	/**
 	 * remove ship from the array list of ships
 	 * @param s ship to be added
@@ -41,12 +57,17 @@ public class Player {
 	 */
 	public boolean removeShip(Ship s) {
 		boolean removedShip = false;
-		if(ship.size() != 0)
+		if(ships.size() != 0)
 		{
-			ship.remove(s);
+			ships.remove(s);
 			removedShip = true;
 		}
 		return removedShip;		
+	}
+	
+	
+	public Base getBase() {
+		return base;
 	}
 	
 	/**
@@ -54,7 +75,7 @@ public class Player {
 	 * @return number of ships player has in play
 	 */
 	public int shipCount() {
-		return ship.size();
+		return ships.size();
 	}
 
 	/**
@@ -62,7 +83,7 @@ public class Player {
 	*@return number of mines player has in play
 	*/
 	public int numberOfMines() {
-		return numberOfMine;
+		return numberOfMines;
 	}
 
 	/**
@@ -70,18 +91,18 @@ public class Player {
 	 * @throws IllegalArgumentException if the player has no more mines.
 	 */
 	public void removeMine() {
-		if (numberOfMine == 0)
+		if (numberOfMines == 0)
 		{
 			throw new IllegalArgumentException("No more mines");
 		}
-		numberOfMine = numberOfMine - 1;
+		numberOfMines = numberOfMines - 1;
 	}
 
 	/**
 	 * Increments the number of mines the player has.
 	 */
 	public void addMine() {
-		numberOfMine = numberOfMine + 1;
+		numberOfMines = numberOfMines + 1;
 	}
 	
 	/**
@@ -104,6 +125,6 @@ public class Player {
 	 * @return
 	 */
 	public Ship[] getShips() {
-		return ship.toArray(null);
+		return ships.toArray(new Ship[0]);
 	}
 }

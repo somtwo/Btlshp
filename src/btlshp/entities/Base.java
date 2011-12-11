@@ -1,7 +1,18 @@
 package btlshp.entities;
 
-public class Base extends Construct {
+import java.io.Serializable;
 
+import btlshp.enums.GraphicAlliance;
+import btlshp.enums.GraphicId;
+import btlshp.enums.GraphicPart;
+import btlshp.utility.NodeIterator;
+
+public class Base extends Construct implements Serializable {
+	private static final long serialVersionUID = -2521390657646600415L;
+	private static final int  BASELENGTH = 10;
+	
+	private NodeIterator repairArea;
+	
 	/**
 	* Constructor for Base
 	* Returns the Base Constructed
@@ -9,13 +20,27 @@ public class Base extends Construct {
 	* ! this is assuming all bases are of size 10.
 	*/
 	public Base(Player owner) {
-		blocks = new ConstructBlock[10];
+		blocks = new ConstructBlock[BASELENGTH];
 		maxRadarRange = 0; // TBD!
 		pl = owner;
-		for (int i = 0; i < 10; i++){
-			blocks[i] = new ConstructBlock(this);
+		for (int i = 0; i < BASELENGTH; i++) {
+			GraphicPart part = i == 0 ? GraphicPart.Head : 
+                i == BASELENGTH - 1 ? GraphicPart.Tail : GraphicPart.Middle;
+                
+			blocks[i] = new ConstructBlock(this, GraphicId.Base, part);
 		}
+		
+		buildRepairArea();
 	}
+	
+	
+	/**
+	 * @return The length of the base.
+	 */
+	public int getLength() {
+		return BASELENGTH;
+	}
+	
 	
 	/**
 	* Determines if this base is in condition to conduct repairs
@@ -42,7 +67,35 @@ public class Base extends Construct {
 			return false;
 		}
 	}
-	public boolean canRepairSelf(){
-		return !this.isDestroyed();
+	
+	
+	public boolean canRepairSelf() {
+		int destroyedBlocks = 0; 
+		
+		// Count good vs. bad (implimented to accomodate a change in the size of the base)
+		for (int i = 0; i < blocks.length; i++){
+			if (blocks[i].isDestroyed()){
+				destroyedBlocks++;
+			}
+		}
+		
+		return destroyedBlocks > 0 && !this.isDestroyed();
+	}
+	
+	
+	private void buildRepairArea() {
+		repairArea = new NodeIterator(null);
+		
+		for(int x = -1; x <= blocks.length; ++x)
+			repairArea.add(x, -1, null);
+		
+		repairArea.add(-1, 0, null);
+		repairArea.add(blocks.length, 0, null);
+	}
+	
+	
+	
+	public NodeIterator getRepairArea() {
+		return repairArea;
 	}
 }

@@ -1,25 +1,50 @@
 package btlshp.turns;
 
-import ConstructTestStubs.Ship;
-import TurnTestStubs.Map;
+import java.io.IOException;
+import java.io.Serializable;
+
 import btlshp.entities.Base;
 import btlshp.entities.ConstructBlock;
 import btlshp.entities.Location;
 import btlshp.enums.Direction;
-public interface Turn {
+import btlshp.entities.Ship;
+import btlshp.entities.Map;
+import java.io.*;
+public abstract class Turn {
+	public boolean writeOut(String filePath, int turnNum){
+		ObjectOutputStream objOut = null;
+		FileOutputStream fileOut = null;
+		try {
+			fileOut = new FileOutputStream(filePath +"/"+ turnNum+".ser");
+			objOut = new ObjectOutputStream(fileOut);
+			
+			objOut.writeObject(this);
+			objOut.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
 	/**
 	 * @returns true if the move object represents a successful move, false otherwise.
 	 */
-	boolean wasSuccessful();
+	abstract boolean wasSuccessful();
 
 	/**
 	 * Executes a given move object representing a move from the other player.
 	 * @throws IllegalStateException If the turn was not successful.
 	 */
-	void executeTurn();
+	abstract void executeTurn();
 }
 
-class Pass implements Turn{
+class Pass extends Turn implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3359745261868508357L;
 	@Override
 	public void executeTurn() {//Does no work
 	}
@@ -30,10 +55,36 @@ class Pass implements Turn{
 	}
 	@Override
 	public String toString(){
-		return "Pass";
+		return "pass";
 	}
 }
-class RequestPostponeGame implements Turn{
+class JoinGame extends Turn implements Serializable{
+	private Map m;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6638148998058324549L;
+	public JoinGame(Map m){
+		this.m = m;
+	}
+	@Override
+	public void executeTurn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean wasSuccessful() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+}
+class RequestPostponeGame extends Turn implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2537600636201002718L;
 	@Override
 	/**
 	 * Opponent would like to PostPone Game
@@ -49,12 +100,16 @@ class RequestPostponeGame implements Turn{
 	}
 	@Override
 	public String toString(){
-		return "RequestPostponeGame";
+		return "requestPostponeGame";
 	}
 }
-class ConfirmPostponeGame implements Turn{
+class ConfirmPostponeGame extends Turn implements Serializable{
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7601913526703183133L;
 	@Override
 	/**
 	 * Opponent accepted postponing game
@@ -72,16 +127,36 @@ class ConfirmPostponeGame implements Turn{
 	}
 	@Override
 	public String toString(){
-		return "ConfirmPostponeGame";
+		return "confirmPostponeGame";
 	}
 }
-class LoadGameState implements Turn{
+class LoadGameState extends Turn implements Serializable{
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4870988534077315987L;
+	private String filePath;
+	/**
+	 * 
+	 * @param f location of saved game file
+	 */
+	public LoadGameState(String f){
+		filePath = f;
+	}
 	@Override
 	public void executeTurn() {
-		// TODO Implementation IO dependent
-		
+			FileInputStream fileIn = null;
+			ObjectInputStream objIn = null;
+			try{
+				fileIn = new FileInputStream(filePath);
+				objIn = new ObjectInputStream(fileIn);
+				fileIn.close();
+			}catch(IOException e){
+				System.err.println(e.getMessage());
+			}
+			
 	}
 
 
@@ -92,14 +167,35 @@ class LoadGameState implements Turn{
 	}
 	@Override
 	public String toString(){
-		return "LoadGameState";
+		return "loadGameState";
 	}
 }
-class SaveGameState implements Turn{
-
+class SaveGameState extends Turn implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2354631655310067958L;
+	private Map saveGame;
+	
+	public SaveGameState(Map map)
+	{
+		saveGame = map;
+	}
 	@Override
-	public void executeTurn() {
+	public void executeTurn()  {
 		// TODO Auto-generated method stub
+		ObjectOutputStream objOut = null;
+		FileOutputStream fileOut = null;
+		try {
+			fileOut = new FileOutputStream("..Dropbox/Btlshp/game.dat");
+			objOut = new ObjectOutputStream(fileOut);
+			
+			objOut.writeObject(saveGame);
+			objOut.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -110,13 +206,17 @@ class SaveGameState implements Turn{
 	}
 	@Override
 	public String toString(){
-		return "SaveGameState";
+		return "saveGameState";
 	}
 	
 }
-class RequestSurrender implements Turn{
+class RequestSurrender extends Turn implements Serializable{
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4395558489216020334L;
 	@Override
 	/**
 	 * Opponent requests to quit(surrender) game
@@ -135,10 +235,14 @@ class RequestSurrender implements Turn{
 	}
 	@Override
 	public String toString(){
-		return "RequestSurrender";
+		return "requestSurrender";
 	}
 }
-class AcceptSurrender implements Turn{
+class AcceptSurrender extends Turn implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8163598235191879797L;
 	@Override
 	/**
 	 * Opponent has accepted request to surrender
@@ -155,10 +259,14 @@ class AcceptSurrender implements Turn{
 	}
 	@Override
 	public String toString(){
-		return "AcceptSurrender";
+		return "acceptSurrender";
 	}
 }
-class MoveShip implements Turn{
+class MoveShip extends Turn implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4599021282070269467L;
 	private Ship s;
 	private Direction dir;
 	private int distance;
@@ -185,14 +293,18 @@ class MoveShip implements Turn{
 
 	@Override
 	public boolean wasSuccessful() {
-		return success;
+		return true;
 	}
 	@Override
 	public String toString(){
-		return "MoveShip";
+		return "moveShip";
 	}
 }
-class PlaceMine implements Turn{
+class PlaceMine extends Turn implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4336837927576289067L;
 	private Map m;
 	private Location loc;
 	private Ship s;
@@ -220,10 +332,14 @@ class PlaceMine implements Turn{
 	}
 	@Override
 	public String toString(){
-		return "PlaceMine";
+		return "placeMine";
 	}
 }
-class TakeMine implements Turn{
+class TakeMine extends Turn implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1991458862311470623L;
 	private Location loc;
 	private Ship s;
 	private Map m;
@@ -251,18 +367,22 @@ class TakeMine implements Turn{
 	}
 	@Override
 	public String toString(){
-		return "TakeMine";
+		return "takeMine";
 	}
 }
-class LaunchTorpedo implements Turn{
+class LaunchTorpedo extends Turn implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1790493199271040630L;
 	private Map m;
 	private Ship s;
 	private boolean success = false;
 
 
-	LaunchTorpedo(Map m, Ship s) {
-		this.m = m;
-		this.s = s;
+	LaunchTorpedo(Map m2, Ship s2) {
+		this.m = m2;
+		this.s = s2;
 	}
 
 	@Override
@@ -282,12 +402,16 @@ class LaunchTorpedo implements Turn{
 	}
 	@Override
 	public String toString(){
-		return "LaunchTorpedo";
+		return "launchTorpedo";
 	}
 }
 
-class Shoot implements Turn{
+class Shoot extends Turn implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -605750640559980738L;
 	private Map m;
 	private Ship s;
 	private Location loc;
@@ -315,11 +439,15 @@ class Shoot implements Turn{
 	}
 	@Override
 	public String toString(){
-		return "Shoot";
+		return "shoot";
 	}
 }
-class RepairBase implements Turn{
+class RepairBase extends Turn implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3486672126675014858L;
 	private ConstructBlock repairBlock;
 	private Base b;
 	private boolean success = false;
@@ -340,15 +468,19 @@ class RepairBase implements Turn{
 	}
 	@Override
 	public String toString(){
-		return "RepairBase";
+		return "repairBase";
 	}
 }
-class RepairShip implements Turn{
+class RepairShip extends Turn implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 89817140305258661L;
 	private Ship s;
-	private ConstructTestStubs.ConstructBlock repairBlock;
+	private ConstructBlock repairBlock;
 	private boolean success = false;
 
-	RepairShip(Ship s, ConstructTestStubs.ConstructBlock repairBlock) {
+	RepairShip(Ship s, ConstructBlock repairBlock) {
 		this.s = s;
 		this.repairBlock = repairBlock;
 	}
@@ -368,6 +500,6 @@ class RepairShip implements Turn{
 	
 	@Override
 	public String toString(){
-		return "RepairShip";
+		return "repairShip";
 	}
 }

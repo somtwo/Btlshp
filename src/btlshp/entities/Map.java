@@ -1,17 +1,20 @@
 package btlshp.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import btlshp.enums.Direction;
 import btlshp.enums.Weapon;
+import btlshp.utility.NodeIterator;
+import btlshp.utility.NodeIteratorAction;
 
-public class Map  {
+public class Map implements Serializable {
+	private static final long serialVersionUID = -6849202817059640136L;
 	private static final int MAPWIDTH = 30;
 	private static final int MAPHEIGHT = 30;
 	ArrayList<Ship> ships;
 	MapNode   nodes [][];
 	Player    leftPlayer, rightPlayer;
-	Base      leftBase, rightBase;
 	
 	
 	/**
@@ -19,7 +22,7 @@ public class Map  {
 	 * @return
 	 */
 	public Ship[] getShips() {
-		return ships.toArray(null);
+		return ships.toArray(new Ship[0]);
 	}
 	
 	
@@ -28,7 +31,7 @@ public class Map  {
 	 * @return
 	 */
 	public Base getLeftBase() {
-		return leftBase;
+		return leftPlayer.getBase();
 	}
 	
 	
@@ -37,7 +40,7 @@ public class Map  {
 	 * @return
 	 */
 	public Base getRightBase() {
-		return rightBase;
+		return rightPlayer.getBase();
 	}
 	
 	/**
@@ -59,9 +62,20 @@ public class Map  {
 		}
 	}
 	
+	
 	private void createReefs() {
-		// TODO Auto-generated method stub
+		int width = 10, height = 24;
 		
+		int leftx = (MAPWIDTH - width) / 2;
+		int topy = (MAPHEIGHT - height) / 2;
+		
+		for(int i = 0; i < 24; ++i) {
+			int x = leftx + (int)(Math.random() * width);
+			int y = topy + (int)(Math.random() * height);
+			
+			MapNode n = getMapNode(x, y);
+			n.block = new ReefBlock();
+		}
 	}
 
 	
@@ -80,27 +94,57 @@ public class Map  {
 		node.block = null;
 	}
 	
-	
-	
-	private void placeBase(Base b, int x) {
-		ConstructBlock [] blocks = b.getBlocks();
-		int y = (MAPHEIGHT - blocks.length) / 2;
+	private void placeStructures(Player p, boolean isLeft) {
+		Direction  shipDir;
+		int        basex, shipx;
+		Location   baseLoc;
+		
+		if(isLeft) {
+			shipDir = Direction.East;
+			basex = 0;
+			shipx = 1;
+			baseLoc = new Location(0, (MAPHEIGHT - p.getBase().getBlocks().length) / 2);
+		}
+		else {
+			basex = MAPWIDTH - 1;
+			shipx = MAPWIDTH - 2;
+			shipDir = Direction.West;
+			baseLoc = new Location(0, (MAPHEIGHT + p.getBase().getBlocks().length) / 2);
+		}
+		
+		p.getBase().setDirection(shipDir);
+		p.getBase().setLocation(baseLoc);
+		
+		ConstructBlock [] blocks = p.getBase().getBlocks();
+		int ytop = (MAPHEIGHT - blocks.length) / 2;
 		
 		for(int i = 0; i < blocks.length; ++i)
-			placeBlock(nodes[x][y + i], blocks[i]);
-	}
-	
-	
-	private void createStructures() {
-		// Create the left-player base and ships
-		leftBase = new Base(leftPlayer);
-		placeBase(leftBase, 0);
-		// TODO: Ships
+			placeBlock(getMapNode(basex, ytop + i), blocks[i]);
 		
-		// Create the left-player base and ships
-		rightBase = new Base(rightPlayer);
-		placeBase(rightBase, MAPWIDTH - 1);
-		// TODO: Ships
+		Ship [] playerShips = p.getShips();
+		
+		for(int i = 0; i < playerShips.length; ++i) {
+			// Select a random ship from the array
+			int startIndex;
+			int shipIndex = startIndex = (int)(Math.random() * playerShips.length);
+			
+			// We might have already placed the ship at shipIndex, so linearly traverse the list
+			// until we find one that we haven't placed yet.
+			while(playerShips[shipIndex] == null) {
+				shipIndex = (shipIndex + 1) % playerShips.length;
+				if(shipIndex == startIndex)
+					throw new IllegalStateException("Infinite loop detected.");
+			}
+			
+			// TODO: This is a hack for now. A better solution should be found...
+			int offset = 0;
+			if(playerShips[shipIndex].getBlocks().length == 3)
+				offset = shipDir == Direction.East ? 1 : shipDir == Direction.West ? -1 : 0;
+			
+			addShip(playerShips[shipIndex]);
+			placeShip(playerShips[shipIndex], shipx + offset, ytop + i, shipDir);
+			playerShips[shipIndex] = null;
+		}
 	}
 	
 	/**
@@ -110,12 +154,19 @@ public class Map  {
 	* @param playerTwo     Player 2 (right side)
 	*/
 	public Map(Player playerOne, Player playerTwo) {
+		ships = new ArrayList<Ship>();
 		leftPlayer = playerOne;
 		rightPlayer = playerTwo;
 		
+		if(playerOne == playerTwo)
+			throw new IllegalArgumentException("Left player and Right player can not be the same player.");
+		
 		createNodes();
-		createStructures();
 		createReefs();
+		
+		// Place bases and ships
+		placeStructures(leftPlayer, true);
+		placeStructures(rightPlayer, false);
 	}
 	        	
 	/**
@@ -126,15 +177,9 @@ public class Map  {
 	* @param playerTwo     Player 2 (right side)
 	*/
 	public Map(StoredMap map, Player playerOne, Player playerTwo) {
-		// TODO: Support for loading a stored map.
-		leftPlayer = playerOne;
-		rightPlayer = playerTwo;
-		
-		createNodes();
-		createStructures();
-		createReefs();
+		throw new IllegalStateException("The source is in such a state that this is illegal...");
 	}
-	        	
+
 	
 	
 	/**
@@ -184,23 +229,28 @@ public class Map  {
 	 * @param dir   The direction the ship should be facing.
 	 */
 	public void placeShip(Ship s, Location tail, Direction dir) {
-		ConstructBlock [] blocks = s.getBlocks();
-		int x, y, min;
-		
-		if(dir == Direction.North || dir == Direction.South) {
-			x = tail.getx();
-			
-			for(y = min = s.gety1(); y <= s.gety2(); ++y)
-				placeBlock(getMapNode(x, y), blocks[y - min]);
-		}
-		else {
-			y = tail.gety();
-			
-			for(x = min = s.getx1(); x <= s.getx2(); ++x)
-				placeBlock(getMapNode(x, y), blocks[x - min]);
-		}
-		
-		s.setLocation(tail);
+		placeShip(s, tail.getx(), tail.gety(), dir);
+	}
+	
+	
+	/**
+	 * Places the ship in the given location and facing the given direction. Links the map nodes to the ship blocks
+	 * @param s     Ship to be placed.
+	 * @param x     The x-coordinate of the tail of the ship
+	 * @param y     The y-coordinate of the tail of the ship
+	 * @param dir   The direction the ship should be facing.
+	 */
+	public void placeShip(Ship s, int x, int y, Direction dir) {
+		s.getCoreIterator().iterate(this, x, y, dir, new NodeIteratorAction() {
+			public void visit(MapNode n, Block b) {
+				if(n == null)
+					throw new IndexOutOfBoundsException();
+				
+				placeBlock(n, b);
+			}
+		});
+
+		s.setLocation(new Location(x, y));
 		s.setDirection(dir);
 	}
 	
@@ -210,31 +260,55 @@ public class Map  {
 	 * @param s
 	 */
 	public void unplaceShip(Ship s) {
-		ConstructBlock [] blocks = s.getBlocks();
-		Direction dir = s.getDirection();
-		Location  loc = s.getLocation();
-		int x, y, min;
-		
-		if(dir == Direction.North || dir == Direction.South) {
-			x = loc.getx();
+		s.getCoreIterator().iterate(this, s.getLocation(), s.getDirection(), new NodeIteratorAction() {
+			public void visit(MapNode n, Block b) {
+				if(n == null)
+					throw new IndexOutOfBoundsException();
 			
-			for(y = min = s.gety1(); y <= s.gety2(); ++y)
-				unplaceBlock(getMapNode(x, y), blocks[y - min]);
-		}
-		else {
-			y = loc.gety();
-			
-			for(x = min = s.getx1(); x <= s.getx2(); ++x)
-				unplaceBlock(getMapNode(x, y), blocks[x - min]);
-		}
+				unplaceBlock(n, b);
+			}
+		});
 	}
 	        	
 	/**
-	* This method cleans up any visibility data from the previous turn and updates the map with the
-	* radar/sonar of the current ship locations.
-	*/
-	public void updateFrame() {
-		// TODO: Determine how to update the blocks for the UI
+	 * This method cleans up any visibility data from the previous turn and updates the map with the
+	 * radar/sonar of the current ship locations.
+	 * 
+	 * @param forPlayer    The player to update radar/sonar for (ie, the local player)
+	 */
+	public void updateFrame(Player forPlayer) {
+		if(forPlayer != leftPlayer && forPlayer != rightPlayer)
+			throw new IllegalArgumentException("forPlayer must be either player one or player two.");
+		
+		for(int y = 0; y < MAPHEIGHT; ++y) {
+			for(int x = 0; x < MAPWIDTH; ++x) {
+				getMapNode(x, y).clearFlags();
+			}
+		}
+		
+		for(int i = 0; i < ships.size(); ++i)
+		{
+			Ship s = ships.get(i);
+			if(s.getPlayer() != forPlayer)
+				continue;
+			
+			if(s.hasSonar()) {
+				s.getRadarIterator().iterate(this, s.getLocation(), s.getDirection(), new NodeIteratorAction() {
+					public void visit(MapNode n, Block b) {
+						if(n != null)
+							n.hasSonar(true);
+					}
+				});
+			}
+			else {
+				s.getRadarIterator().iterate(this, s.getLocation(), s.getDirection(), new NodeIteratorAction() {
+					public void visit(MapNode n, Block b) {
+						if(n != null)
+							n.hasRadar(true);
+					}
+				});
+			}
+		}
 	}
 
 	/**
@@ -252,7 +326,14 @@ public class Map  {
 	* @returns The map block at the given location
 	*/
 	public MapNode getMapNode(int x, int y) {
-		return nodes[y][x];
+		return insideMap(x, y) ? nodes[y][x] : null;
+	}
+	
+	
+	private boolean insideMap(int x, int y) {
+		if(x < 0 || x >= MAPWIDTH || y < 0 || y >= MAPHEIGHT)
+			return false;
+		return true;
 	}
 	        	
 	/**
@@ -263,50 +344,43 @@ public class Map  {
 	* @return true if the ship movement can be carried out.
 	*/
 	public boolean canMove(Ship s, Direction dir, int blocks) {
-		Location   loc = s.getLocation();
-		Direction sdir = s.getDirection();
-		int x1, x2, y1, y2, x, y;	
+		Location      loc = s.getLocation();
+		NodeIterator  it = s.getCoreIterator();
+		int           x, y, deltax, deltay;
 		
-		x1 = s.getx1(); x2 = s.getx2();
-		y1 = s.gety1(); y2 = s.gety2();
+		x = loc.getx();
+		y = loc.gety();
 		
-		for(int i = 0; i < blocks; ++i) {
-			if(dir == Direction.North) {
-				y1--; y2--;
-			}
-			else if(dir == Direction.South) {
-				y1++; y2++;
-			}
-			else if(dir == Direction.East) {
-				x1--; x2--;
-			}
-			else if(dir == Direction.West) {
-				x1++; x2++;
-			}
+		deltax = (dir == Direction.West) ? -1 : (dir == Direction.East) ? 1 : 0;
+		deltay = (dir == Direction.North) ? -1 : (dir == Direction.South) ? 1 : 0;
+
+		it.rotate(s.getDirection());
+		
+		int moveCount;
+		for(moveCount = 0; moveCount < blocks; ++moveCount)
+		{
+			it.setOrigin(x, y);
+			x += deltax;
+			y += deltay;
 			
-			for(y = y1; y <= y2; ++y) {
-				for(x = x1; x <= x2; ++x) {
-					Block b = getMapNode(x, y).block;
+			for(int i = 0; i < it.size(); ++i) {
+				if(!insideMap(it.getx(i), it.gety(i)))
+					break;
+				
+				Block b = getMapNode(it.getx(i), it.gety(i)).block;
+				
+				if(b == null)
+					continue;
+				
+				if(b instanceof ConstructBlock) {
+					ConstructBlock cb = (ConstructBlock)b;
 					
-					if(b == null || b instanceof MineBlock)
-						continue;
-					
-					if(b instanceof ConstructBlock) {
-						ConstructBlock [] sblocks = s.getBlocks();
-						boolean           inship = false;
-						
-						for(int it = 0; it < sblocks.length; ++it)
-							if (b == sblocks[it])
-								inship = true;
-						
-						if(inship)
-							continue;
-					}
-					return false;
+					if(cb.myConstruct != s)
+						break;
 				}
 			}
 		}
-		return true;
+		return moveCount > 0;
 	}
 	        	
 	/**
@@ -318,64 +392,75 @@ public class Map  {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public int move(Ship s, Direction dir, int blocks) {
-		Location   loc = s.getLocation();
-		Direction sdir = s.getDirection();
-		int x1, x2, y1, y2, x, y;	
+		Location      loc = s.getLocation();
+		NodeIterator  it = s.getCoreIterator();
+		NodeIterator  adjIt = s.getSurroundingIterator();
+		int           x, y, deltax, deltay, moveCount;
+		boolean		  canContinue = true;
 		
-		x1 = s.getx1(); x2 = s.getx2();
-		y1 = s.gety1(); y2 = s.gety2();
+		x = loc.getx();
+		y = loc.gety();
 		
-		unplaceShip(s);
+		deltax = (dir == Direction.West) ? -1 : (dir == Direction.East) ? 1 : 0;
+		deltay = (dir == Direction.North) ? -1 : (dir == Direction.South) ? 1 : 0;
 		
-		int i;
-		for(i = 0; i < blocks; ++i) {
-			if(dir == Direction.North) {
-				y1--; y2--;
-			}
-			else if(dir == Direction.South) {
-				y1++; y2++;
-			}
-			else if(dir == Direction.East) {
-				x1--; x2--;
-			}
-			else if(dir == Direction.West) {
-				x1++; x2++;
-			}
-			
-			boolean success = true;
-			for(y = y1; y <= y2; ++y) {
-				for(x = x1; x <= x2; ++x) {
-					Block b = getMapNode(x, y).block;
-					
-					if(b == null)
-						continue;
-					
-					if(b instanceof MineBlock) {
-						unplaceBlock(getMapNode(x, y), b);
-						// TODO: EXPLODE MINE
-					}
+		it.rotate(s.getDirection());
+		adjIt.rotate(s.getDirection());
 
-					success = false;
+		for(moveCount = 0; moveCount < blocks && canContinue; ++moveCount)
+		{
+			x += deltax;
+			y += deltay;
+			it.setOrigin(x, y);
+			adjIt.setOrigin(x, y);
+			
+			// Check the body
+			for(int i = 0; i < it.size(); ++i) {
+				if(!insideMap(it.getx(i), it.gety(i))) {
+					canContinue = false; break;
+				}
+				
+				MapNode n = getMapNode(it.getx(i), it.gety(i));
+				Block b = n.block;
+				
+				if(b instanceof MineBlock) {
+					canContinue = false;
+					explodeMine(it.getx(i), it.gety(i));
+				}
+				else if(b instanceof ConstructBlock) {
+					ConstructBlock cb = (ConstructBlock)b;
+					
+					if(cb.myConstruct != s)
+						canContinue = false;
+				}
+				else if(b != null) {
+					canContinue = false; break;
 				}
 			}
 			
-			if(!success)
+			if(!canContinue)
 				break;
+			
+			unplaceShip(s);
+			placeShip(s, x, y, s.getDirection());
+
+			// Check adjacent squares for mines
+			for(int i = 0; i < adjIt.size(); ++i) {
+				if(!insideMap(adjIt.getx(i), adjIt.gety(i)))
+					continue;
+				
+				MapNode n = getMapNode(adjIt.getx(i), adjIt.gety(i));
+				Block b = n.block;
+				
+				if(!(b instanceof MineBlock) || s.canPlaceMine())
+					continue;
+				
+				explodeMine(adjIt.getx(i), adjIt.gety(i));
+				canContinue = false;
+			}
 		}
 		
-		if(dir == Direction.North) {
-			s.setLocation(new Location(loc.getx(), loc.gety() - i));
-		}
-		else if(dir == Direction.South) {
-			s.setLocation(new Location(loc.getx(), loc.gety() + i));
-		}
-		else if(dir == Direction.East) {
-			s.setLocation(new Location(loc.getx() - i, loc.gety()));
-		}
-		else if(dir == Direction.West) {
-			s.setLocation(new Location(loc.getx() + i, loc.gety()));
-		}
-		return i;
+		return moveCount;
 	}
 	        	
 	/**
@@ -399,7 +484,13 @@ public class Map  {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public void rotateShip(Ship s, Direction newDir) {
+		Location      loc = s.getLocation();
+		int x = loc.getx();
+		int y = loc.gety();
 		
+		unplaceShip(s);
+		placeShip(s,x,y,newDir);
+		return;
 	}
 
 	/**
@@ -410,7 +501,8 @@ public class Map  {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public boolean placeMine(Ship s, Location loc) {
-		MapNode n = getMapNode(loc);
+		MapNode  n = getMapNode(loc);
+		
 		if(!s.canPlaceMine() || n.block != null || s.getPlayer().numberOfMines() == 0)
 			return false;
 		
@@ -418,7 +510,7 @@ public class Map  {
 		   loc.gety() < s.gety1() - 1 || loc.gety() > s.gety2() + 1)
 			return false;
 		
-		n.block = new MineBlock();
+		placeBlock(n, new MineBlock());
 		s.getPlayer().removeMine();
 		return true;
 	}
@@ -434,17 +526,44 @@ public class Map  {
 		MapNode n = getMapNode(loc);
 		MineBlock b = n.block != null && n.block instanceof MineBlock ? (MineBlock)n.block : null;
 		
-		if(!s.canPickUpMine() || b != null || s.getPlayer().numberOfMines() == 0)
+		if(!s.canPickUpMine() || b == null)
 			return false;
 		
 		if(loc.getx() < s.getx1() - 1 || loc.getx() > s.getx2() + 1 ||
 		   loc.gety() < s.gety1() - 1 || loc.gety() > s.gety2() + 1)
 			return false;
 		
-		n.block = null;
+		unplaceBlock(n, b);
 		s.getPlayer().addMine();
 		return true;
 	}
+	
+	
+	private void explodeMine(int mapx, int mapy) {
+		MapNode n = getMapNode(mapx, mapy);
+		
+		if(n == null || n.block == null || !(n.block instanceof MineBlock))
+			return;
+		n.block = null;
+		n.hasExplosion(true);
+		
+		n = getMapNode(mapx - 1, mapy);
+		if(n != null && n.block != null)
+			n.block.takeHit(Weapon.Mine);
+		
+		n = getMapNode(mapx + 1, mapy);
+		if(n != null && n.block != null)
+			n.block.takeHit(Weapon.Mine);
+		
+		n = getMapNode(mapx, mapy + 1);
+		if(n != null && n.block != null)
+			n.block.takeHit(Weapon.Mine);
+		
+		n = getMapNode(mapx, mapy - 1);
+		if(n != null && n.block != null)
+			n.block.takeHit(Weapon.Mine);
+	}
+	
 	        	
 	/**
 	* Fires the torpedo of the given ship. The torpedo will start from the front of the ship and will
@@ -464,5 +583,12 @@ public class Map  {
 	*/
 	public void fireGuns(Ship s, Location loc) {
 		
+	}
+
+	public Player getRightPlayer(){
+		return rightPlayer;
+	}
+	public Player getLeftPlayer() {
+		return leftPlayer;
 	}
 }

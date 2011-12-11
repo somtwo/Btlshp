@@ -1,9 +1,8 @@
 package btlshp.junit;
 import junit.framework.TestCase;
 import org.junit.Test;
-import ConstructTestStubs.*;
-import ConstructTestStubs.Location;
 import btlshp.enums.*;
+import btlshp.teststubs.construct.*;
 
 public class ConstructsTest extends TestCase{
 	Player myPlayer = new Player();

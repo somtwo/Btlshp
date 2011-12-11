@@ -1,25 +1,48 @@
 package btlshp.entities;
 
+import java.io.Serializable;
+
+import btlshp.Btlshp;
 import btlshp.enums.BlockStatus;
+import btlshp.enums.GraphicAlliance;
+import btlshp.enums.GraphicId;
+import btlshp.enums.GraphicPart;
 import btlshp.enums.Weapon;
 
-public class ConstructBlock extends Block {
+public class ConstructBlock extends Block implements Serializable{
 
-	Construct myConstruct;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 475071291959481605L;
+	Construct   myConstruct;
 	BlockStatus myStatus;
 	
 	/**
 	 * Basic Constructor for a Block
 	 */
-	public ConstructBlock(Construct Owner){
+	public ConstructBlock(Construct Owner, GraphicId graphicId, GraphicPart graphicPart) {
+		this.graphicId = graphicId == null ? GraphicId.None : graphicId;
+		this.graphicPart = graphicPart == null ? GraphicPart.None : graphicPart;
+		
 		myConstruct = Owner;
 		myStatus = BlockStatus.untouched;
 	}
+	
 	/**
 	 * Passes the Information that this block was hit to it's Construct
 	 */
 	public void takeHit(Weapon weaponUsed){
 		myConstruct.assessDamage(this, weaponUsed);
+	}
+	
+	
+	public Construct getConstruct() {
+		return myConstruct;
+	}
+	
+	public Player getPlayer() {
+		return myConstruct.pl;
 	}
 	
 	/**
@@ -67,6 +90,25 @@ public class ConstructBlock extends Block {
 	 */
 	public void repair() {
 		myStatus = BlockStatus.untouched;
-		
 	}
+	
+	
+	
+	@Override
+	public String getGraphicName() {
+		if(myConstruct != null && Btlshp.getGame() != null) {
+			graphicAlliance = myConstruct.pl == Btlshp.getGame().getLocalPlayer() ? GraphicAlliance.Friendly : GraphicAlliance.Unfriendly;
+		}
+		return super.getGraphicName() + myConstruct.getDirection().suffix();
+	}
+	
+	@Override
+	public GraphicAlliance getAlliance() {
+		if(myConstruct != null && Btlshp.getGame() != null) {
+			graphicAlliance = myConstruct.pl == Btlshp.getGame().getLocalPlayer() ? GraphicAlliance.Friendly : GraphicAlliance.Unfriendly;
+		}
+		
+		return graphicAlliance;
+	}
+	
 }
