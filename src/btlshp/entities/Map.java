@@ -330,7 +330,7 @@ public class Map implements Serializable {
 	}
 	
 	
-	private boolean insideMap(int x, int y) {
+	public boolean insideMap(int x, int y) {
 		if(x < 0 || x >= MAPWIDTH || y < 0 || y >= MAPHEIGHT)
 			return false;
 		return true;

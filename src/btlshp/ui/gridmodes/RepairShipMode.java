@@ -6,6 +6,7 @@ import btlshp.entities.Block;
 import btlshp.entities.ConstructBlock;
 import btlshp.entities.Map;
 import btlshp.entities.MapNode;
+import btlshp.entities.MineBlock;
 import btlshp.ui.GameGrid;
 import btlshp.utility.NodeIterator;
 import btlshp.utility.NodeIteratorAction;
@@ -51,8 +52,8 @@ public class RepairShipMode extends GridMode {
 		
 		if(n != null && n.actionArea()) {
 			ConstructBlock cb = n.block != null && n.block instanceof ConstructBlock ? (ConstructBlock)n.block : null;
-			
 			if(cb != null && cb.getPlayer() == base.getPlayer())
+				n.block.takeRepair();
 				Btlshp.getGame().outputMessage("Repair ship action.");
 		}
 

@@ -5,6 +5,7 @@ import btlshp.entities.Block;
 import btlshp.entities.Map;
 import btlshp.entities.MapNode;
 import btlshp.entities.Ship;
+import btlshp.enums.Weapon;
 import btlshp.ui.GameGrid;
 import btlshp.utility.NodeIterator;
 import btlshp.utility.NodeIteratorAction;
@@ -46,9 +47,15 @@ public class FireGunMode extends GridMode {
 	public void mouseClick(int x, int y) {
 		MapNode n = map.getMapNode(grid.getHoverx(), grid.getHovery());
 		
-		if(n.actionSquare())
+		if(n.actionSquare()){
 			Btlshp.getGame().outputMessage("Fire gun action.");
-		
+			if (n.block == null){
+				//Do Nothing if the block is null
+			}
+			else{
+				n.block.takeHit(Weapon.Gun);
+			}
+		}
 		grid.cancelAction();
 	}
 

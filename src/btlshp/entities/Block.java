@@ -26,7 +26,10 @@ public abstract class Block implements Serializable {
 	 * Checks if this block is destroyed
 	 * @returns True if this block is destroyed
 	 */
-	public abstract void takeHit(Weapon fromWeapon);
+	public void takeHit(Weapon fromWeapon){
+	}
+	
+	public abstract void takeRepair();
 
 	
 	/**

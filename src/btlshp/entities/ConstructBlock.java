@@ -35,6 +35,9 @@ public class ConstructBlock extends Block implements Serializable{
 	public void takeHit(Weapon weaponUsed){
 		myConstruct.assessDamage(this, weaponUsed);
 	}
+	public void takeRepair(){
+		myConstruct.AssesRepair(this);
+	}
 	
 	
 	public Construct getConstruct() {
