@@ -84,6 +84,7 @@ public class Map implements Serializable {
 			throw new IllegalStateException();
 		
 		node.block = block;
+		block.setMap(this);
 	}
 	
 	
@@ -92,6 +93,7 @@ public class Map implements Serializable {
 			throw new IllegalStateException();
 		
 		node.block = null;
+		block.setMap(null);
 	}
 	
 	private void placeStructures(Player p, boolean isLeft) {

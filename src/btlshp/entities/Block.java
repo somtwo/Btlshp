@@ -15,6 +15,7 @@ public abstract class Block implements Serializable {
 	protected GraphicId       graphicId;
 	protected GraphicPart     graphicPart;
 	protected GraphicAlliance graphicAlliance;
+	protected Map             map;
 	
 	Block() {
 		graphicId = GraphicId.None;
@@ -41,5 +42,13 @@ public abstract class Block implements Serializable {
 	
 	public GraphicAlliance getAlliance() {
 		return graphicAlliance;
+	}
+	
+	public void setMap(Map map) {
+		this.map = map;
+	}
+	
+	public Map getMap() {
+		return map;
 	}
 }
