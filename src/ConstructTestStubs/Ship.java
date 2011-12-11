@@ -307,11 +307,12 @@ public class Ship extends Construct {
 		else {
 			// Counter for array position
 			int k = 0; 
-			
-			if (blocks.length == 2) locations = new Location[2];
-			else if (blocks.length == 4) locations = new Location[9];
-			else locations = new Location[14];
-			
+			int arraySize = 0;
+			for (int i = 0; i < blocks.length; i++){
+				arraySize = arraySize +i;
+			}
+			arraySize = arraySize + blocks.length -1;
+			locations = new Location[arraySize];
 			// Do head through one less then tail. Then do tail at one less then length of ship.
 			for (int i = 0; i < blocks.length -1; i++){
 				// for each position on the ship, add that number of blocks in the correct direction
