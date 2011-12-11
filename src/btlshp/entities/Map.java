@@ -204,6 +204,7 @@ public class Map implements Serializable {
 				throw new IllegalStateException();
 		
 		ships.add(s);
+		s.setMap(this);
 	}
 	
 	
@@ -215,6 +216,7 @@ public class Map implements Serializable {
 		for(int i = 0; i < ships.size(); ++i) {
 			if(s == ships.get(i)) {
 				ships.remove(i);
+				s.setMap(null);
 				return;
 			}
 		}
