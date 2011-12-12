@@ -6,7 +6,9 @@ public enum GraphicId {
 	Mine("mine"),
 	Reef("reef"),
 	Ship("ship"),
-	Base("base");
+	Base("base"),
+	DestroyedShip("dams"),
+	DestroyedBase("damb");
 	
 	private final String name;
 	

@@ -17,13 +17,15 @@ public class ConstructBlock extends Block implements Serializable{
 	private static final long serialVersionUID = 475071291959481605L;
 	Construct   myConstruct;
 	BlockStatus myStatus;
+	GraphicId   destroyedId;
 	
 	/**
 	 * Basic Constructor for a Block
 	 */
-	public ConstructBlock(Construct Owner, GraphicId graphicId, GraphicPart graphicPart) {
+	public ConstructBlock(Construct Owner, GraphicId graphicId, GraphicId destroyedId, GraphicPart graphicPart) {
 		this.graphicId = graphicId == null ? GraphicId.None : graphicId;
 		this.graphicPart = graphicPart == null ? GraphicPart.None : graphicPart;
+		this.destroyedId = destroyedId == null ? GraphicId.None : destroyedId;
 		
 		myConstruct = Owner;
 		myStatus = BlockStatus.untouched;
@@ -99,10 +101,12 @@ public class ConstructBlock extends Block implements Serializable{
 	
 	@Override
 	public String getGraphicName() {
+		GraphicId id = myStatus == BlockStatus.untouched ? graphicId : destroyedId;
+		
 		if(myConstruct != null && Btlshp.getGame() != null) {
 			graphicAlliance = myConstruct.pl == Btlshp.getGame().getLocalPlayer() ? GraphicAlliance.Friendly : GraphicAlliance.Unfriendly;
 		}
-		return super.getGraphicName() + myConstruct.getDirection().suffix();
+		return id.getName() + graphicPart.getSuffix() + graphicAlliance.getSuffix() + myConstruct.getDirection().suffix();
 	}
 	
 	@Override

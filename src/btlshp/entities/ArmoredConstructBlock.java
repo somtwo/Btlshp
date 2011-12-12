@@ -1,13 +1,19 @@
 package btlshp.entities;
 
+import btlshp.Btlshp;
 import btlshp.enums.BlockStatus;
+import btlshp.enums.GraphicAlliance;
 import btlshp.enums.GraphicId;
 import btlshp.enums.GraphicPart;
 
 public class ArmoredConstructBlock extends ConstructBlock{
 	
-	public ArmoredConstructBlock(Construct Owner, GraphicId graphicId, GraphicPart graphicPart) {
-		super(Owner, graphicId, graphicPart);
+	GraphicId damagedId;
+	
+	public ArmoredConstructBlock(Construct Owner, GraphicId graphicId, GraphicId damagedId, GraphicId destroyedId, GraphicPart graphicPart) {
+		super(Owner, graphicId, destroyedId, graphicPart);
+		
+		this.damagedId = damagedId == null ? GraphicId.None : damagedId;
 	}
 
 	/**
@@ -35,5 +41,16 @@ public class ArmoredConstructBlock extends ConstructBlock{
 		else{ //myStatus == BlockStatus.untouched)
 			myStatus = BlockStatus.destroyed;
 		}
+	}
+	
+	@Override
+	public String getGraphicName() {
+		GraphicId id = myStatus == BlockStatus.untouched ? graphicId : 
+			myStatus == BlockStatus.damaged ? damagedId : destroyedId;
+		
+		if(myConstruct != null && Btlshp.getGame() != null) {
+			graphicAlliance = myConstruct.pl == Btlshp.getGame().getLocalPlayer() ? GraphicAlliance.Friendly : GraphicAlliance.Unfriendly;
+		}
+		return id.getName() + graphicPart.getSuffix() + graphicAlliance.getSuffix() + myConstruct.getDirection().suffix();
 	}
 }

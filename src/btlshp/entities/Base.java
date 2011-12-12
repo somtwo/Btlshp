@@ -27,7 +27,7 @@ public class Base extends Construct implements Serializable {
 			GraphicPart part = i == 0 ? GraphicPart.Head : 
                 i == BASELENGTH - 1 ? GraphicPart.Tail : GraphicPart.Middle;
                 
-			blocks[i] = new ConstructBlock(this, GraphicId.Base, part);
+			blocks[i] = new ConstructBlock(this, GraphicId.Base, GraphicId.DestroyedBase, part);
 		}
 		
 		buildRepairArea();
