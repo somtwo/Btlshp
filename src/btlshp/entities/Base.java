@@ -11,7 +11,7 @@ public class Base extends Construct implements Serializable {
 	private static final long serialVersionUID = -2521390657646600415L;
 	private static final int  BASELENGTH = 10;
 	
-	private NodeIterator repairArea;
+	private NodeIterator repairArea, coreArea;
 	
 	/**
 	* Constructor for Base
@@ -31,6 +31,7 @@ public class Base extends Construct implements Serializable {
 		}
 		
 		buildRepairArea();
+		buildCoreArea();
 	}
 	
 	
@@ -86,7 +87,7 @@ public class Base extends Construct implements Serializable {
 	private void buildRepairArea() {
 		repairArea = new NodeIterator(null);
 		
-		for(int x = -1; x <= blocks.length; ++x)
+		for(int x = 0; x < blocks.length; ++x)
 			repairArea.add(x, -1, null);
 		
 		repairArea.add(-1, 0, null);
@@ -95,7 +96,21 @@ public class Base extends Construct implements Serializable {
 	
 	
 	
+	public void buildCoreArea() {
+		coreArea = new NodeIterator(null);
+		
+		for(int x = 0; x < blocks.length; ++x)
+			coreArea.add(x, 0, blocks[x]);
+	}
+	
+	
+	
 	public NodeIterator getRepairArea() {
 		return repairArea;
+	}
+	
+	
+	public NodeIterator getCoreArea() {
+		return coreArea;
 	}
 }

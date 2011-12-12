@@ -7,14 +7,15 @@ import btlshp.entities.ConstructBlock;
 import btlshp.entities.Map;
 import btlshp.entities.MapNode;
 import btlshp.entities.MineBlock;
+import btlshp.entities.Ship;
 import btlshp.ui.GameGrid;
 import btlshp.utility.NodeIterator;
 import btlshp.utility.NodeIteratorAction;
 
-public class RepairShipMode extends GridMode {
+public class RepairMode extends GridMode {
 	private Base base;
 	
-	public RepairShipMode(Base b, GameGrid gameGrid, Map gameMap) {
+	public RepairMode(Base b, GameGrid gameGrid, Map gameMap) {
 		super(gameGrid, gameMap);
 		base = b;
 	}
@@ -24,9 +25,8 @@ public class RepairShipMode extends GridMode {
 	public void highlightCells() {
 		super.highlightCells();
 		
-		NodeIterator it = base.getRepairArea();
+		NodeIterator it = base.getCoreArea();
 		it.iterate(map, base.getLocation(), base.getDirection(), new NodeIteratorAction() {
-			@Override
 			public void visit(MapNode n, Block b) {
 				if(n == null)
 					return;
@@ -34,6 +34,30 @@ public class RepairShipMode extends GridMode {
 				n.actionArea(true);
 			}
 		});
+		
+		if(base.canRepairOther()) {
+			it = base.getRepairArea();
+			it.iterate(map, base.getLocation(), base.getDirection(), new NodeIteratorAction() {
+				@Override
+				public void visit(MapNode n, Block b) {
+					if(n == null || n.block == null || !(n.block instanceof ConstructBlock))
+						return;
+
+					ConstructBlock cb = (ConstructBlock)n.block;
+					
+					if(!(cb.getConstruct() instanceof Ship) || cb.getPlayer() != base.getPlayer())
+						return;
+					
+					Ship s = (Ship)cb.getConstruct();
+					NodeIterator shipit = s.getCoreIterator();
+					shipit.iterate(map, s.getLocation(), s.getDirection(), new NodeIteratorAction() {
+						public void visit(MapNode n, Block b) {
+							n.actionArea(true);
+						}
+					});
+				}
+			});
+		}
 		
 		MapNode n = map.getMapNode(grid.getHoverx(), grid.getHovery());
 		
@@ -54,7 +78,7 @@ public class RepairShipMode extends GridMode {
 			ConstructBlock cb = n.block != null && n.block instanceof ConstructBlock ? (ConstructBlock)n.block : null;
 			if(cb != null && cb.getPlayer() == base.getPlayer())
 				n.block.takeRepair();
-				Btlshp.getGame().outputMessage("Repair ship action.");
+				Btlshp.getGame().outputMessage("Repair action.");
 		}
 
 		grid.cancelAction();

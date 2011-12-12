@@ -34,7 +34,7 @@ import btlshp.ui.gridmodes.MoveMode;
 import btlshp.ui.gridmodes.NormalMode;
 import btlshp.ui.gridmodes.PickupMineMode;
 import btlshp.ui.gridmodes.PlaceMineMode;
-import btlshp.ui.gridmodes.RepairShipMode;
+import btlshp.ui.gridmodes.RepairMode;
 import btlshp.ui.gridmodes.RotateMode;
 
 public class GameGrid extends JComponent implements MouseListener, MouseMotionListener {
@@ -203,13 +203,6 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 			
 			drawDoubleHorizontalLine(g2, hy,      0, getWidth() - 1);
 			drawDoubleHorizontalLine(g2, hy + 16, 0, getWidth() - 1);
-			
-			g2.setColor(hoverColor);
-			drawDoubleHorizontalLine(g2, hy,      hx, hx + 17);
-			drawDoubleHorizontalLine(g2, hy + 16, hx, hx + 17);
-			
-			drawDoubleVerticalLine(g2, hx,      hy + 2, hy + 15);
-			drawDoubleVerticalLine(g2, hx + 16, hy + 2, hy + 15);
 		}
 		
 		if(map != null) {
@@ -243,6 +236,18 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 				for(x = 0; x < 30; ++x)
 					g2.fillRect(x * colWidth + 2, y * rowHeight + 2, colWidth - 2, rowHeight - 2);
 			}
+		}
+		
+		if(showHover) {
+			int hx = hoverx * colWidth;
+			int hy = hovery * rowHeight;
+			
+			g2.setColor(hoverColor);
+			drawDoubleHorizontalLine(g2, hy,      hx, hx + 17);
+			drawDoubleHorizontalLine(g2, hy + 16, hx, hx + 17);
+			
+			drawDoubleVerticalLine(g2, hx,      hy + 2, hy + 15);
+			drawDoubleVerticalLine(g2, hx + 16, hy + 2, hy + 15);
 		}
 	}
 	
@@ -332,9 +337,9 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	 * 
 	 * @param b    base to conduct the repair.
 	 */
-	public void startRepairShip(Base b) {
+	public void startRepair(Base b) {
 		state = GridState.RepairConstruct;
-		mode = new RepairShipMode(b, this, map);
+		mode = new RepairMode(b, this, map);
 		repaint();
 	}
 	

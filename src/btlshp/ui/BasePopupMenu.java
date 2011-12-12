@@ -20,12 +20,11 @@ public class BasePopupMenu extends JPopupMenu {
 		target = targetBase;
 		
 		// Add menu items based on the capabilities of the base
-		JMenuItem item = new JMenuItem("Repair base");
-		if(target.canRepairSelf()) {
+		JMenuItem item = new JMenuItem("Repair Ship");
+		if(target.canRepairOther() || target.canRepairSelf()) {
 			item.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ev) {
-					// TODO: Actually do something there
-					Btlshp.getGame().outputMessage("Repair base!");
+					grid.startRepair(target);
 				}
 			});
 		}
@@ -34,17 +33,13 @@ public class BasePopupMenu extends JPopupMenu {
 		}
 		add(item);
 		
-		item = new JMenuItem("Repair Ship");
-		if(target.canRepairOther()) {
-			item.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent ev) {
-					grid.startRepairShip(target);
-				}
-			});
-		}
-		else {
-			item.setEnabled(false);
-		}
+		item = new JMenuItem("Pass turn");
+		item.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				// TODO: PAss a turn
+				
+			}
+		});
 		add(item);
 	}
 }
