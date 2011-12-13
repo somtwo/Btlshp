@@ -468,7 +468,7 @@ public class Ship extends Construct implements Serializable{
 			}
 		}
 		for(y = 0; y < maxForwardMove + blocks.length - 1; ++y) {
-			forwardMoveArea.add(0, offset - 1 - y, null);
+			forwardMoveArea.add(0, offset - 1 - y, null);						//this is where we could put damaged forward move, or we could put it in the move itself
 		}
 	}
 	

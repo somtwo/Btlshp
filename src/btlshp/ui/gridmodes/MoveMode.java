@@ -132,7 +132,8 @@ public class MoveMode extends GridMode {
 		
 		// Move Forward 
 		if(currentMove == Move.Forward && forwardDistance <= ship.getMaxForwardMove() &&
-			map.canMove(ship, shipDirection, forwardDistance)) {
+				map.canMove(ship, shipDirection, forwardDistance)) {
+			
 			map.move(ship, shipDirection, forwardDistance);
 			Btlshp.getGame().outputMessage("Move forward.");
 		}
