@@ -65,6 +65,7 @@ public class Ship extends Construct implements Serializable{
 		buildCoreIterator();
 		buildAdjacentIterator();
 		buildMoveIterators();
+		buildForwardMoveIterator();
 		
 		if(hasSonar())
 			buildSonarIterator();
@@ -147,6 +148,7 @@ public class Ship extends Construct implements Serializable{
 	 * @return an iterator object that can be used to iterate through all the squares a ship can move forward through.
 	 */
 	public NodeIterator getForwardMoveArea() {
+		buildForwardMoveIterator();
 		return forwardMoveArea;
 	}
 	
@@ -440,10 +442,23 @@ public class Ship extends Construct implements Serializable{
 	}
 	
 	
+	
+	private void buildForwardMoveIterator() {
+		int y;
+		
+		forwardMoveArea = new NodeIterator(null);
+		
+		int offset = blocks.length == 3 ? 1 : 0;
+		
+		for(y = 0; y < getMaxForwardMove() + blocks.length - 1; ++y) {
+			forwardMoveArea.add(0, offset - 1 - y, null);						//this is where we could put damaged forward move, or we could put it in the move itself
+		}
+	}
+	
+	
 	private void buildMoveIterators() {
 		int x, y;
 		
-		forwardMoveArea = new NodeIterator(null);
 		backMoveArea = new NodeIterator(null);
 		leftMoveArea = new NodeIterator(null);
 		rightMoveArea = new NodeIterator(null);
@@ -459,9 +474,6 @@ public class Ship extends Construct implements Serializable{
 				leftMoveArea.add(-x, offset - y, null);
 				rightMoveArea.add(x, offset - y, null);
 			}
-		}
-		for(y = 0; y < maxForwardMove + blocks.length - 1; ++y) {
-			forwardMoveArea.add(0, offset - 1 - y, null);						//this is where we could put damaged forward move, or we could put it in the move itself
 		}
 	}
 	
