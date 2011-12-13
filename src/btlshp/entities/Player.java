@@ -1,6 +1,8 @@
 package btlshp.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import btlshp.Btlshp;
 public class Player implements Serializable {
 	
 	private static final long serialVersionUID = -3335146204678437423L;
@@ -62,6 +64,13 @@ public class Player implements Serializable {
 			ships.remove(s);
 			removedShip = true;
 		}
+		
+		// Check for end of game.
+		if(ships.size() == 0)
+		{
+			Btlshp.getGame().gameOver();
+		}
+		
 		return removedShip;		
 	}
 	

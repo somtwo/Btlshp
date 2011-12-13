@@ -287,7 +287,7 @@ public class Map implements Serializable {
 		
 		for(int y = 0; y < MAPHEIGHT; ++y) {
 			for(int x = 0; x < MAPWIDTH; ++x) {
-				getMapNode(x, y).clearFlags();
+				getMapNode(x, y).clearBasicFlags();
 			}
 		}
 		
@@ -312,6 +312,18 @@ public class Map implements Serializable {
 							n.hasRadar(true);
 					}
 				});
+			}
+		}
+	}
+	
+	
+	/**
+	 * Clears all turn-based graphics flags from map tiles.
+	 */
+	public void clearTurnFlags() {
+		for(int y = 0; y < MAPHEIGHT; ++y) {
+			for(int x = 0; x < MAPWIDTH; ++x) {
+				getMapNode(x, y).clearTurnFlags();
 			}
 		}
 	}

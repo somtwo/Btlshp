@@ -14,7 +14,8 @@ public class MapNode implements Serializable{
 		HasExplosion(0x04),
 		ActionArea(0x08),
 		ActionSquare(0x10),
-		BadAction(0x20);
+		BadAction(0x20),
+		hasShot(0x40);
 		
 		private final int flag;
 		NodeFlag(int f) {
@@ -50,11 +51,17 @@ public class MapNode implements Serializable{
 		flags = 0;
 	}
 	
-	public void clearFlags() {
-		boolean explosion = hasExplosion();
+	public void clearBasicFlags() {
+		boolean explosion = hasExplosion(), shot = hasShot();
 		
 		flags = 0;
 		hasExplosion(explosion);
+		hasShot(shot);
+	}
+	
+	
+	public void clearTurnFlags() {
+		
 	}
 	
 	
@@ -82,6 +89,10 @@ public class MapNode implements Serializable{
 		return NodeFlag.BadAction.isChecked(flags);
 	}
 	
+	public boolean hasShot() {
+		return NodeFlag.hasShot.isChecked(flags);
+	}
+	
 	
 	public void hasRadar(boolean checked) {
 		flags = NodeFlag.HasRadar.setChecked(checked, flags);
@@ -105,5 +116,9 @@ public class MapNode implements Serializable{
 	
 	public void badAction(boolean checked) {
 		flags = NodeFlag.BadAction.setChecked(checked, flags);
+	}
+	
+	public void hasShot(boolean checked) {
+		flags = NodeFlag.hasShot.setChecked(checked, flags);
 	}
 }

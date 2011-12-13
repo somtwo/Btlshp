@@ -17,10 +17,12 @@ import btlshp.ui.MainUI;
 public class BtlshpGame {
 	private AppState appState;
 	private MainUI   mainUi;
-	private Player   localPlayer;
+	private Player   localPlayer, remotePlayer;
+	
+	
 	public BtlshpGame() {
 		appState = AppState.NoGame;
-		localPlayer = null;
+		localPlayer = remotePlayer = null;
 		mainUi = new MainUI();
 	}
 	
@@ -47,7 +49,8 @@ public class BtlshpGame {
 		
 		if(gameDir != null) {
 			localPlayer = new Player();
-			Map m = new Map(localPlayer, new Player());
+			remotePlayer = new Player();
+			Map m = new Map(localPlayer, remotePlayer);
 			mainUi.setMap(m);
 			appState = AppState.LocalTurn;
 			ObjectOutputStream objOut = null;
@@ -83,6 +86,7 @@ public class BtlshpGame {
 					e.printStackTrace();
 				}
 				localPlayer = loadMap.getRightPlayer();
+				remotePlayer = loadMap.getLeftPlayer();
 				mainUi.setMap(loadMap);
 				appState = AppState.LocalTurn;
 				mainUi.updateMainMenu();
@@ -130,7 +134,7 @@ public class BtlshpGame {
 				mainUi.yesNoCancelDialog("Forfeit", "Are you sure you wish to forfeit? This may lead to eternal shame!") == DialogResult.Yes) {
 			
 			// TODO: Send notification
-			localPlayer = null;
+			localPlayer = remotePlayer = null;
 			mainUi.setMap(null);
 			appState = AppState.NoGame;
 			mainUi.updateMainMenu();
@@ -161,7 +165,7 @@ public class BtlshpGame {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			localPlayer = null;
+			localPlayer = remotePlayer = null;
 			mainUi.setMap(null);
 			appState = AppState.NoGame;
 			mainUi.updateMainMenu();
@@ -194,6 +198,7 @@ public class BtlshpGame {
 					e.printStackTrace();
 				}
 				localPlayer = loadMap.getLeftPlayer();
+				remotePlayer = loadMap.getRightPlayer();
 				mainUi.setMap(loadMap);
 				appState = AppState.LocalTurn;
 				mainUi.updateMainMenu();
@@ -209,6 +214,11 @@ public class BtlshpGame {
 	public Player getLocalPlayer() {
 		return localPlayer;
 	}
+	
+	
+	public Player getRemotePlayer() {
+		return remotePlayer;
+	}
 
 	
 	/**
@@ -223,5 +233,23 @@ public class BtlshpGame {
 
 	public void shipDestroyed(Construct destroyedShip) {
 		System.out.println("Construct Destroyed: "+ destroyedShip );
+	}
+
+
+	/**
+	 * Called when one player looses all ships.
+	 */
+	public void gameOver() {
+		appState = AppState.NoGame;
+		
+		boolean locallost = localPlayer.getShips().length == 0;
+		boolean remotelost = remotePlayer.getShips().length == 0;
+		
+		if(locallost && remotelost)
+			mainUi.showAlert("Draw!", "You and your enemy have reached a draw!\n100 points for both of you!");
+		else if(locallost)
+			mainUi.showAlert("Defeat!", "You have been defeated by your opponent!\nYour approximate score is 0.\nYour actual score is 0");
+		else
+			mainUi.showAlert("Victory!", "You have vanquished your foe!");
 	}
 }
