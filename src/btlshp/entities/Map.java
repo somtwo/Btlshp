@@ -391,8 +391,6 @@ public class Map implements Serializable {
 				Block b = n.block;
 				
 				if(b instanceof MineBlock) {
-					canContinue = false;
-					explodeMine(it.getx(i), it.gety(i));
 				}
 				else if(b instanceof ConstructBlock) {
 					ConstructBlock cb = (ConstructBlock)b;
@@ -453,7 +451,8 @@ public class Map implements Serializable {
 				
 				if(b instanceof MineBlock) {
 					canContinue = false;
-					explodeMine(it.getx(i), it.gety(i));
+					if(!s.canPlaceMine())
+						explodeMine(it.getx(i), it.gety(i));
 				}
 				else if(b instanceof ConstructBlock) {
 					ConstructBlock cb = (ConstructBlock)b;
@@ -579,18 +578,22 @@ public class Map implements Serializable {
 		n.hasExplosion(true);
 		
 		n = getMapNode(mapx - 1, mapy);
+		n.hasShot(true);
 		if(n != null && n.block != null)
 			n.block.takeHit(Weapon.Mine, mapx-1, mapy);
 		
 		n = getMapNode(mapx + 1, mapy);
+		n.hasShot(true);
 		if(n != null && n.block != null)
 			n.block.takeHit(Weapon.Mine, mapx+1, mapy);
 		
 		n = getMapNode(mapx, mapy + 1);
+		n.hasShot(true);
 		if(n != null && n.block != null)
 			n.block.takeHit(Weapon.Mine, mapx, mapy+1);
 		
 		n = getMapNode(mapx, mapy - 1);
+		n.hasShot(true);
 		if(n != null && n.block != null)
 			n.block.takeHit(Weapon.Mine, mapx, mapy-1);
 	}
@@ -613,7 +616,12 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public void fireGuns(Ship s, Location loc) {
+		MapNode n = getMapNode(loc);
 		
+		if(n.block != null)
+			n.block.takeHit(Weapon.Gun, loc.getx(), loc.gety());
+		
+		n.hasShot(true);
 	}
 
 	public Player getRightPlayer(){
