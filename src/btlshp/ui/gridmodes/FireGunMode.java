@@ -53,7 +53,7 @@ public class FireGunMode extends GridMode {
 				//Do Nothing if the block is null
 			}
 			else{
-				n.block.takeHit(Weapon.Gun, x, y); //TODO need x & y node locations, not mouse click locations
+				n.block.takeHit(Weapon.Gun, grid.getHoverx(), grid.getHovery()); //TODO need x & y node locations, not mouse click locations
 			}
 		}
 		grid.cancelAction();

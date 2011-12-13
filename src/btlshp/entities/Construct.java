@@ -85,6 +85,7 @@ public abstract class Construct implements Serializable{
 			BtlshpGame currentGame = Btlshp.getGame();
 			currentGame.destroyShip(this);
 			pl.removeShip((Ship)this);
+			
 			//TODO MAP CALL to REMOVE - can be done through game method dtestroyShip (just a print statement atm).
 		}
 	}
