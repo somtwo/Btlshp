@@ -16,6 +16,8 @@ public abstract class Construct implements Serializable{
 	protected ConstructBlock blocks[];
 	protected int maxRadarRange;
 	protected Player pl;
+	protected Map map;
+	
 	
 	/**
 	* Computes the damage of the Construct when a block is damaged.
@@ -82,11 +84,9 @@ public abstract class Construct implements Serializable{
 		}
 	// Check if Ship has become destroyed, if so, report to player and map.
 		if (this.isDestroyed() & this instanceof Ship){
-			BtlshpGame currentGame = Btlshp.getGame();
-			currentGame.destroyShip(this);
-			pl.removeShip((Ship)this);
-			
-			//TODO MAP CALL to REMOVE - can be done through game method dtestroyShip (just a print statement atm).
+			Btlshp.getGame().outputMessage("Ship destroyed.");
+			pl.shipDestroyed((Ship)this);
+			map.removeShip((Ship)this);
 		}
 	}
 	
@@ -107,7 +107,7 @@ public abstract class Construct implements Serializable{
 	public void AssesRepair(ConstructBlock repairBlock) {
 		boolean repairComplete = false;
 		// Check given Block. (Allows user to prioritize repair to a specific location)
-		if (repairBlock.isDestroyed()){
+		if (!repairBlock.isUntouched()){
 			repairBlock.repair();
 			repairComplete = true;
 		}
@@ -232,6 +232,13 @@ public abstract class Construct implements Serializable{
 			}
 		}		
 		return locations;
-		
+	}
+	
+	public void setMap(Map map) {
+		this.map = map;
+	}
+	
+	public Map getMap() {
+		return map;
 	}
 }

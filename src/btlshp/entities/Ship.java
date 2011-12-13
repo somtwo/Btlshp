@@ -22,7 +22,6 @@ public class Ship extends Construct implements Serializable{
 	private int          maxForwardMove, maxSideMove, maxBackMove, maxGunRange, maxSonarRange;
 	private NodeIterator coreArea, adjacentArea, radarArea, turnLeftArea, turnRightArea, firingArea, mineArea;
 	private NodeIterator forwardMoveArea, backMoveArea, leftMoveArea, rightMoveArea;
-	private Map          map;
 	
 	/**
 	* Constructor for Ship
@@ -78,13 +77,7 @@ public class Ship extends Construct implements Serializable{
 			buildMineArea();
 	}
 	
-	public void setMap(Map map) {
-		this.map = map;
-	}
-	
-	public Map getMap() {
-		return map;
-	}
+
 	
 	
 	//	private NodeIterator coreArea, adjacentArea, radarArea, turnLeftArea, turnRightArea, firingArea;

@@ -55,7 +55,7 @@ public class Player implements Serializable {
 	 * @param s ship to be added
 	 * @return true if ship is remove from list else return false
 	 */
-	public boolean removeShip(Ship s) {
+	public boolean shipDestroyed(Ship s) {
 		boolean removedShip = false;
 		if(ships.size() != 0)
 		{

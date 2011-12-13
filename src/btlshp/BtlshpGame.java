@@ -221,7 +221,7 @@ public class BtlshpGame {
 	}
 
 
-	public void destroyShip(Construct destroyedShip) {
+	public void shipDestroyed(Construct destroyedShip) {
 		System.out.println("Construct Destroyed: "+ destroyedShip );
 	}
 }

@@ -38,7 +38,7 @@ public class PlayerTest extends TestCase {
 		Player myPlayer = new Player();
 		Ship s = Ship.buildCruiser(myPlayer);
 		// remove ship from empty list
-		assertFalse(myPlayer.removeShip(s));
+		assertFalse(myPlayer.shipDestroyed(s));
 		assertEquals(myPlayer.shipCount(), 0);
 		assertFalse(-1 == myPlayer.shipCount());
 		assertFalse(1 == myPlayer.shipCount());
@@ -52,7 +52,7 @@ public class PlayerTest extends TestCase {
 		myPlayer.addShip(s2);
 		myPlayer.addShip(s3);
 		
-		assertTrue(myPlayer.removeShip(s2));
+		assertTrue(myPlayer.shipDestroyed(s2));
 		assertEquals(myPlayer.shipCount(), 2);
 		assertFalse(1 == myPlayer.shipCount());
 		assertFalse(3 == myPlayer.shipCount());

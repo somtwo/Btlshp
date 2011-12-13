@@ -215,6 +215,7 @@ public class Map implements Serializable {
 	public void removeShip(Ship s) {
 		for(int i = 0; i < ships.size(); ++i) {
 			if(s == ships.get(i)) {
+				unplaceShip(s);
 				ships.remove(i);
 				s.setMap(null);
 				return;
