@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import btlshp.entities.Construct;
 import btlshp.entities.Map;
@@ -19,8 +21,8 @@ public class BtlshpGame {
 	private AppState appState;
 	private MainUI   mainUi;
 	private Player   localPlayer, remotePlayer;
-	
-	
+	private File 	 gameDir;
+
 	public BtlshpGame() {
 		appState = AppState.NoGame;
 		localPlayer = remotePlayer = null;
@@ -46,7 +48,7 @@ public class BtlshpGame {
 				return;
 		}
 		
-		File gameDir = mainUi.selectDiretory("Chose a hosting location");
+		gameDir = mainUi.selectDiretory("Chose a hosting location");
 		
 		if(gameDir != null) {
 			localPlayer = new Player();
@@ -90,6 +92,7 @@ public class BtlshpGame {
 				remotePlayer = loadMap.getLeftPlayer();
 				mainUi.setMap(loadMap);
 				appState = AppState.LocalTurn;
+				
 				mainUi.updateMainMenu();
 			}catch(IOException e){
 				System.err.println("IOException: File Path: "+filePath);
@@ -244,8 +247,60 @@ public class BtlshpGame {
 	public void sendTurn(Turn t) {
 		if(appState != AppState.LocalTurn)
 			throw new IllegalStateException("NOT YO TURN!");
+		long modified =t.writeOut(gameDir.getAbsolutePath()); 
+		if(modified<0){
+			throw new IllegalStateException("Error Writing out turn");
+		}
 		
+		appState = AppState.RemoteTurn;
+		waitForTurn(modified);
 		// TODO: Send turn
+	}
+	/**
+	 * Read the last modified time of a file every 5 seconds
+	 * @param modified time the file was last modified
+	 */
+	private void waitForTurn(long modified){
+		
+			Timer t = new Timer();
+			class CheckTurn extends TimerTask{
+				long modified;
+				CheckTurn(long m){
+					modified = m;
+				}
+				@Override
+				public void run() {
+					String filePath = gameDir.getPath();
+					File f = new File(filePath+"/"+0+".ser");
+					if(f.lastModified()!= modified){
+						FileInputStream fileIn = null;
+						ObjectInputStream objIn = null;
+						try{
+							fileIn = new FileInputStream(filePath+"/"+0+".ser");
+						
+							objIn = new ObjectInputStream(fileIn);
+							Turn loadTurn= null;
+							try {
+								loadTurn = (Turn) objIn.readObject();
+							} catch (ClassNotFoundException e) {
+								e.printStackTrace();
+							}
+						
+							loadTurn.executeTurn();
+							appState = AppState.LocalTurn;
+						
+						}catch(IOException e){
+							System.err.println("IOException: File Path: "+filePath);
+							e.printStackTrace();
+						}
+					}					
+				}
+				
+			}
+			
+			CheckTurn task = new CheckTurn(modified);
+			t.schedule(task, 5000);
+			
 	}
 
 

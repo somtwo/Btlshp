@@ -1,5 +1,6 @@
 package btlshp.turns;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -11,22 +12,24 @@ import btlshp.entities.Ship;
 import btlshp.entities.Map;
 import java.io.*;
 public abstract class Turn {
-	public boolean writeOut(String filePath, int turnNum){
+	public long writeOut(String filePath){
 		ObjectOutputStream objOut = null;
 		FileOutputStream fileOut = null;
+		File f = null;
 		try {
-			fileOut = new FileOutputStream(filePath +"/"+ turnNum+".ser");
+			fileOut = new FileOutputStream(filePath +"/"+0+".ser");
 			objOut = new ObjectOutputStream(fileOut);
 			
 			objOut.writeObject(this);
 			objOut.close();
+			f = new File(filePath+"/"+0+".ser");
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			return -1;
 		}
 		
-		return true;
+		return f.lastModified();
 	}
 	/**
 	 * @returns true if the move object represents a successful move, false otherwise.
@@ -37,7 +40,7 @@ public abstract class Turn {
 	 * Executes a given move object representing a move from the other player.
 	 * @throws IllegalStateException If the turn was not successful.
 	 */
-	abstract void executeTurn();
+	public abstract void executeTurn();
 }
 
 class Pass extends Turn implements Serializable{
