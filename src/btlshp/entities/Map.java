@@ -567,19 +567,19 @@ public class Map implements Serializable {
 		
 		n = getMapNode(mapx - 1, mapy);
 		if(n != null && n.block != null)
-			n.block.takeHit(Weapon.Mine, mapx, mapy);
+			n.block.takeHit(Weapon.Mine, mapx-1, mapy);
 		
 		n = getMapNode(mapx + 1, mapy);
 		if(n != null && n.block != null)
-			n.block.takeHit(Weapon.Mine, mapx, mapy);
+			n.block.takeHit(Weapon.Mine, mapx+1, mapy);
 		
 		n = getMapNode(mapx, mapy + 1);
 		if(n != null && n.block != null)
-			n.block.takeHit(Weapon.Mine, mapx, mapy);
+			n.block.takeHit(Weapon.Mine, mapx, mapy+1);
 		
 		n = getMapNode(mapx, mapy - 1);
 		if(n != null && n.block != null)
-			n.block.takeHit(Weapon.Mine, mapx, mapy);
+			n.block.takeHit(Weapon.Mine, mapx, mapy-1);
 	}
 	
 	        	
