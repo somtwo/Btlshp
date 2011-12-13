@@ -241,4 +241,14 @@ public abstract class Construct implements Serializable{
 	public Map getMap() {
 		return map;
 	}
+	public double percentNotDestroyed(){
+		double result = blocks.length;
+		for (int i = 0; i < blocks.length; i++){
+			if(blocks[i].isDestroyed()){
+				result -= 1;
+			}
+		}
+		result = result/blocks.length;
+		return result;
+	}
 }
