@@ -48,7 +48,7 @@ public class Ship extends Construct implements Serializable{
 				GraphicPart part = i == 0 ? GraphicPart.Head : 
 	                i == numberOfBlocks - 1 ? GraphicPart.Tail : GraphicPart.Middle;
 	                
-				blocks[i] = new ArmoredConstructBlock(this, GraphicId.Ship, null, GraphicId.DestroyedShip, part);
+				blocks[i] = new ArmoredConstructBlock(this, GraphicId.ArmoredShip, GraphicId.Ship, GraphicId.DestroyedShip, part);
 			}	
 		}
 		else {

@@ -7,6 +7,7 @@ public enum GraphicId {
 	Reef("reef"),
 	Ship("ship"),
 	Base("base"),
+	ArmoredShip("armr"),
 	DestroyedShip("dams"),
 	DestroyedBase("damb");
 	

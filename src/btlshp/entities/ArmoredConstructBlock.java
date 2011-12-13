@@ -7,6 +7,7 @@ import btlshp.enums.GraphicId;
 import btlshp.enums.GraphicPart;
 
 public class ArmoredConstructBlock extends ConstructBlock{
+	private static final long serialVersionUID = -8855058436621051905L;
 	
 	GraphicId damagedId;
 	
