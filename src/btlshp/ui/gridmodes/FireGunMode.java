@@ -2,6 +2,7 @@ package btlshp.ui.gridmodes;
 
 import btlshp.Btlshp;
 import btlshp.entities.Block;
+import btlshp.entities.Location;
 import btlshp.entities.Map;
 import btlshp.entities.MapNode;
 import btlshp.entities.Ship;
@@ -47,14 +48,9 @@ public class FireGunMode extends GridMode {
 	public void mouseClick(int x, int y) {
 		MapNode n = map.getMapNode(grid.getHoverx(), grid.getHovery());
 		
-		if(n.actionSquare()){
+		if(n.actionSquare()) {
 			Btlshp.getGame().outputMessage("Fire gun action.");
-			if (n.block == null){
-				//Do Nothing if the block is null
-			}
-			else{
-				n.block.takeHit(Weapon.Gun, grid.getHoverx(), grid.getHovery()); //TODO need x & y node locations, not mouse click locations
-			}
+			map.fireGuns(ship, new Location(grid.getHoverx(), grid.getHovery()));
 		}
 		grid.cancelAction();
 	}

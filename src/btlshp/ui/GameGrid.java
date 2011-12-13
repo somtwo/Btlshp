@@ -57,7 +57,8 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	
 	private Dimension size;
 	private Color     gridColor, hoverColor, hoverLineColor;
-	private Color     bgColor, sonarColor, radarColor, explosionColor;
+	private Color     bgColor, sonarColor, radarColor;
+	private Color     explosionColor, shotColor;
 	
 	private Color     actionAreaColor, actionColor, badColor;
 	
@@ -88,7 +89,9 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		bgColor = new Color(2, 20, 6);
 		sonarColor = new Color(0, 90, 90);
 		radarColor = new Color(16, 79, 32);
+		
 		explosionColor = new Color(192, 0, 0);
+		shotColor = new Color(192, 60, 0);
 		
 		actionAreaColor = new Color(58, 113, 36);
 		actionColor = new Color(105, 166, 81);
@@ -214,6 +217,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 					Color c = n.badAction() ? badColor : n.actionSquare() ? actionColor :
 					          n.actionArea() ? actionAreaColor :
 					          n.hasExplosion() ? explosionColor :
+					          n.hasShot() ? shotColor :
 						      n.hasSonar() ? sonarColor :
 					          n.hasRadar() ? radarColor : bgColor;
 					
