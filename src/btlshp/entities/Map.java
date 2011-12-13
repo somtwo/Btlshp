@@ -361,28 +361,39 @@ public class Map implements Serializable {
 		it.rotate(s.getDirection());
 		
 		int moveCount;
-		for(moveCount = 0; moveCount < blocks; ++moveCount)
+		boolean canContinue = true;
+		for(moveCount = 0; moveCount < blocks && canContinue; ++moveCount)
 		{
-			it.setOrigin(x, y);
 			x += deltax;
 			y += deltay;
+			it.setOrigin(x, y);
 			
+			// Check the body
 			for(int i = 0; i < it.size(); ++i) {
-				if(!insideMap(it.getx(i), it.gety(i)))
-					break;
+				if(!insideMap(it.getx(i), it.gety(i))) {
+					canContinue = false; break;
+				}
 				
-				Block b = getMapNode(it.getx(i), it.gety(i)).block;
+				MapNode n = getMapNode(it.getx(i), it.gety(i));
+				Block b = n.block;
 				
-				if(b == null)
-					continue;
-				
-				if(b instanceof ConstructBlock) {
+				if(b instanceof MineBlock) {
+					canContinue = false;
+					explodeMine(it.getx(i), it.gety(i));
+				}
+				else if(b instanceof ConstructBlock) {
 					ConstructBlock cb = (ConstructBlock)b;
 					
 					if(cb.myConstruct != s)
-						break;
+						canContinue = false;
+				}
+				else if(b != null) {
+					canContinue = false; break;
 				}
 			}
+			
+			if(!canContinue)
+				break;
 		}
 		return moveCount > 0;
 	}

@@ -491,7 +491,7 @@ public class Ship extends Construct implements Serializable{
 
 	
 	/**
-	 * Retruns the left-most column occupied by a ship.
+	 * Returns the left-most column occupied by a ship.
 	 * @return
 	 */
 	public int getx1() {
@@ -502,7 +502,7 @@ public class Ship extends Construct implements Serializable{
 	}
 	
 	/**
-	 * Retruns the right-most column occupied by a ship.
+	 * Returns the right-most column occupied by a ship.
 	 * @return
 	 */
 	public int getx2() {
@@ -513,7 +513,7 @@ public class Ship extends Construct implements Serializable{
 	}
 	
 	/**
-	 * Retruns the top-most column occupied by a ship.
+	 * Returns the top-most column occupied by a ship.
 	 * @return
 	 */
 	public int gety1() {
@@ -524,7 +524,7 @@ public class Ship extends Construct implements Serializable{
 	}
 	
 	/**
-	 * Retruns the bottom-most column occupied by a ship.
+	 * Returns the bottom-most column occupied by a ship.
 	 * @return
 	 */
 	public int gety2() {
