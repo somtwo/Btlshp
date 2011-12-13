@@ -11,6 +11,7 @@ import btlshp.entities.Construct;
 import btlshp.entities.Map;
 import btlshp.entities.Player;
 import btlshp.enums.AppState;
+import btlshp.turns.Turn;
 import btlshp.ui.DialogResult;
 import btlshp.ui.MainUI;
 
@@ -233,6 +234,18 @@ public class BtlshpGame {
 
 	public void shipDestroyed(Construct destroyedShip) {
 		System.out.println("Construct Destroyed: "+ destroyedShip );
+	}
+	
+	
+	/**
+	 * Used by the game to send a turn and place the game into a waiting-for-turn state.
+	 * @param t   Turn object to send to other player.
+	 */
+	public void sendTurn(Turn t) {
+		if(appState != AppState.LocalTurn)
+			throw new IllegalStateException("NOT YO TURN!");
+		
+		// TODO: Send turn
 	}
 
 
