@@ -28,6 +28,8 @@ public class RotateMode extends GridMode {
 		it.iterate(map, ship.getLocation(), ship.getDirection(), new NodeIteratorAction() {
 			@Override
 			public void visit(MapNode n, Block b) {
+				if (n==null)
+					return;
 				n.actionArea(true);
 				
 				if(rightAction)
@@ -40,6 +42,8 @@ public class RotateMode extends GridMode {
 		it.iterate(map, ship.getLocation(), ship.getDirection(), new NodeIteratorAction() {
 			@Override
 			public void visit(MapNode n, Block b) {
+				if (n==null)
+					return;
 				n.actionArea(true);
 				
 				if(leftAction)
