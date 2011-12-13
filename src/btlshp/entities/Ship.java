@@ -202,7 +202,9 @@ public class Ship extends Construct implements Serializable{
 	 * @returns the maximum number of map blocks a ship can travel forward in a turn
 	 */
 	public int getMaxForwardMove() {
-		return maxForwardMove;
+		System.out.println(this.percentNotDestroyed());
+		System.out.println(maxForwardMove * this.percentNotDestroyed());
+		return (int) (maxForwardMove * this.percentNotDestroyed());
 	}
 
 	/**
