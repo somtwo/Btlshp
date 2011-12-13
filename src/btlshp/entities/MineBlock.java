@@ -12,7 +12,8 @@ public class MineBlock extends Block {
 	}
 	
 	@Override
-	public void takeHit(Weapon fromWeapon) {
+	public void takeHit(Weapon fromWeapon, int x, int y) {
+		map.explodeMine(x, y);
 		// TODO This Function somehow needs to call the map's explode mine function when it takes damage... No such link exists.
 	}
 

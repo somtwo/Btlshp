@@ -15,7 +15,7 @@ public class ReefBlock extends Block implements Serializable{
 	}
 	
 	@Override
-	public void takeHit(Weapon fromWeapon) {
+	public void takeHit(Weapon fromWeapon, int x, int y) {
 	}
 
 	@Override

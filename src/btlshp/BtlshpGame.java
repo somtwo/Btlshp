@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import btlshp.entities.Construct;
 import btlshp.entities.Map;
 import btlshp.entities.Player;
 import btlshp.enums.AppState;
@@ -216,5 +218,10 @@ public class BtlshpGame {
 	 */
 	public void outputMessage(String msg) {
 		mainUi.outputMessage(msg);
+	}
+
+
+	public void destroyShip(Construct destroyedShip) {
+		System.out.println("Construct Destroyed: "+ destroyedShip );
 	}
 }

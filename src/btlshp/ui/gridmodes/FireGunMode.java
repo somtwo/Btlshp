@@ -53,7 +53,7 @@ public class FireGunMode extends GridMode {
 				//Do Nothing if the block is null
 			}
 			else{
-				n.block.takeHit(Weapon.Gun);
+				n.block.takeHit(Weapon.Gun, x, y);
 			}
 		}
 		grid.cancelAction();

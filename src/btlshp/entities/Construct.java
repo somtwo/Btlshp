@@ -2,6 +2,8 @@ package btlshp.entities;
 
 import java.io.Serializable;
 
+import btlshp.Btlshp;
+import btlshp.BtlshpGame;
 import btlshp.enums.*;
 
 public abstract class Construct implements Serializable{
@@ -77,6 +79,13 @@ public abstract class Construct implements Serializable{
 	// No Other Cases Possible
 		else {
 			// Error Occurred, Not Checked.
+		}
+	// Check if Ship has become destroyed, if so, report to player and map.
+		if (this.isDestroyed() & this instanceof Ship){
+			BtlshpGame currentGame = Btlshp.getGame();
+			currentGame.destroyShip(this);
+			pl.removeShip((Ship)this);
+			//TODO MAP CALL to REMOVE - can be done through game method dtestroyShip (just a print statement atm).
 		}
 	}
 	

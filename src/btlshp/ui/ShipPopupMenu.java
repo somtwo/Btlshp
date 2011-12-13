@@ -80,8 +80,7 @@ public class ShipPopupMenu extends JPopupMenu {
 
 					for(fireCount = 0; fireCount < 10 && canContinue; fireCount++)
 					{				
-						// Check each zone one at a time. (similar to move forward method in map)
-							//System.out.println("Made it ahead # of blocks: " + fireCount);
+						// Check each zone one at a time. (similar to move forward method in map)							
 							if(!grid.getMap().insideMap(x, y)) {
 								canContinue = false; break;
 							}
@@ -89,8 +88,7 @@ public class ShipPopupMenu extends JPopupMenu {
 							MapNode n = grid.getMap().getMapNode(x, y);
 							Block b = n.block;
 							if(b != null){
-								b.takeHit(Weapon.Torpedo);
-								//System.out.println("Exploded on block # " + fireCount);
+								b.takeHit(Weapon.Torpedo, x , y);
 								canContinue = false;
 							}
 						

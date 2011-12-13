@@ -34,7 +34,7 @@ public class ConstructBlock extends Block implements Serializable{
 	/**
 	 * Passes the Information that this block was hit to it's Construct
 	 */
-	public void takeHit(Weapon weaponUsed){
+	public void takeHit(Weapon weaponUsed, int x, int y){
 		myConstruct.assessDamage(this, weaponUsed);
 	}
 	public void takeRepair(){

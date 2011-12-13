@@ -557,7 +557,7 @@ public class Map implements Serializable {
 	}
 	
 	
-	private void explodeMine(int mapx, int mapy) {
+	public void explodeMine(int mapx, int mapy) {
 		MapNode n = getMapNode(mapx, mapy);
 		
 		if(n == null || n.block == null || !(n.block instanceof MineBlock))
@@ -567,19 +567,19 @@ public class Map implements Serializable {
 		
 		n = getMapNode(mapx - 1, mapy);
 		if(n != null && n.block != null)
-			n.block.takeHit(Weapon.Mine);
+			n.block.takeHit(Weapon.Mine, mapx, mapy);
 		
 		n = getMapNode(mapx + 1, mapy);
 		if(n != null && n.block != null)
-			n.block.takeHit(Weapon.Mine);
+			n.block.takeHit(Weapon.Mine, mapx, mapy);
 		
 		n = getMapNode(mapx, mapy + 1);
 		if(n != null && n.block != null)
-			n.block.takeHit(Weapon.Mine);
+			n.block.takeHit(Weapon.Mine, mapx, mapy);
 		
 		n = getMapNode(mapx, mapy - 1);
 		if(n != null && n.block != null)
-			n.block.takeHit(Weapon.Mine);
+			n.block.takeHit(Weapon.Mine, mapx, mapy);
 	}
 	
 	        	
