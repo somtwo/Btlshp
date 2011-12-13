@@ -488,7 +488,8 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public boolean canShipRotate(Ship s, Direction newDir) {
-		return false;
+		return true;
+		//TODO: check for obsticles in way of turning
 		
 	}
 	        	
@@ -502,6 +503,8 @@ public class Map implements Serializable {
 		Location      loc = s.getLocation();
 		int x = loc.getx();
 		int y = loc.gety();
+		
+		//TODO: check for mines in turn, and next to ship's destination for explosion!
 		
 		unplaceShip(s);
 		placeShip(s,x,y,newDir);
