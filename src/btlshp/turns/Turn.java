@@ -17,12 +17,12 @@ public abstract class Turn {
 		FileOutputStream fileOut = null;
 		File f = null;
 		try {
-			fileOut = new FileOutputStream(filePath +"/"+0+".ser");
+			fileOut = new FileOutputStream(filePath +"/game.ser");
 			objOut = new ObjectOutputStream(fileOut);
 			
 			objOut.writeObject(this);
 			objOut.close();
-			f = new File(filePath+"/"+0+".ser");
+			f = new File(filePath+"/game.ser");
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -42,7 +42,6 @@ public abstract class Turn {
 	 */
 	public abstract void executeTurn();
 }
-
 class Pass extends Turn implements Serializable{
 	/**
 	 * 

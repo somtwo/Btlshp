@@ -6,6 +6,8 @@ import btlshp.entities.Map;
 import btlshp.entities.MapNode;
 import btlshp.entities.Ship;
 import btlshp.enums.Direction;
+import btlshp.turns.Turn;
+import btlshp.turns.TurnFactory;
 import btlshp.ui.GameGrid;
 import btlshp.utility.NodeIterator;
 import btlshp.utility.NodeIteratorAction;
@@ -133,26 +135,31 @@ public class MoveMode extends GridMode {
 		// Move Forward 
 		if(currentMove == Move.Forward && forwardDistance <= ship.getMaxForwardMove() &&
 				map.canMove(ship, shipDirection, forwardDistance)) {
-			
+			grid.cancelAction();
 			map.move(ship, shipDirection, forwardDistance);
+			Turn t = TurnFactory.moveShip(map, ship, shipDirection, forwardDistance);
+			Btlshp.getGame().sendTurn(t);
 			Btlshp.getGame().outputMessage("Move forward.");
 		}
 		
 		// Move Backward
 		if(currentMove == Move.Backward && map.canMove(ship, shipDirection.backwardsDir(), 1)) {
 			map.move(ship, shipDirection.backwardsDir(), 1);
+			Btlshp.getGame().sendTurn(TurnFactory.moveShip(map, ship, shipDirection.backwardsDir(), 1));
 			Btlshp.getGame().outputMessage("Move Backwards.");
 		}
 		
 		// Move Left
 		if(currentMove == Move.Left && map.canMove(ship, shipDirection.leftDir(), 1)) {
 			map.move(ship, shipDirection.leftDir(), 1);
+			Btlshp.getGame().sendTurn(TurnFactory.moveShip(map, ship, shipDirection.leftDir(), 1));
 			Btlshp.getGame().outputMessage("Move Left.");
 		}
 		
 		// Move Right
 		if(currentMove == Move.Right && map.canMove(ship, shipDirection.rightDir(), 1)) {
 			map.move(ship, shipDirection.rightDir(), 1);
+			Btlshp.getGame().sendTurn(TurnFactory.moveShip(map, ship, shipDirection.rightDir(), 1));
 			Btlshp.getGame().outputMessage("Move Right.");
 		}
 		

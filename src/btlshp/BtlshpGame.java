@@ -27,6 +27,7 @@ public class BtlshpGame {
 		appState = AppState.NoGame;
 		localPlayer = remotePlayer = null;
 		mainUi = new MainUI();
+		
 	}
 	
 	
@@ -68,11 +69,14 @@ public class BtlshpGame {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			File f = new File(gameDir.getAbsolutePath() +"/"+ 0+".ser");
+			appState = AppState.RemoteTurn;
+			waitForTurn(f.lastModified());
 			mainUi.updateMainMenu();
 		}
 	}
 	public void joinGame(){
-		File gameDir = mainUi.selectDiretory("Choose a shared directory");
+		gameDir = mainUi.selectDiretory("Choose a shared directory");
 		
 		if(gameDir != null){
 			outputMessage("Joining game " + gameDir.getPath());
@@ -251,8 +255,8 @@ public class BtlshpGame {
 		if(modified<0){
 			throw new IllegalStateException("Error Writing out turn");
 		}
-		
-		appState = AppState.RemoteTurn;
+	    appState = AppState.RemoteTurn;
+
 		waitForTurn(modified);
 		// TODO: Send turn
 	}
@@ -260,46 +264,51 @@ public class BtlshpGame {
 	 * Read the last modified time of a file every 5 seconds
 	 * @param modified time the file was last modified
 	 */
-	private void waitForTurn(long modified){
-		
+	private void waitForTurn(final long modified){
+			
 			Timer t = new Timer();
-			class CheckTurn extends TimerTask{
-				long modified;
-				CheckTurn(long m){
-					modified = m;
-				}
+			
+			
+			t.schedule(new TimerTask(){
 				@Override
 				public void run() {
 					String filePath = gameDir.getPath();
-					File f = new File(filePath+"/"+0+".ser");
-					if(f.lastModified()!= modified){
+					File f = new File(filePath+"/game.ser");
+					
+					if(f.lastModified()> modified){
 						FileInputStream fileIn = null;
 						ObjectInputStream objIn = null;
 						try{
-							fileIn = new FileInputStream(filePath+"/"+0+".ser");
+							fileIn = new FileInputStream(filePath+"/game.ser");
 						
 							objIn = new ObjectInputStream(fileIn);
 							Turn loadTurn= null;
 							try {
 								loadTurn = (Turn) objIn.readObject();
+								objIn.close();
+								fileIn.close();
+								loadTurn.executeTurn();
+							    mainUi.getGameGrid().repaint();
+								appState = AppState.LocalTurn;
+								cancel();
+								
 							} catch (ClassNotFoundException e) {
 								e.printStackTrace();
 							}
 						
-							loadTurn.executeTurn();
-							appState = AppState.LocalTurn;
+							
 						
 						}catch(IOException e){
 							System.err.println("IOException: File Path: "+filePath);
 							e.printStackTrace();
 						}
-					}					
+					}	
+					
 				}
-				
-			}
 			
-			CheckTurn task = new CheckTurn(modified);
-			t.schedule(task, 5000);
+			}, 5000, 5000);
+			
+	
 			
 	}
 

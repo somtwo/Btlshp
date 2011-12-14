@@ -238,4 +238,10 @@ public class MainUI implements Serializable{
 	public void outputMessage(String message) {
 		outputConsole.addLine(message);
 	}
+
+
+	public GameGrid getGameGrid() {
+		// TODO Auto-generated method stub
+		return gameGrid;
+	}
 }

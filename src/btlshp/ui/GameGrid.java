@@ -69,7 +69,6 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	
 	private Map       map;
 	private GridMode  mode;
-	
 	public GameGrid() {
 		gridWidth = gridHeight = 30;
 		
