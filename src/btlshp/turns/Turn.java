@@ -31,6 +31,7 @@ public abstract class Turn {
 		
 		return f.lastModified();
 	}
+	public abstract void setMap(Map m);
 	/**
 	 * @returns true if the move object represents a successful move, false otherwise.
 	 */
@@ -59,6 +60,11 @@ class Pass extends Turn implements Serializable{
 	public String toString(){
 		return "pass";
 	}
+	@Override
+	public void setMap(Map m) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 class JoinGame extends Turn implements Serializable{
 	private Map m;
@@ -79,6 +85,11 @@ class JoinGame extends Turn implements Serializable{
 	public boolean wasSuccessful() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public void setMap(Map m) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
@@ -103,6 +114,11 @@ class RequestPostponeGame extends Turn implements Serializable{
 	@Override
 	public String toString(){
 		return "requestPostponeGame";
+	}
+	@Override
+	public void setMap(Map m) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 class ConfirmPostponeGame extends Turn implements Serializable{
@@ -130,6 +146,13 @@ class ConfirmPostponeGame extends Turn implements Serializable{
 	@Override
 	public String toString(){
 		return "confirmPostponeGame";
+	}
+
+
+	@Override
+	public void setMap(Map m) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 class LoadGameState extends Turn implements Serializable{
@@ -171,6 +194,11 @@ class LoadGameState extends Turn implements Serializable{
 	public String toString(){
 		return "loadGameState";
 	}
+	@Override
+	public void setMap(Map m) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 class SaveGameState extends Turn implements Serializable{
 	/**
@@ -210,6 +238,11 @@ class SaveGameState extends Turn implements Serializable{
 	public String toString(){
 		return "saveGameState";
 	}
+	@Override
+	public void setMap(Map m) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
 class RequestSurrender extends Turn implements Serializable{
@@ -239,6 +272,13 @@ class RequestSurrender extends Turn implements Serializable{
 	public String toString(){
 		return "requestSurrender";
 	}
+
+
+	@Override
+	public void setMap(Map m) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 class AcceptSurrender extends Turn implements Serializable{
 	/**
@@ -263,6 +303,11 @@ class AcceptSurrender extends Turn implements Serializable{
 	public String toString(){
 		return "acceptSurrender";
 	}
+	@Override
+	public void setMap(Map m) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 class MoveShip extends Turn implements Serializable{
 	/**
@@ -276,18 +321,19 @@ class MoveShip extends Turn implements Serializable{
 	private boolean success = false;
 
 	public MoveShip(Map m, Ship s, Direction dir, int distance) {
-		this.m = m;
 		this.s = s;
 		this.dir = dir;
 		this.distance = distance;
 	}
-
+	
 	@Override
 	public void executeTurn() {
 		try{
-			m.move(s, dir, distance);
+			System.err.println("Moving ship "+s.getId()+" "+ dir.name() +" "+ distance+ " blocks");
+			m.move(s, dir,distance);
 			success = true;
 		}catch(IllegalStateException e){
+			e.printStackTrace();
 			success = false;
 		}
 		
@@ -300,6 +346,12 @@ class MoveShip extends Turn implements Serializable{
 	@Override
 	public String toString(){
 		return "moveShip";
+	}
+
+	@Override
+	public void setMap(Map m) {
+		this.m = m;
+		
 	}
 }
 class PlaceMine extends Turn implements Serializable{
@@ -336,6 +388,44 @@ class PlaceMine extends Turn implements Serializable{
 	public String toString(){
 		return "placeMine";
 	}
+
+	@Override
+	public void setMap(Map m) {
+		this.m = m;
+		
+	}
+}
+class RotateShip extends Turn implements Serializable{
+	private Map m;
+	private Ship s;
+	private Direction dir;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2197899809799342874L;
+	RotateShip(Map m, Ship s, Direction dir){
+		this.m = m;
+		this.s = s;
+		this.dir = dir;
+	}
+	@Override
+	public void setMap(Map m) {
+		this.m = m;
+		
+	}
+
+	@Override
+	boolean wasSuccessful() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void executeTurn() {
+		m.rotateShip(s, dir);
+		
+	}
+	
 }
 class TakeMine extends Turn implements Serializable{
 	/**
@@ -371,6 +461,11 @@ class TakeMine extends Turn implements Serializable{
 	public String toString(){
 		return "takeMine";
 	}
+
+	@Override
+	public void setMap(Map m) {
+		this.m = m;		
+	}
 }
 class LaunchTorpedo extends Turn implements Serializable{
 	/**
@@ -405,6 +500,12 @@ class LaunchTorpedo extends Turn implements Serializable{
 	@Override
 	public String toString(){
 		return "launchTorpedo";
+	}
+
+	@Override
+	public void setMap(Map m) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 
@@ -443,6 +544,11 @@ class Shoot extends Turn implements Serializable{
 	public String toString(){
 		return "shoot";
 	}
+
+	@Override
+	public void setMap(Map m) {
+		this.m = m;		
+	}
 }
 class RepairBase extends Turn implements Serializable{
 
@@ -471,6 +577,12 @@ class RepairBase extends Turn implements Serializable{
 	@Override
 	public String toString(){
 		return "repairBase";
+	}
+
+	@Override
+	public void setMap(Map m) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 class RepairShip extends Turn implements Serializable{
@@ -503,5 +615,11 @@ class RepairShip extends Turn implements Serializable{
 	@Override
 	public String toString(){
 		return "repairShip";
+	}
+
+	@Override
+	public void setMap(Map m) {
+		// TODO Auto-generated method stub
+		
 	}
 }

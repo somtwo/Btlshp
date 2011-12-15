@@ -1,5 +1,9 @@
 package btlshp.entities;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -284,7 +288,6 @@ public class Map implements Serializable {
 	public void updateFrame(Player forPlayer) {
 		if(forPlayer != leftPlayer && forPlayer != rightPlayer)
 			throw new IllegalArgumentException("forPlayer must be either player one or player two.");
-		
 		for(int y = 0; y < MAPHEIGHT; ++y) {
 			for(int x = 0; x < MAPWIDTH; ++x) {
 				getMapNode(x, y).clearBasicFlags();
@@ -423,7 +426,10 @@ public class Map implements Serializable {
 		NodeIterator  adjIt = s.getSurroundingIterator();
 		int           x, y, deltax, deltay, moveCount;
 		boolean		  canContinue = true;
-		
+		if(!ships.contains(s)){
+			s = getShip(s.getId());
+		}
+
 		x = loc.getx();
 		y = loc.gety();
 		
@@ -467,7 +473,6 @@ public class Map implements Serializable {
 			
 			if(!canContinue)
 				break;
-			
 			unplaceShip(s);
 			placeShip(s, x, y, s.getDirection());
 
@@ -486,7 +491,6 @@ public class Map implements Serializable {
 				canContinue = false;
 			}
 		}
-		
 		return moveCount;
 	}
 	        	
@@ -517,7 +521,10 @@ public class Map implements Serializable {
 		int y = loc.gety();
 		
 		//TODO: check for mines in turn, and next to ship's destination for explosion!
-		
+		if(!ships.contains(s)){
+			s = getShip(s.getId());
+		}
+
 		unplaceShip(s);
 		placeShip(s,x,y,newDir);
 		return;
@@ -532,7 +539,10 @@ public class Map implements Serializable {
 	*/
 	public boolean placeMine(Ship s, Location loc) {
 		MapNode  n = getMapNode(loc);
-		
+		if(!ships.contains(s)){
+			s = getShip(s.getId());
+		}
+
 		if(!s.canPlaceMine() || n.block != null || s.getPlayer().numberOfMines() == 0)
 			return false;
 		
@@ -553,6 +563,10 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public boolean pickupMine(Ship s, Location loc) {
+		if(!ships.contains(s)){
+			s = getShip(s.getId());
+		}
+
 		MapNode n = getMapNode(loc);
 		MineBlock b = n.block != null && n.block instanceof MineBlock ? (MineBlock)n.block : null;
 		
@@ -616,6 +630,10 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public void fireGuns(Ship s, Location loc) {
+		if(!ships.contains(s)){
+			s = getShip(s.getId());
+		}
+
 		MapNode n = getMapNode(loc);
 		
 		if(n.block != null)
@@ -630,4 +648,11 @@ public class Map implements Serializable {
 	public Player getLeftPlayer() {
 		return leftPlayer;
 	}
+	public Ship getShip(int id){
+		for(Ship s : ships){
+			if(s.getId() == id) return s;
+		}
+		return null;
+	}
+
 }

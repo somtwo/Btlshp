@@ -14,6 +14,7 @@ import btlshp.entities.Map;
 import btlshp.entities.Player;
 import btlshp.enums.AppState;
 import btlshp.turns.Turn;
+import btlshp.turns.TurnFactory;
 import btlshp.ui.DialogResult;
 import btlshp.ui.MainUI;
 
@@ -96,6 +97,7 @@ public class BtlshpGame {
 				remotePlayer = loadMap.getLeftPlayer();
 				mainUi.setMap(loadMap);
 				setAppState(AppState.LocalTurn);
+				sendTurn(TurnFactory.pass());
 				
 				mainUi.updateMainMenu();
 			}catch(IOException e){
@@ -147,7 +149,7 @@ public class BtlshpGame {
 		if(appState != AppState.NoGame &&
 				mainUi.yesNoCancelDialog("Forfeit", "Are you sure you wish to forfeit? This may lead to eternal shame!") == DialogResult.Yes) {
 			
-			// TODO: Send notification
+			
 			localPlayer = remotePlayer = null;
 			mainUi.setMap(null);
 			setAppState(AppState.NoGame);
@@ -192,9 +194,7 @@ public class BtlshpGame {
 	 * Handles a UI-side restore game event.
 	 */
 	public void restoreGame() {
-		//if(appState == AppState.NoGame) 
-			//return;
-		
+	
 		File f = mainUi.selectSaveFile("Select a file to restore from");
 		
 		if(f != null) {
@@ -286,15 +286,14 @@ public class BtlshpGame {
 						ObjectInputStream objIn = null;
 						try{
 							fileIn = new FileInputStream(filePath+"/game.ser");
-						
 							objIn = new ObjectInputStream(fileIn);
 							Turn loadTurn= null;
 							try {
 								loadTurn = (Turn) objIn.readObject();
 								objIn.close();
 								fileIn.close();
+								loadTurn.setMap(mainUi.getMap());
 								loadTurn.executeTurn();
-							    mainUi.getGameGrid().repaint();
 								setAppState(AppState.LocalTurn);
 								cancel();
 								
