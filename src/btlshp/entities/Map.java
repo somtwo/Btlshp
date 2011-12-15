@@ -421,14 +421,15 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public int move(Ship s, Direction dir, int blocks) {
+		if(!ships.contains(s)){
+			s = getShip(s.getId());
+		}
 		Location      loc = s.getLocation();
 		NodeIterator  it = s.getCoreIterator();
 		NodeIterator  adjIt = s.getSurroundingIterator();
 		int           x, y, deltax, deltay, moveCount;
 		boolean		  canContinue = true;
-		if(!ships.contains(s)){
-			s = getShip(s.getId());
-		}
+		
 
 		x = loc.getx();
 		y = loc.gety();

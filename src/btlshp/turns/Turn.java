@@ -61,16 +61,10 @@ class Pass extends Turn implements Serializable{
 		return "pass";
 	}
 	@Override
-	public void setMap(Map m) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void setMap(Map m) {}
 }
 class JoinGame extends Turn implements Serializable{
 	private Map m;
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6638148998058324549L;
 	public JoinGame(Map m){
 		this.m = m;
@@ -123,10 +117,6 @@ class RequestPostponeGame extends Turn implements Serializable{
 }
 class ConfirmPostponeGame extends Turn implements Serializable{
 
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7601913526703183133L;
 	@Override
 	/**
@@ -157,10 +147,6 @@ class ConfirmPostponeGame extends Turn implements Serializable{
 }
 class LoadGameState extends Turn implements Serializable{
 
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4870988534077315987L;
 	private String filePath;
 	/**
@@ -184,7 +170,6 @@ class LoadGameState extends Turn implements Serializable{
 			
 	}
 
-
 	@Override
 	public boolean wasSuccessful() {
 		// TODO Implementation IO dependent
@@ -201,9 +186,7 @@ class LoadGameState extends Turn implements Serializable{
 	}
 }
 class SaveGameState extends Turn implements Serializable{
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 2354631655310067958L;
 	private Map saveGame;
 	
@@ -248,9 +231,6 @@ class SaveGameState extends Turn implements Serializable{
 class RequestSurrender extends Turn implements Serializable{
 
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4395558489216020334L;
 	@Override
 	/**
@@ -281,9 +261,7 @@ class RequestSurrender extends Turn implements Serializable{
 	}
 }
 class AcceptSurrender extends Turn implements Serializable{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -8163598235191879797L;
 	@Override
 	/**
@@ -310,9 +288,7 @@ class AcceptSurrender extends Turn implements Serializable{
 	}
 }
 class MoveShip extends Turn implements Serializable{
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 4599021282070269467L;
 	private Ship s;
 	private Direction dir;
