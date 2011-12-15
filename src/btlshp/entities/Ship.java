@@ -30,6 +30,7 @@ public class Ship extends Construct implements Serializable{
 	* @param blocks  The blocks to use for the given ship.
 	*/
 	private Ship(Player owner, int shipFlags, int forward, int side, int back, int gunRange, int radarRange, int sonarRange, int numberOfBlocks) {
+		constructID = super.getNextConstructerID();
 		pl = owner;
 		flags = shipFlags;
 		maxForwardMove = forward;
@@ -202,8 +203,6 @@ public class Ship extends Construct implements Serializable{
 	 * @returns the maximum number of map blocks a ship can travel forward in a turn
 	 */
 	public int getMaxForwardMove() {
-		System.out.println(this.percentNotDestroyed());
-		System.out.println(maxForwardMove * this.percentNotDestroyed());
 		return (int) (maxForwardMove * this.percentNotDestroyed());
 	}
 
