@@ -24,10 +24,9 @@ public class BtlshpGame {
 	private File 	 gameDir;
 
 	public BtlshpGame() {
-		appState = AppState.NoGame;
 		localPlayer = remotePlayer = null;
 		mainUi = new MainUI();
-		
+		appState = AppState.NoGame;
 	}
 	
 	
@@ -56,7 +55,8 @@ public class BtlshpGame {
 			remotePlayer = new Player();
 			Map m = new Map(localPlayer, remotePlayer);
 			mainUi.setMap(m);
-			appState = AppState.LocalTurn;
+			
+			setAppState(AppState.LocalTurn);
 			ObjectOutputStream objOut = null;
 			FileOutputStream fileOut = null;
 			try {
@@ -70,7 +70,7 @@ public class BtlshpGame {
 				e.printStackTrace();
 			}
 			File f = new File(gameDir.getAbsolutePath() +"/"+ 0+".ser");
-			appState = AppState.RemoteTurn;
+			setAppState(AppState.RemoteTurn);
 			waitForTurn(f.lastModified());
 			mainUi.updateMainMenu();
 		}
@@ -95,7 +95,7 @@ public class BtlshpGame {
 				localPlayer = loadMap.getRightPlayer();
 				remotePlayer = loadMap.getLeftPlayer();
 				mainUi.setMap(loadMap);
-				appState = AppState.LocalTurn;
+				setAppState(AppState.LocalTurn);
 				
 				mainUi.updateMainMenu();
 			}catch(IOException e){
@@ -118,6 +118,12 @@ public class BtlshpGame {
 	 */
 	public AppState getAppState() {
 		return appState;
+	}
+	
+	
+	private void setAppState(AppState newState) {
+		appState = newState;
+		mainUi.updateStatus();
 	}
 	
 	
@@ -144,7 +150,7 @@ public class BtlshpGame {
 			// TODO: Send notification
 			localPlayer = remotePlayer = null;
 			mainUi.setMap(null);
-			appState = AppState.NoGame;
+			setAppState(AppState.NoGame);
 			mainUi.updateMainMenu();
 		}
 	}
@@ -175,7 +181,7 @@ public class BtlshpGame {
 			}
 			localPlayer = remotePlayer = null;
 			mainUi.setMap(null);
-			appState = AppState.NoGame;
+			setAppState(AppState.NoGame);
 			mainUi.updateMainMenu();
 		}
 	}
@@ -208,7 +214,7 @@ public class BtlshpGame {
 				localPlayer = loadMap.getLeftPlayer();
 				remotePlayer = loadMap.getRightPlayer();
 				mainUi.setMap(loadMap);
-				appState = AppState.LocalTurn;
+				setAppState(AppState.LocalTurn);
 				mainUi.updateMainMenu();
 			}catch(IOException e){
 				System.err.println("IOException: File Path: "+filePath);
@@ -255,7 +261,7 @@ public class BtlshpGame {
 		if(modified<0){
 			throw new IllegalStateException("Error Writing out turn");
 		}
-	    appState = AppState.RemoteTurn;
+	    setAppState(AppState.RemoteTurn);
 
 		waitForTurn(modified);
 		// TODO: Send turn
@@ -289,7 +295,7 @@ public class BtlshpGame {
 								fileIn.close();
 								loadTurn.executeTurn();
 							    mainUi.getGameGrid().repaint();
-								appState = AppState.LocalTurn;
+								setAppState(AppState.LocalTurn);
 								cancel();
 								
 							} catch (ClassNotFoundException e) {
@@ -317,7 +323,7 @@ public class BtlshpGame {
 	 * Called when one player looses all ships.
 	 */
 	public void gameOver() {
-		appState = AppState.NoGame;
+		setAppState(AppState.NoGame);
 		
 		boolean locallost = localPlayer.getShips().length == 0;
 		boolean remotelost = remotePlayer.getShips().length == 0;

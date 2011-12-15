@@ -16,8 +16,11 @@ public class OutputArea extends JTextArea {
 		setOpaque(true);
 		setEditable(false);
 		
-		setMinimumSize(new Dimension(200, 80));
-		setPreferredSize(new Dimension(640, 80));
+		setMinimumSize(new Dimension(200, 75));
+		setPreferredSize(new Dimension(340, 75));
+		
+		setLineWrap(true);
+		setWrapStyleWord(true);
 	}
 	
 	

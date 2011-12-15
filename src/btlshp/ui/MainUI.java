@@ -17,11 +17,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import btlshp.Btlshp;
+import btlshp.BtlshpGame;
 import btlshp.entities.Map;
 import btlshp.enums.AppState;
 
@@ -34,8 +36,9 @@ public class MainUI implements Serializable{
 	private JMenuBar     mainMenuBar;
 	private FileMenu     fileMenu;
 	private GameGrid     gameGrid;
+	private JPanel       infoArea;
 	private OutputArea   outputConsole;
-	private JLabel       status;
+	private JTextArea    status;
 	private Font         proFont;
 	
 	public MainUI() {
@@ -71,12 +74,18 @@ public class MainUI implements Serializable{
 	
 	
 	private void makeStatusPane() {
-		status = new JLabel();
-		status.setPreferredSize(new Dimension(158, 100));
+		status = new JTextArea();
+		status.setPreferredSize(new Dimension(140, 75));
+		status.setMinimumSize(new Dimension(140, 75));
 		status.setFont(proFont.deriveFont(Font.PLAIN, 12.0f));
 		status.setForeground(new Color(6, 178, 48));
 		status.setBackground(new Color(0, 0, 0));
 		status.setOpaque(true);
+		status.setEditable(false);
+		status.setLineWrap(true);
+		status.setWrapStyleWord(true);
+		
+		updateStatus();
 	}
 	
 	
@@ -98,7 +107,7 @@ public class MainUI implements Serializable{
 		
 		Dimension dims = new Dimension();
 		dims.width = 640;
-		dims.height = 580;
+		dims.height = 577;
 		
 		mainFrame.setSize(dims);
 		mainFrame.setResizable(false);
@@ -113,16 +122,23 @@ public class MainUI implements Serializable{
 		gameGrid = new GameGrid();
 		mainFrame.add(gameGrid, BorderLayout.CENTER);
 		
+		// Make the info area:
+		infoArea = new JPanel();
+		if(!(infoArea.getLayout() instanceof BorderLayout))
+			infoArea.setLayout(new BorderLayout());
+				
 		// Right status pane
 		makeStatusPane();
-		mainFrame.add(status, BorderLayout.LINE_END);
+		infoArea.add(status, BorderLayout.LINE_END);
 		
 		// Bottom console pane.
 		outputConsole = new OutputArea();
 		outputConsole.setFont(status.getFont());
-		mainFrame.add(outputConsole, BorderLayout.PAGE_END);
 		outputConsole.addLine("Welcome to BtlShp! Please start or restore a game!");
 		outputConsole.addLine("BTLSHP by TeamTBD");
+		infoArea.add(outputConsole, BorderLayout.CENTER);
+		
+		mainFrame.add(infoArea, BorderLayout.PAGE_END);
 		
 		// Make help screen
 		helpScreen = new HelpScreen();
@@ -241,7 +257,25 @@ public class MainUI implements Serializable{
 
 
 	public GameGrid getGameGrid() {
-		// TODO Auto-generated method stub
 		return gameGrid;
+	}
+	
+	
+	/**
+	 * Updates the status text based on the current game state.
+	 */
+	public void updateStatus() {
+		String newStatus = "";
+		
+		BtlshpGame game = Btlshp.getGame();
+		
+		if(game == null || game.getAppState() == AppState.NoGame)
+			newStatus += "Not in game.\nStart or load a game!\n";
+		else if(game.getAppState() == AppState.LocalTurn)
+			newStatus += "Your turn\n";
+		else
+			newStatus += "Other players turn\n";
+		
+		status.setText(newStatus);
 	}
 }
