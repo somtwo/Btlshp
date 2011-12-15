@@ -517,15 +517,16 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public void rotateShip(Ship s, Direction newDir) {
+		if(!ships.contains(s)){
+			s = getShip(s.getId());
+		}
+
 		Location      loc = s.getLocation();
 		int x = loc.getx();
 		int y = loc.gety();
 		
 		//TODO: check for mines in turn, and next to ship's destination for explosion!
-		if(!ships.contains(s)){
-			s = getShip(s.getId());
-		}
-
+	
 		unplaceShip(s);
 		placeShip(s,x,y,newDir);
 		return;
@@ -539,11 +540,12 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public boolean placeMine(Ship s, Location loc) {
-		MapNode  n = getMapNode(loc);
 		if(!ships.contains(s)){
 			s = getShip(s.getId());
 		}
 
+		MapNode  n = getMapNode(loc);
+		
 		if(!s.canPlaceMine() || n.block != null || s.getPlayer().numberOfMines() == 0)
 			return false;
 		
