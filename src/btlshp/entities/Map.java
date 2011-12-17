@@ -505,7 +505,7 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public boolean canShipRotate(Ship s, Direction oldDir, Direction newDir) {
-		
+		/*
 		// left turn check
 		if (oldDir.val()>newDir.val()) {
 			
@@ -528,7 +528,7 @@ public class Map implements Serializable {
 			});
 		}
 		
-		//TODO: check for obsticles in way of turning
+		//TODO: check for obsticles in way of turning*/
 		return true;
 	}
 	        	
