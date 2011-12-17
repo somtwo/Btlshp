@@ -6,6 +6,7 @@ import btlshp.entities.Map;
 import btlshp.entities.MapNode;
 import btlshp.entities.Ship;
 import btlshp.enums.Direction;
+import btlshp.turns.TurnFactory;
 import btlshp.ui.GameGrid;
 import btlshp.utility.NodeIterator;
 import btlshp.utility.NodeIteratorAction;
@@ -61,14 +62,16 @@ public class RotateMode extends GridMode {
 		if(n.actionArea()) {
 			
 			// Rotate Left
-			if(isLeftRotate(shipDirection) && map.canShipRotate(ship, shipDirection.leftDir())) {
+			if(isLeftRotate(shipDirection) && map.canShipRotate(ship, ship.getDirection(), shipDirection.leftDir())) {
 				map.rotateShip(ship,shipDirection.leftDir());
+				Btlshp.getGame().sendTurn(TurnFactory.rotateShip(map,ship,shipDirection.leftDir()));
 				Btlshp.getGame().outputMessage("Rotate Left ship action.");
 			}
 			
 			// Rotate Right
-			else if (isLeftRotate(shipDirection) == false && map.canShipRotate(ship, shipDirection.rightDir())){
+			else if (isLeftRotate(shipDirection) == false && map.canShipRotate(ship, ship.getDirection(), shipDirection.rightDir())){
 				map.rotateShip(ship,shipDirection.rightDir());
+				Btlshp.getGame().sendTurn(TurnFactory.rotateShip(map,ship,shipDirection.rightDir()));
 				Btlshp.getGame().outputMessage("Rotate Right ship action.");
 			}
 		}

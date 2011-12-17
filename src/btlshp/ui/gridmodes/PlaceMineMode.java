@@ -7,6 +7,7 @@ import btlshp.entities.Map;
 import btlshp.entities.MapNode;
 import btlshp.entities.MineBlock;
 import btlshp.entities.Ship;
+import btlshp.turns.TurnFactory;
 import btlshp.ui.GameGrid;
 import btlshp.utility.NodeIterator;
 import btlshp.utility.NodeIteratorAction;
@@ -48,6 +49,7 @@ public class PlaceMineMode extends GridMode {
 		
 		if(n != null && n.block == null && n.actionSquare() && 
 				map.placeMine(ship, new Location(grid.getHoverx(), grid.getHovery()))) {
+			Btlshp.getGame().sendTurn(TurnFactory.placeMine(map, ship, new Location(grid.getHoverx(), grid.getHovery())));
 			Btlshp.getGame().outputMessage("Place a mine action action.");
 		}
 		

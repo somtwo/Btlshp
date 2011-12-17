@@ -12,7 +12,11 @@ public abstract class Construct implements Serializable{
 	 */
 	protected static int constructIDCounter = 0;
 	private static final long serialVersionUID = 207342763352324403L;
+<<<<<<< HEAD
 	protected int constructID;
+=======
+	protected static int idCount = 0;
+>>>>>>> 84f1e17f60ec461bf54298ec7ec98dd3820af904
 	protected Location myLoc;
 	protected Direction myDir;
 	protected ConstructBlock blocks[];

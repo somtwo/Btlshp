@@ -69,7 +69,9 @@ public final class TurnFactory {
 		return new MoveShip(m, s, dir, distance);
 	}
 
-
+	public static RotateShip rotateShip(Map m, Ship s, Direction dir){
+		return new RotateShip(m,s,dir);
+	}
 	/**
 	* Immerse mine at specified location
 	* @param loc location to place mine

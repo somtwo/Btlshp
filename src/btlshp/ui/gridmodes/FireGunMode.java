@@ -7,6 +7,7 @@ import btlshp.entities.Map;
 import btlshp.entities.MapNode;
 import btlshp.entities.Ship;
 import btlshp.enums.Weapon;
+import btlshp.turns.TurnFactory;
 import btlshp.ui.GameGrid;
 import btlshp.utility.NodeIterator;
 import btlshp.utility.NodeIteratorAction;
@@ -50,7 +51,9 @@ public class FireGunMode extends GridMode {
 		
 		if(n.actionSquare()) {
 			Btlshp.getGame().outputMessage("Fire gun action.");
-			map.fireGuns(ship, new Location(grid.getHoverx(), grid.getHovery()));
+			Location loc = new Location(grid.getHoverx(), grid.getHovery());
+			map.fireGuns(ship, loc );
+			Btlshp.getGame().sendTurn(TurnFactory.shoot(map, ship, loc));
 		}
 		grid.cancelAction();
 	}

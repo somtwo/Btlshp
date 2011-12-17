@@ -1,5 +1,9 @@
 package btlshp.entities;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -284,7 +288,6 @@ public class Map implements Serializable {
 	public void updateFrame(Player forPlayer) {
 		if(forPlayer != leftPlayer && forPlayer != rightPlayer)
 			throw new IllegalArgumentException("forPlayer must be either player one or player two.");
-		
 		for(int y = 0; y < MAPHEIGHT; ++y) {
 			for(int x = 0; x < MAPWIDTH; ++x) {
 				getMapNode(x, y).clearBasicFlags();
@@ -418,12 +421,16 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public int move(Ship s, Direction dir, int blocks) {
+		if(!ships.contains(s)){
+			s = getShip(s.getId());
+		}
 		Location      loc = s.getLocation();
 		NodeIterator  it = s.getCoreIterator();
 		NodeIterator  adjIt = s.getSurroundingIterator();
 		int           x, y, deltax, deltay, moveCount;
 		boolean		  canContinue = true;
 		
+
 		x = loc.getx();
 		y = loc.gety();
 		
@@ -467,7 +474,6 @@ public class Map implements Serializable {
 			
 			if(!canContinue)
 				break;
-			
 			unplaceShip(s);
 			placeShip(s, x, y, s.getDirection());
 
@@ -486,7 +492,6 @@ public class Map implements Serializable {
 				canContinue = false;
 			}
 		}
-		
 		return moveCount;
 	}
 	        	
@@ -499,10 +504,32 @@ public class Map implements Serializable {
 	* @returns True if the ship can rotate in the new direction.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	public boolean canShipRotate(Ship s, Direction newDir) {
-		return true;
-		//TODO: check for obsticles in way of turning
+	public boolean canShipRotate(Ship s, Direction oldDir, Direction newDir) {
+		/*
+		// left turn check
+		if (oldDir.val()>newDir.val()) {
+			
+			
+		// right turn check
+		} else {
+			NodeIterator it = s.getRightRotationIterator();
+			
+			final boolean rightAction = it.isPointInside(grid.getHoverx(), grid.getHovery(), s.getLocation(), s.getDirection());
+			it.iterate(map, s.getLocation(), s.getDirection(), new NodeIteratorAction() {
+				@Override
+				public void visit(MapNode n, Block b) {
+					if (n==null)
+						return;
+					n.actionArea(true);
+					
+					if(rightAction)
+						n.actionSquare(true);
+				}
+			});
+		}
 		
+		//TODO: check for obsticles in way of turning*/
+		return true;
 	}
 	        	
 	/**
@@ -512,12 +539,17 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public void rotateShip(Ship s, Direction newDir) {
+		s.getDirection();
+		if(!ships.contains(s)){
+			s = getShip(s.getId());
+		}
+
 		Location      loc = s.getLocation();
 		int x = loc.getx();
 		int y = loc.gety();
 		
 		//TODO: check for mines in turn, and next to ship's destination for explosion!
-		
+	
 		unplaceShip(s);
 		placeShip(s,x,y,newDir);
 		return;
@@ -531,6 +563,10 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public boolean placeMine(Ship s, Location loc) {
+		if(!ships.contains(s)){
+			s = getShip(s.getId());
+		}
+
 		MapNode  n = getMapNode(loc);
 		
 		if(!s.canPlaceMine() || n.block != null || s.getPlayer().numberOfMines() == 0)
@@ -553,6 +589,10 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public boolean pickupMine(Ship s, Location loc) {
+		if(!ships.contains(s)){
+			s = getShip(s.getId());
+		}
+
 		MapNode n = getMapNode(loc);
 		MineBlock b = n.block != null && n.block instanceof MineBlock ? (MineBlock)n.block : null;
 		
@@ -616,6 +656,10 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public void fireGuns(Ship s, Location loc) {
+		if(!ships.contains(s)){
+			s = getShip(s.getId());
+		}
+
 		MapNode n = getMapNode(loc);
 		
 		if(n.block != null)
@@ -630,4 +674,11 @@ public class Map implements Serializable {
 	public Player getLeftPlayer() {
 		return leftPlayer;
 	}
+	public Ship getShip(int id){
+		for(Ship s : ships){
+			if(s.getId() == id) return s;
+		}
+		return null;
+	}
+
 }

@@ -7,6 +7,7 @@ import btlshp.entities.Map;
 import btlshp.entities.MapNode;
 import btlshp.entities.MineBlock;
 import btlshp.entities.Ship;
+import btlshp.turns.TurnFactory;
 import btlshp.ui.GameGrid;
 import btlshp.utility.NodeIterator;
 import btlshp.utility.NodeIteratorAction;
@@ -48,7 +49,9 @@ public class PickupMineMode extends GridMode {
 		MapNode n = map.getMapNode(grid.getHoverx(), grid.getHovery());
 		
 		if(n != null && n.block != null && n.block instanceof MineBlock && n.actionSquare()) {
-			map.pickupMine(ship, new Location(grid.getHoverx(), grid.getHovery()));
+			Location loc = new Location(grid.getHoverx(), grid.getHovery());
+			map.pickupMine(ship, loc);
+			Btlshp.getGame().sendTurn(TurnFactory.takeMine(map, ship, loc));
 			Btlshp.getGame().outputMessage("Pickup mine action action.");
 		}
 		

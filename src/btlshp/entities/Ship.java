@@ -22,7 +22,7 @@ public class Ship extends Construct implements Serializable{
 	private int          maxForwardMove, maxSideMove, maxBackMove, maxGunRange, maxSonarRange;
 	private NodeIterator coreArea, adjacentArea, radarArea, turnLeftArea, turnRightArea, firingArea, mineArea;
 	private NodeIterator forwardMoveArea, backMoveArea, leftMoveArea, rightMoveArea;
-	
+	private int			 id;
 	/**
 	* Constructor for Ship
 	* Returns the Ship Constructed
@@ -41,7 +41,8 @@ public class Ship extends Construct implements Serializable{
 		maxRadarRange = radarRange;
 		myLoc = new Location(0, 0);
 		map = null;
-		
+		id = super.idCount;
+		super.idCount++;
 		if (hasArmor()) {
 			blocks = new ArmoredConstructBlock[numberOfBlocks];
 			for (int i = 0; i<numberOfBlocks ; i++){
@@ -538,6 +539,9 @@ public class Ship extends Construct implements Serializable{
 			return myLoc.gety() + blocks.length - 1;
 		
 		return myLoc.gety();
+	}
+	public int getId(){
+		return id;
 	}
 
 }
