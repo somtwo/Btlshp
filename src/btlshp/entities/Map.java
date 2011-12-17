@@ -504,10 +504,32 @@ public class Map implements Serializable {
 	* @returns True if the ship can rotate in the new direction.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	public boolean canShipRotate(Ship s, Direction newDir) {
-		return true;
-		//TODO: check for obsticles in way of turning
+	public boolean canShipRotate(Ship s, Direction oldDir, Direction newDir) {
 		
+		// left turn check
+		if (oldDir.val()>newDir.val()) {
+			
+			
+		// right turn check
+		} else {
+			NodeIterator it = s.getRightRotationIterator();
+			
+			final boolean rightAction = it.isPointInside(grid.getHoverx(), grid.getHovery(), s.getLocation(), s.getDirection());
+			it.iterate(map, s.getLocation(), s.getDirection(), new NodeIteratorAction() {
+				@Override
+				public void visit(MapNode n, Block b) {
+					if (n==null)
+						return;
+					n.actionArea(true);
+					
+					if(rightAction)
+						n.actionSquare(true);
+				}
+			});
+		}
+		
+		//TODO: check for obsticles in way of turning
+		return true;
 	}
 	        	
 	/**
@@ -517,6 +539,7 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public void rotateShip(Ship s, Direction newDir) {
+		s.getDirection();
 		if(!ships.contains(s)){
 			s = getShip(s.getId());
 		}
