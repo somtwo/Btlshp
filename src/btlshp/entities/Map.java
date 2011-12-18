@@ -11,6 +11,7 @@ import btlshp.enums.Direction;
 import btlshp.enums.Weapon;
 import btlshp.utility.NodeIterator;
 import btlshp.utility.NodeIteratorAction;
+import btlshp.utility.NodeTestAction;
 
 public class Map implements Serializable {
 	private static final long serialVersionUID = -6849202817059640136L;
@@ -504,31 +505,43 @@ public class Map implements Serializable {
 	* @returns True if the ship can rotate in the new direction.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	public boolean canShipRotate(Ship s, boolean isLeftTurn, Direction newDir) {
+	public boolean canShipRotate(Ship s, Direction newDir) {
 		boolean canRotate = true;
+
 		// left turn check
-		if (isLeftTurn) {
-			return true;
+		if (newDir == s.getDirection().leftDir()) {
+			NodeIterator it = s.getLeftRotationIterator();
 			
+			return it.test(this, s.getLocation(), s.getDirection(), new NodeTestAction() {
+				@Override
+				public boolean visit(MapNode n, Block b) {
+					if(n == null)
+						return false;
+					if(n.block != null && !(n.block instanceof MineBlock))
+						return false;
+
+					return true;
+				}
+			});
+		} 
 		// right turn check
-		} else {
-			
+		else if(newDir == s.getDirection().rightDir()) {
 			NodeIterator it = s.getRightRotationIterator();
 			
-			
-			it.iterate(this, s.getLocation(), s.getDirection(), new NodeIteratorAction() {
+			return it.test(this, s.getLocation(), s.getDirection(), new NodeTestAction() {
 				@Override
-				public void visit(MapNode n, Block b) {
-					if (n==null)
-						return;
-					n.actionArea(true);
-					
-					//canRotate = false;
+				public boolean visit(MapNode n, Block b) {
+					if(n == null)
+						return false;
+					if(n.block != null && !(n.block instanceof MineBlock))
+						return false;
+
+					return true;
 				}
 			});
 		}
-		return canRotate;
-	
+		
+		return false;
 	}
 	        	
 	/**

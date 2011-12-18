@@ -174,7 +174,13 @@ public class NodeIterator implements Serializable{
 	}
 	
 	
-	public boolean test(Map map, int x, int y, Direction dir, NodeIteratorTest test) {
+	public boolean test(Map map, Location loc, Direction dir, NodeTestAction test) {
+		return test(map, loc.getx(), loc.gety(), dir, test);
+	}
+	
+	
+	
+	public boolean test(Map map, int x, int y, Direction dir, NodeTestAction test) {
 		boolean result = true;
 		
 		setOrigin(x, y);
