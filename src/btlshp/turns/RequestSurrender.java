@@ -2,6 +2,7 @@ package btlshp.turns;
 
 import java.io.Serializable;
 
+import btlshp.Btlshp;
 import btlshp.entities.Map;
 
 class RequestSurrender extends Turn implements Serializable{
@@ -15,7 +16,7 @@ class RequestSurrender extends Turn implements Serializable{
 	public void executeTurn() {
 		// TODO Implementation UI dependent
 		//Generate dialog for the player to accept or reject surrender
-		
+		Btlshp.getGame().otherPlayerForfeit();
 	}
 
 

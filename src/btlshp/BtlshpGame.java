@@ -159,6 +159,17 @@ public class BtlshpGame {
 	
 	
 	/**
+	 * Handles game-logic when the other player forfeits.
+	 */
+	public void otherPlayerForfeit() {
+		mainUi.showAlert("Other player has quit!", "It seems you were simply too cunning, fearless, and generally superior for the other player to handle. You have won the game!");
+		localPlayer = remotePlayer = null;
+		setAppState(AppState.NoGame);
+		mainUi.updateMainMenu();
+	}
+	
+	
+	/**
 	 * Handles a UI-side save game event.
 	 */
 	public void saveGame() {
