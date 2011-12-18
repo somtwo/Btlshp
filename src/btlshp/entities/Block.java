@@ -60,4 +60,9 @@ public abstract class Block implements Serializable {
 	public Map getMap() {
 		return map;
 	}
+
+
+	public Construct getConstruct() {
+		return null;
+	}
 }
