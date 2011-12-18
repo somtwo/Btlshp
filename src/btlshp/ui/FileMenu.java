@@ -9,6 +9,7 @@ import javax.swing.JMenuItem;
 
 import btlshp.Btlshp;
 import btlshp.enums.AppState;
+import btlshp.turns.TurnFactory;
 
 public class FileMenu extends JMenu {
 	/**
@@ -34,7 +35,7 @@ public class FileMenu extends JMenu {
 			}	
 		});
 		add(newGameItem);
-		addSeparator();
+		
 		JMenuItem joinGameItem = fileMenuItems[1] = new JMenuItem("Join game");
 		joinGameItem.setMnemonic(KeyEvent.VK_J);
 		joinGameItem.addActionListener(new ActionListener(){
@@ -44,6 +45,7 @@ public class FileMenu extends JMenu {
 			}
 		});
 		add(joinGameItem);
+		addSeparator();
 		JMenuItem saveGameItem = fileMenuItems[2] = new JMenuItem("Save");
 		saveGameItem.setMnemonic(KeyEvent.VK_S);
 		saveGameItem.addActionListener(new ActionListener() {
@@ -71,6 +73,7 @@ public class FileMenu extends JMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Btlshp.getGame().forfeitGame();
+				Btlshp.getGame().sendTurn(TurnFactory.requestSurrender());
 			}
 		});
 		add(forfeitGameItem);
