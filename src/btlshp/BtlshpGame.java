@@ -9,6 +9,8 @@ import java.io.ObjectOutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JOptionPane;
+
 import btlshp.entities.Construct;
 import btlshp.entities.Map;
 import btlshp.entities.Player;
@@ -164,7 +166,11 @@ public class BtlshpGame {
 	public void saveGame() {
 		if(appState == AppState.NoGame) 
 			return;
-		
+		if (localPlayer.getPlayerID() != mainUi.getMap().getLeftPlayer().getPlayerID())
+		{
+			JOptionPane.showMessageDialog(null, "You can't save because you joined game.");
+			return;
+		}
 		File f = mainUi.selectSaveFile("Select a file to save");
 		
 		if(f != null) {
