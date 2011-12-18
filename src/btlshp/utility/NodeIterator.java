@@ -174,6 +174,24 @@ public class NodeIterator implements Serializable{
 	}
 	
 	
+	public boolean test(Map map, int x, int y, Direction dir, NodeIteratorTest test) {
+		boolean result = true;
+		
+		setOrigin(x, y);
+		rotate(dir);
+		for(int i = 0; i < offsets.size(); ++i) {
+			LocationBlock lb = offsets.get(i);
+			
+			MapNode n = map.getMapNode(lb.loc.getx() + origin.getx(), lb.loc.gety() + origin.gety());
+			
+			if(test.visit(n, lb.block) == false)
+				result = false;
+		}
+		
+		return result;
+	}
+	
+	
 	/**
 	 * Tests to see if a point lies within the iteration area of the iterator.
 	 * 
