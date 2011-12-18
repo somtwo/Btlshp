@@ -20,6 +20,7 @@ public class Base extends Construct implements Serializable {
 	* ! this is assuming all bases are of size 10.
 	*/
 	public Base(Player owner) {
+		constructID = super.getNextConstructerID();
 		blocks = new ConstructBlock[BASELENGTH];
 		maxRadarRange = 0; // TBD!
 		pl = owner;

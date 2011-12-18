@@ -305,7 +305,7 @@ class MoveShip extends Turn implements Serializable{
 	@Override
 	public void executeTurn() {
 		try{
-			System.err.println("Moving ship "+s.getId()+" "+ dir.name() +" "+ distance+ " blocks");
+			System.err.println("Moving ship "+s.getConstructID()+" "+ dir.name() +" "+ distance+ " blocks");
 			m.move(s, dir,distance);
 			success = true;
 		}catch(IllegalStateException e){

@@ -422,7 +422,7 @@ public class Map implements Serializable {
 	*/
 	public int move(Ship s, Direction dir, int blocks) {
 		if(!ships.contains(s)){
-			s = getShip(s.getId());
+			s = getShip(s.getConstructID());
 		}
 		Location      loc = s.getLocation();
 		NodeIterator  it = s.getCoreIterator();
@@ -540,7 +540,7 @@ public class Map implements Serializable {
 	public void rotateShip(Ship s, Direction newDir) {
 		s.getDirection();
 		if(!ships.contains(s)){
-			s = getShip(s.getId());
+			s = getShip(s.getConstructID());
 		}
 
 		Location      loc = s.getLocation();
@@ -563,7 +563,7 @@ public class Map implements Serializable {
 	*/
 	public boolean placeMine(Ship s, Location loc) {
 		if(!ships.contains(s)){
-			s = getShip(s.getId());
+			s = getShip(s.getConstructID());
 		}
 
 		MapNode  n = getMapNode(loc);
@@ -589,7 +589,7 @@ public class Map implements Serializable {
 	*/
 	public boolean pickupMine(Ship s, Location loc) {
 		if(!ships.contains(s)){
-			s = getShip(s.getId());
+			s = getShip(s.getConstructID());
 		}
 
 		MapNode n = getMapNode(loc);
@@ -656,7 +656,7 @@ public class Map implements Serializable {
 	*/
 	public void fireGuns(Ship s, Location loc) {
 		if(!ships.contains(s)){
-			s = getShip(s.getId());
+			s = getShip(s.getConstructID());
 		}
 
 		MapNode n = getMapNode(loc);
@@ -675,7 +675,7 @@ public class Map implements Serializable {
 	}
 	public Ship getShip(int id){
 		for(Ship s : ships){
-			if(s.getId() == id) return s;
+			if(s.getConstructID() == id) return s;
 		}
 		return null;
 	}

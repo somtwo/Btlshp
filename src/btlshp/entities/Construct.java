@@ -10,7 +10,9 @@ public abstract class Construct implements Serializable{
 	/**
 	 * 
 	 */
+	protected static int constructIDCounter = 0;
 	private static final long serialVersionUID = 207342763352324403L;
+	protected int constructID;
 	protected static int idCount = 0;
 	protected Location myLoc;
 	protected Direction myDir;
@@ -251,5 +253,22 @@ public abstract class Construct implements Serializable{
 		}
 		result = result/blocks.length;
 		return result;
+	}
+	
+	/**
+	 * Returns the Next Construct ID Number to be allocated.
+	 * @return the Next Construct ID Number to be allocated.
+	 */
+	public int getNextConstructerID() {
+		constructIDCounter++;
+		return constructIDCounter;
+	}
+	
+	/**
+	 * Returns the calling Construct's ID Number
+	 * @return the calling Construct's ID Number
+	 */
+	public int getConstructID(){
+		return constructID;
 	}
 }

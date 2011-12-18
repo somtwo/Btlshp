@@ -9,6 +9,8 @@ public class Player implements Serializable {
 	/**
 	 * Instance variables
 	 */
+	private static int 		playerIDCounter = 0;
+	private int 			playerID;
 	private ArrayList<Ship> ships;
 	private Base            base;
 	private int             numberOfMines;
@@ -20,6 +22,7 @@ public class Player implements Serializable {
 	 */
 	public Player() {
 		// Starting value of player
+		playerID = getNextPlayerID();
 		ships = new ArrayList<Ship>();
 		numberOfMines = 10;
 		points = 0;
@@ -34,6 +37,14 @@ public class Player implements Serializable {
 			addShip(Ship.buildTorpedoBoat(this));
 		}
 		addShip(Ship.buildTorpedoBoat(this));
+	}
+	/**
+	 * Returns the Next Player ID Number to be allocated.
+	 * @return the Next Player ID Number to be allocated.
+	 */
+	private int getNextPlayerID() {
+		playerIDCounter++;
+		return playerIDCounter;
 	}
 
 	/**
@@ -136,5 +147,12 @@ public class Player implements Serializable {
 	 */
 	public Ship[] getShips() {
 		return ships.toArray(new Ship[0]);
+	}
+	/**
+	 * Returns the calling Player's ID Number
+	 * @return the calling Player's ID Number
+	 */
+	public int getPlayerID(){
+		return playerID;
 	}
 }

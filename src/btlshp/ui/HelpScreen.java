@@ -36,15 +36,7 @@ public class HelpScreen {
 		
 		helpLabel = new JLabel() {
 			private static final long serialVersionUID = 1493078874270486716L;
-			public Dimension getPreferredSize() {
-				return new Dimension(610, 456);
-			}
-			public Dimension getMinimumSize() {
-				return new Dimension(610, 456);
-			}
-			public Dimension getMaximumSize() {
-				return new Dimension(610, 1000);
-			}
+			
 		};
 		helpLabel.setBackground(mainFrame.getBackground());
 		helpLabel.setHorizontalAlignment(JLabel.CENTER);
