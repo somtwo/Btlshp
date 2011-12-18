@@ -269,51 +269,46 @@ public class BtlshpGame {
 	 * Read the last modified time of a file every 5 seconds
 	 * @param modified time the file was last modified
 	 */
-	private void waitForTurn(final long modified){
-			
-			Timer t = new Timer();
-			
-			
-			t.schedule(new TimerTask(){
-				@Override
-				public void run() {
-					String filePath = gameDir.getPath();
-					File f = new File(filePath+"/game.ser");
-					
-					if(f.lastModified()> modified){
-						FileInputStream fileIn = null;
-						ObjectInputStream objIn = null;
-						try{
-							fileIn = new FileInputStream(filePath+"/game.ser");
-							objIn = new ObjectInputStream(fileIn);
-							Turn loadTurn= null;
-							try {
-								loadTurn = (Turn) objIn.readObject();
-								objIn.close();
-								fileIn.close();
-								loadTurn.setMap(mainUi.getMap());
-								loadTurn.executeTurn();
-								setAppState(AppState.LocalTurn);
-								cancel();
-								
-							} catch (ClassNotFoundException e) {
-								e.printStackTrace();
-							}
-						
+	private void waitForTurn(final long modified) {
+		Timer t = new Timer();
+		
+		t.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				String filePath = gameDir.getPath();
+				File f = new File(filePath+"/game.ser");
+				
+				if(f.lastModified()> modified){
+					FileInputStream fileIn = null;
+					ObjectInputStream objIn = null;
+					try{
+						fileIn = new FileInputStream(filePath+"/game.ser");
+						objIn = new ObjectInputStream(fileIn);
+						Turn loadTurn= null;
+						try {
+							loadTurn = (Turn) objIn.readObject();
+							objIn.close();
+							fileIn.close();
+							loadTurn.setMap(mainUi.getMap());
+							loadTurn.executeTurn();
+							setAppState(AppState.LocalTurn);
+							cancel();
 							
-						
-						}catch(IOException e){
-							System.err.println("IOException: File Path: "+filePath);
+						} catch (ClassNotFoundException e) {
 							e.printStackTrace();
 						}
-					}	
 					
-				}
-			
-			}, 500, 500);
-			
-	
-			
+						
+					
+					}catch(IOException e){
+						System.err.println("IOException: File Path: "+filePath);
+						e.printStackTrace();
+					}
+				}	
+				
+			}
+		
+		}, 500, 500);
 	}
 
 

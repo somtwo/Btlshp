@@ -373,19 +373,21 @@ public class Ship extends Construct implements Serializable{
 	
 	private void buildAdjacentIterator() {
 		// Account for Destroyer's odd pivot point
-		int offset = (blocks.length == 3) ? 1 : blocks.length - 1;
+		int offset = (blocks.length == 3) ? 1 : 0;
 		
 		adjacentArea = new NodeIterator(null);
 		
 		// Add the area along the sides
+		int ybase = 1 - blocks.length + offset;
+		
 		for(int i = 0; i < blocks.length; ++i) {
-			adjacentArea.add(-1, i - offset, blocks[i]);
-			adjacentArea.add( 1, i - offset, blocks[i]);
+			adjacentArea.add(-1, ybase + i, blocks[i]);
+			adjacentArea.add( 1, ybase + i, blocks[i]);
 		}
 		
 		// Add the head and tail.
-		adjacentArea.add(0, 1,             blocks[blocks.length - 1]);
-		adjacentArea.add(0, blocks.length, blocks[0]);
+		adjacentArea.add(0, 1 + offset,    blocks[blocks.length - 1]);
+		adjacentArea.add(0, -blocks.length + offset, blocks[0]);
 	}
 	
 	
