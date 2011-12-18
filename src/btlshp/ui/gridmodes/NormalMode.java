@@ -33,7 +33,7 @@ public class NormalMode extends GridMode {
 			return;
 		
 		if((cb.getConstruct()) instanceof Ship) {
-			JPopupMenu m = new ShipPopupMenu(grid, (Ship)cb.getConstruct());
+			JPopupMenu m = new ShipPopupMenu(grid, (Ship)cb.getConstruct(), map);
 			m.show(grid, x, y);
 		}
 		else if(cb.getConstruct() instanceof Base) {

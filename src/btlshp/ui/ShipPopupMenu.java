@@ -15,6 +15,7 @@ import btlshp.entities.MineBlock;
 import btlshp.entities.Ship;
 import btlshp.enums.Direction;
 import btlshp.enums.Weapon;
+import btlshp.turns.TurnFactory;
 import btlshp.utility.NodeIterator;
 
 /**
@@ -27,9 +28,11 @@ public class ShipPopupMenu extends JPopupMenu {
 	private final GameGrid grid;
 	private final Ship     target;
 	
-	public ShipPopupMenu(GameGrid gameGrid, Ship clickedShip) {
+	public ShipPopupMenu(GameGrid gameGrid, Ship clickedShip, btlshp.entities.Map map2) {
 		target = clickedShip;
 		grid = gameGrid;
+		final Ship ship = clickedShip;
+		final btlshp.entities.Map maps = map2;
 		
 		// Add menu items based on the capabilities of the ship
 		JMenuItem item = new JMenuItem("Move ship");
@@ -89,6 +92,7 @@ public class ShipPopupMenu extends JPopupMenu {
 							Block b = n.block;
 							if(b != null){
 								b.takeHit(Weapon.Torpedo, x , y);
+								Btlshp.getGame().sendTurn(TurnFactory.launchTorpedo(maps, ship));
 								canContinue = false;
 							}
 						
