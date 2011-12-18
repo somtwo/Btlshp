@@ -578,8 +578,10 @@ public class Map implements Serializable {
 		if(!ships.contains(s)){
 			s = getShip(s.getConstructID());
 		}
-
+		
 		MapNode  n = getMapNode(loc);
+		MapNode m = getMapNode(loc);
+		
 		
 		if(!s.canPlaceMine() || n.block != null || s.getPlayer().numberOfMines() == 0)
 			return false;
@@ -588,6 +590,38 @@ public class Map implements Serializable {
 		   loc.gety() < s.gety1() - 1 || loc.gety() > s.gety2() + 1)
 			return false;
 		
+		m = getMapNode(loc.getx()- 1, loc.gety());
+		if (m != null){
+			if (m.block instanceof ConstructBlock){
+				if(m.block.getConstruct() != s){
+					return false;
+				}
+			}
+		}
+		m = getMapNode(loc.getx()+ 1, loc.gety());
+		if (m != null){
+			if (m.block instanceof ConstructBlock){
+				if(m.block.getConstruct() != s){
+					return false;
+				}
+			}
+		}
+		m = getMapNode(loc.getx(), loc.gety()+1);
+		if (m != null){
+			if (m.block instanceof ConstructBlock){
+				if(m.block.getConstruct() != s){
+					return false;
+				}
+			}
+		}
+		m = getMapNode(loc.getx(), loc.gety()-1);
+		if (m != null){
+			if (m.block instanceof ConstructBlock){
+				if(m.block.getConstruct() != s){
+					return false;
+				}
+			}
+		}		
 		placeBlock(n, new MineBlock());
 		s.getPlayer().removeMine();
 		return true;
