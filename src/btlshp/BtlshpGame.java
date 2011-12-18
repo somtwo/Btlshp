@@ -151,7 +151,6 @@ public class BtlshpGame {
 		if(appState != AppState.NoGame &&
 				mainUi.yesNoCancelDialog("Forfeit", "Are you sure you wish to forfeit? This may lead to eternal shame!") == DialogResult.Yes) {
 			
-			
 			localPlayer = remotePlayer = null;
 			mainUi.setMap(null);
 			setAppState(AppState.NoGame);

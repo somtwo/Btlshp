@@ -2,6 +2,8 @@ package btlshp.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import btlshp.Btlshp;
 public class Player implements Serializable {
 	
