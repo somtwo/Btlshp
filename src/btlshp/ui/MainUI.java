@@ -151,6 +151,15 @@ public class MainUI implements Serializable{
 	
 	
 	/**
+	 * Forces the UI to refresh
+	 */
+	public void refresh() {
+		mainFrame.repaint();	
+	}
+	
+	
+	
+	/**
 	 * Utility function to display a Yes/No/Cancel dialog for the user.
 	 * 
 	 * @param title    Title of the dialog window
