@@ -79,6 +79,7 @@ public class Player implements Serializable {
 		return base;
 	}
 	
+	
 	/**
 	 * counts the ships of player
 	 * @return number of ships player has in play
