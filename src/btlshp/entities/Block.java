@@ -12,15 +12,24 @@ public abstract class Block implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -5024766800984383104L;
+	private static int        nextId = 0;
+	
 	protected GraphicId       graphicId;
 	protected GraphicPart     graphicPart;
 	protected GraphicAlliance graphicAlliance;
 	protected Map             map;
+	protected int             id;
 	
 	Block() {
 		graphicId = GraphicId.None;
 		graphicPart = GraphicPart.None;
 		graphicAlliance = GraphicAlliance.Neutral;
+		id = nextId++;
+	}
+	
+	
+	public int getId() {
+		return id;
 	}
 	
 	/**

@@ -8,6 +8,7 @@ import javax.swing.JPopupMenu;
 
 import btlshp.Btlshp;
 import btlshp.entities.Base;
+import btlshp.turns.TurnFactory;
 
 public class BasePopupMenu extends JPopupMenu {
 	private static final long serialVersionUID = -1149025916444288803L;
@@ -36,8 +37,7 @@ public class BasePopupMenu extends JPopupMenu {
 		item = new JMenuItem("Pass turn");
 		item.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				// TODO: PAss a turn
-				
+				Btlshp.getGame().sendTurn(TurnFactory.pass());
 			}
 		});
 		add(item);
