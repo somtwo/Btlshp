@@ -9,6 +9,8 @@ import java.io.ObjectOutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JOptionPane;
+
 import btlshp.entities.Construct;
 import btlshp.entities.Map;
 import btlshp.entities.Player;
@@ -149,7 +151,6 @@ public class BtlshpGame {
 		if(appState != AppState.NoGame &&
 				mainUi.yesNoCancelDialog("Forfeit", "Are you sure you wish to forfeit? This may lead to eternal shame!") == DialogResult.Yes) {
 			
-			
 			localPlayer = remotePlayer = null;
 			mainUi.setMap(null);
 			setAppState(AppState.NoGame);
@@ -175,7 +176,11 @@ public class BtlshpGame {
 	public void saveGame() {
 		if(appState == AppState.NoGame) 
 			return;
-		
+		if (localPlayer.getPlayerID() != mainUi.getMap().getLeftPlayer().getPlayerID())
+		{
+			JOptionPane.showMessageDialog(null, "You can't save because you joined game.");
+			return;
+		}
 		File f = mainUi.selectSaveFile("Select a file to save");
 		
 		if(f != null) {
