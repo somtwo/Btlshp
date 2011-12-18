@@ -1,6 +1,12 @@
 package btlshp.entities;
 
-public class SaveGame {
+import java.io.Serializable;
+
+public class SaveGame implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Map savedMap;
 	int savingPlayerID;
 	
