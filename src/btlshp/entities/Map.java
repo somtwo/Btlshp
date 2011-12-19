@@ -116,7 +116,7 @@ public class Map implements Serializable {
 			basex = MAPWIDTH - 1;
 			shipx = MAPWIDTH - 2;
 			shipDir = Direction.West;
-			baseLoc = new Location(0, (MAPHEIGHT + p.getBase().getBlocks().length) / 2);
+			baseLoc = new Location(basex, ((MAPHEIGHT + p.getBase().getBlocks().length) / 2) - 1);
 		}
 		
 		p.getBase().setDirection(shipDir);
@@ -125,8 +125,19 @@ public class Map implements Serializable {
 		ConstructBlock [] blocks = p.getBase().getBlocks();
 		int ytop = (MAPHEIGHT - blocks.length) / 2;
 		
+		/*ConstructBlock [] blocks = p.getBase().getBlocks();
+		int ytop = baseLoc.gety();
+		
 		for(int i = 0; i < blocks.length; ++i)
-			placeBlock(getMapNode(basex, ytop + i), blocks[i]);
+			placeBlock(getMapNode(baseLoc.getx(), ytop + i), blocks[i]);*/
+		
+		NodeIterator it = p.getBase().getCoreArea();
+		it.iterate(this, baseLoc, shipDir, new NodeIteratorAction() {
+			@Override
+			public void visit(MapNode n, Block b) {
+				placeBlock(n, b);
+			}
+		});
 		
 		Ship [] playerShips = p.getShips();
 		

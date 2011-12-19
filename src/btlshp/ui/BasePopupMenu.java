@@ -21,34 +21,26 @@ public class BasePopupMenu extends JPopupMenu {
 		grid = gameGrid;
 		target = targetBase;
 		JMenuItem item;
-		
-			// Add menu items based on the capabilities of the base
-			 item = new JMenuItem("Repair Base");
-			if(!target.canRepairOther() || target.canRepairSelf()) {
-				item.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent ev) {
-						grid.startRepair(target);
-					}
-				});
-			}
-			else {
-				item.setEnabled(false);
-			}
-			add(item);
 
-			// Add menu items based on the capabilities of the base
-			 item = new JMenuItem("Repair Base or Ship");
-			if(target.canRepairOther() || target.canRepairSelf()) {
-				item.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent ev) {
-						grid.startRepair(target);
-					}
-				});
-			}
-			else {
-				item.setEnabled(false);
-			}
-			add(item);
+		// Add menu items based on the capabilities of the base
+		if(target.canRepairOther() && target.canRepairSelf())
+			item = new JMenuItem("Repair base or ship");
+		else if(target.canRepairOther())
+			item = new JMenuItem("Repair ship");
+		else
+			item = new JMenuItem("Repair base");
+		
+		if(target.canRepairOther() || target.canRepairSelf()) {
+			item.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent ev) {
+					grid.startRepair(target);
+				}
+			});
+		}
+		else {
+			item.setEnabled(false);
+		}
+		add(item);
 		
 		item = new JMenuItem("Pass turn");
 		item.addActionListener(new ActionListener() {
