@@ -35,14 +35,14 @@ public abstract class Construct implements Serializable{
 	//Determine Weapon Used and Allocate the Damage accordingly
 		
 	// Gun
-		if (weaponUsed == Weapon.Gun){
+		if (weaponUsed == Weapon.Gun || weaponUsed == Weapon.Torpedo){
 			hitBlock.takeDamage();
 		}
 	// Torpedo
 		else if (weaponUsed == Weapon.Torpedo){
 			// Damage the block hit regardless
 			hitBlock.takeDamage();
-			
+			/*
 			// Determine the Next block to be Damaged (if another block exists).
 			int blockLoc = this.blockLocation(hitBlock);
 			// If this is not the Bow, Damage the next in the direction of the Bow
@@ -52,7 +52,7 @@ public abstract class Construct implements Serializable{
 			// If the Bow was hit, Damage the second location of the ship (if it exists)
 			else if (blocks.length>1){ 
 				blocks[1].takeDamage();
-			}
+			}*/
 		}
 	// Mine
 		else if (weaponUsed == Weapon.Mine){

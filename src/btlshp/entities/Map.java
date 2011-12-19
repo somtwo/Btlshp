@@ -705,6 +705,9 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public void fireTorpedo(Ship s) {
+		if(!ships.contains(s)){
+			s = getShip(s.getConstructID());
+		}
 		Location      loc = s.getLocation();
 		int           x, y, deltax, deltay, deltaLength, fireCount;
 		boolean		  canContinue = true;
@@ -730,7 +733,7 @@ public class Map implements Serializable {
 			MapNode n = getMapNode(x, y);
 			Block b = n.block;
 			if(b != null){
-				b.takeHit(Weapon.Torpedo, x , y);
+				n.block.takeHit(Weapon.Torpedo, x , y);
 				canContinue = false;
 			}
 			
