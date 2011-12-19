@@ -149,7 +149,9 @@ public class BtlshpGame {
 	 */
 	public void forfeitGame() {
 		if(appState != AppState.NoGame &&
-				mainUi.yesNoCancelDialog("Forfeit", "Are you sure you wish to forfeit? This may lead to eternal shame!") == DialogResult.Yes) {
+			mainUi.yesNoCancelDialog("Forfeit", "Are you sure you wish to forfeit? This may lead to eternal shame!") == DialogResult.Yes) {
+			
+			Btlshp.getGame().sendTurn(TurnFactory.requestSurrender());
 			
 			localPlayer = remotePlayer = null;
 			mainUi.setMap(null);
