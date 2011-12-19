@@ -730,7 +730,7 @@ public class Map implements Serializable {
 			MapNode n = getMapNode(x, y);
 			Block b = n.block;
 			if(b != null){
-				b.takeHit(Weapon.Torpedo, x , y);
+				n.block.takeHit(Weapon.Torpedo, x , y);
 				canContinue = false;
 			}
 			
