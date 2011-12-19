@@ -128,6 +128,8 @@ public class BtlshpGame {
 	private void setAppState(AppState newState) {
 		appState = newState;
 		mainUi.updateStatus();
+		mainUi.updateMainMenu();
+		
 	}
 	
 	
@@ -148,7 +150,7 @@ public class BtlshpGame {
 	 * Handles a UI-side forfeit game event.
 	 */
 	public void forfeitGame() {
-		if(appState != AppState.NoGame &&
+		if(appState == AppState.LocalTurn &&
 			mainUi.yesNoCancelDialog("Forfeit", "Are you sure you wish to forfeit? This may lead to eternal shame!") == DialogResult.Yes) {
 			
 			Btlshp.getGame().sendTurn(TurnFactory.requestSurrender());
@@ -157,6 +159,10 @@ public class BtlshpGame {
 			mainUi.setMap(null);
 			setAppState(AppState.NoGame);
 			mainUi.updateMainMenu();
+			return;
+		} else {
+			mainUi.showNotificationDialog("forfeit Game", "you can only forefit the game when it is you turn.");
+			return;
 		}
 	}
 	
@@ -178,6 +184,11 @@ public class BtlshpGame {
 	public void saveGame() {
 		if(appState == AppState.NoGame) 
 			return;
+		if(appState == AppState.RemoteTurn) {
+			mainUi.showNotificationDialog("Save Game", "you can only save and exit the game when it is you turn.");
+			return;
+		}
+			
 		if (localPlayer.getPlayerID() != mainUi.getMap().getLeftPlayer().getPlayerID())
 		{
 			JOptionPane.showMessageDialog(null, "You can't save because you joined game.");
