@@ -723,16 +723,16 @@ public class Map implements Serializable {
 		for(fireCount = 0; fireCount < 10 && canContinue; fireCount++)
 		{				
 			// Check each zone one at a time. (similar to move forward method in map)							
-				if(!insideMap(x, y)) {
-					canContinue = false; break;
-				}
-				
-				MapNode n = getMapNode(x, y);
-				Block b = n.block;
-				if(b != null){
-					b.takeHit(Weapon.Torpedo, x , y);
-					canContinue = false;
-				}
+			if(!insideMap(x, y)) {
+				canContinue = false; break;
+			}
+			
+			MapNode n = getMapNode(x, y);
+			Block b = n.block;
+			if(b != null){
+				b.takeHit(Weapon.Torpedo, x , y);
+				canContinue = false;
+			}
 			
 			if(!canContinue)
 				break;
