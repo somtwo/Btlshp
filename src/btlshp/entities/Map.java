@@ -714,7 +714,7 @@ public class Map implements Serializable {
 		
 		deltax = (s.getDirection()== Direction.West) ? -1 : (s.getDirection() == Direction.East) ? 1 : 0;
 		deltay = (s.getDirection() == Direction.North) ? -1 : (s.getDirection() == Direction.South) ? 1 : 0;
-		deltaLength = (s.getBlocks().length == 2) ? 2 : s.getBlocks().length;
+		deltaLength = (s.getBlocks().length == 3) ? 2 : s.getBlocks().length;
 		
 		
 		x += (s.getDirection()== Direction.West) ? - deltaLength : (s.getDirection() == Direction.East) ? deltaLength : 0;
