@@ -92,6 +92,7 @@ public final class TurnFactory {
 
 	/**
 	* Launch a torpedo from a ship
+	 * @param m 
 	* @param s ship to launch a torpedo from
 	* @return true if torpedo launched
 	*/

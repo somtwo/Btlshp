@@ -832,5 +832,8 @@ public class Map implements Serializable {
 		}
 		return null;
 	}
+	public Base getBase(int id){
+		return getLeftBase().getConstructID() == id ? getLeftBase(): getRightBase();
+	}
 
 }

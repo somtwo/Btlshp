@@ -138,6 +138,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	 */
 	public void fireTorpedo(Ship ship) {
 		map.fireTorpedo(ship);
+		repaint();
 	}
 	
 	
