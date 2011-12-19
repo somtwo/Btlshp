@@ -13,7 +13,7 @@ public class Btlshp {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				game.buildUI();
-			}
+			} 
 		});
 	}
 	
