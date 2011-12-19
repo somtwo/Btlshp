@@ -2,6 +2,7 @@ package btlshp.turns;
 
 import java.io.Serializable;
 
+import btlshp.Btlshp;
 import btlshp.entities.Map;
 import btlshp.entities.Ship;
 
