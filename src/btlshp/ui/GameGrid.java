@@ -137,40 +137,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	 * @param ship 
 	 */
 	public void fireTorpedo(Ship ship) {
-		Location      loc = ship.getLocation();
-		int           x, y, deltax, deltay, fireCount;
-		boolean		  canContinue = true;
-		
-		x = loc.getx();
-		y = loc.gety();
-		
-		deltax = (ship.getDirection()== Direction.West) ? -1 : (ship.getDirection() == Direction.East) ? 1 : 0;
-		deltay = (ship.getDirection() == Direction.North) ? -1 : (ship.getDirection() == Direction.South) ? 1 : 0;
-		
-		x += (ship.getDirection()== Direction.West) ? -(ship.getBlocks().length) : (ship.getDirection() == Direction.East) ? ship.getBlocks().length : 0;
-		y += (ship.getDirection() == Direction.North) ? -(ship.getBlocks().length) : (ship.getDirection() == Direction.South) ? ship.getBlocks().length : 0;
-
-		for(fireCount = 0; fireCount < 10 && canContinue; fireCount++)
-		{				
-			// Check each zone one at a time. (similar to move forward method in map)							
-				if(!map.insideMap(x, y)) {
-					canContinue = false; break;
-				}
-				
-				MapNode n = map.getMapNode(x, y);
-				Block b = n.block;
-				if(b != null){
-					b.takeHit(Weapon.Torpedo, x , y);
-					Btlshp.getGame().sendTurn(TurnFactory.launchTorpedo(map, ship));
-					canContinue = false;
-				}
-			
-			if(!canContinue)
-				break;
-			x += deltax;
-			y += deltay;
-		}
-
+		map.fireTorpedo(ship);
 	}
 	
 	
