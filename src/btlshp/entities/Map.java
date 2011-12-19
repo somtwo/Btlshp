@@ -519,7 +519,6 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public boolean canShipRotate(Ship s, Direction newDir) {
-		boolean canRotate = true;
 
 		// left turn check
 		if (newDir == s.getDirection().leftDir()) {
@@ -564,6 +563,8 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public void rotateShip(Ship s, Direction newDir) {
+		boolean canShipRotate = true;
+		
 		s.getDirection();
 		if(!ships.contains(s)){
 			s = getShip(s.getConstructID());
@@ -573,10 +574,65 @@ public class Map implements Serializable {
 		int x = loc.getx();
 		int y = loc.gety();
 		
-		//TODO: check for mines in turn, and next to ship's destination for explosion!
-	
-		unplaceShip(s);
-		placeShip(s,x,y,newDir);
+		//check for mines in turn
+			// left turn check
+			if (newDir == s.getDirection().leftDir()) {
+				NodeIterator it = s.getLeftRotationIterator();
+				
+				canShipRotate = it.test(this, s.getLocation(), s.getDirection(), new NodeTestAction() {
+					@Override
+					public boolean visit(MapNode n, Block b) {
+						if(n == null)
+							return false;
+						if(n.block != null && !(n.block instanceof MineBlock))
+							return false;
+						
+						//explode mine
+						if(n.block instanceof MineBlock) {
+							int x = 1;  				// this is wrong, and needs to be fixed
+							int y = 1;					// this is wrong, and needs to be fixed
+							explodeMine(x, y);
+							return false;
+						}
+						
+						return true;
+					}
+				});
+			} 
+			// right turn check
+			else if(newDir == s.getDirection().rightDir()) {
+				NodeIterator it = s.getRightRotationIterator();
+				
+				canShipRotate = it.test(this, s.getLocation(), s.getDirection(), new NodeTestAction() {
+					@Override
+					public boolean visit(MapNode n, Block b) {
+						if(n == null)
+							return false;
+						if(n.block != null && !(n.block instanceof MineBlock))
+							return false;
+						
+						//explode mine
+						if(n.block instanceof MineBlock) {
+							int x = 1;  				// this is wrong, and needs to be fixed
+							int y = 1;					// this is wrong, and needs to be fixed
+							explodeMine(x, y);
+							return false;
+						}
+						
+						return true;
+					}
+				});
+			}
+		
+		
+		
+		if (canShipRotate) {
+			unplaceShip(s);
+			placeShip(s,x,y,newDir);
+		}
+		
+		//check for mine next to ship after rotate
+		
 		return;
 	}
 
