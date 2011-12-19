@@ -7,8 +7,10 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import btlshp.Btlshp;
 import btlshp.enums.Direction;
 import btlshp.enums.Weapon;
+import btlshp.turns.TurnFactory;
 import btlshp.utility.NodeIterator;
 import btlshp.utility.NodeIteratorAction;
 import btlshp.utility.NodeTestAction;
@@ -692,7 +694,39 @@ public class Map implements Serializable {
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
 	public void fireTorpedo(Ship s) {
+		Location      loc = s.getLocation();
+		int           x, y, deltax, deltay, fireCount;
+		boolean		  canContinue = true;
 		
+		x = loc.getx();
+		y = loc.gety();
+		
+		deltax = (s.getDirection()== Direction.West) ? -1 : (s.getDirection() == Direction.East) ? 1 : 0;
+		deltay = (s.getDirection() == Direction.North) ? -1 : (s.getDirection() == Direction.South) ? 1 : 0;
+		
+		x += (s.getDirection()== Direction.West) ? -(s.getBlocks().length) : (s.getDirection() == Direction.East) ? s.getBlocks().length : 0;
+		y += (s.getDirection() == Direction.North) ? -(s.getBlocks().length) : (s.getDirection() == Direction.South) ? s.getBlocks().length : 0;
+
+		for(fireCount = 0; fireCount < 10 && canContinue; fireCount++)
+		{				
+			// Check each zone one at a time. (similar to move forward method in map)							
+				if(!insideMap(x, y)) {
+					canContinue = false; break;
+				}
+				
+				MapNode n = getMapNode(x, y);
+				Block b = n.block;
+				if(b != null){
+					b.takeHit(Weapon.Torpedo, x , y);
+					canContinue = false;
+				}
+			
+			if(!canContinue)
+				break;
+			x += deltax;
+			y += deltay;
+		}
+
 	}
 	        	
 	/**

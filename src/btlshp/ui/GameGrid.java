@@ -20,12 +20,15 @@ import btlshp.Btlshp;
 import btlshp.entities.Base;
 import btlshp.entities.Block;
 import btlshp.entities.ConstructBlock;
+import btlshp.entities.Location;
 import btlshp.entities.Map;
 import btlshp.entities.MapNode;
 import btlshp.entities.MineBlock;
 import btlshp.entities.Ship;
 import btlshp.enums.AppState;
+import btlshp.enums.Direction;
 import btlshp.enums.GraphicAlliance;
+import btlshp.enums.Weapon;
 import btlshp.turns.Turn;
 import btlshp.turns.TurnFactory;
 import btlshp.ui.gridmodes.FireGunMode;
@@ -134,8 +137,7 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	 * @param ship 
 	 */
 	public void fireTorpedo(Ship ship) {
-		
-
+		map.fireTorpedo(ship);
 	}
 	
 	
