@@ -2,6 +2,7 @@ package btlshp.turns;
 
 import java.io.Serializable;
 
+import btlshp.Btlshp;
 import btlshp.entities.Map;
 
 class RequestPostponeGame extends Turn implements Serializable{
@@ -16,6 +17,7 @@ class RequestPostponeGame extends Turn implements Serializable{
 	public void executeTurn() {
 		// TODO Implementation UI dependent
 		//Generate a dialog box with player and allow player to accept or reject
+		Btlshp.getGame().otherPlayerSaved();
 	}
 	@Override
 	public boolean wasSuccessful() {

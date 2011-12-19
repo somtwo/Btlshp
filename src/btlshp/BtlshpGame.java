@@ -173,6 +173,7 @@ public class BtlshpGame {
 	public void otherPlayerForfeit() {
 		mainUi.showAlert("Other player has quit!", "It seems you were simply too cunning, fearless, and generally superior for the other player to handle. You have won the game!");
 		localPlayer = remotePlayer = null;
+		mainUi.setMap(null);
 		setAppState(AppState.NoGame);
 		mainUi.updateMainMenu();
 	}
@@ -210,6 +211,7 @@ public class BtlshpGame {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			Btlshp.getGame().sendTurn(TurnFactory.requestPostponeGame());
 			localPlayer = remotePlayer = null;
 			mainUi.setMap(null);
 			setAppState(AppState.NoGame);
@@ -217,7 +219,14 @@ public class BtlshpGame {
 		}
 	}
 	
-	
+	public void otherPlayerSaved() {
+		mainUi.showAlert("Other player has Saved!", "It seems the other player has saved and quit the game.  You can resume the game later.  \n" +
+				" Make sure that he enters the game first though otherwise you will be the other player. :)");
+		localPlayer = remotePlayer = null;
+		mainUi.setMap(null);
+		setAppState(AppState.NoGame);
+		mainUi.updateMainMenu();
+	}
 	
 	/**
 	 * Handles a UI-side restore game event.
