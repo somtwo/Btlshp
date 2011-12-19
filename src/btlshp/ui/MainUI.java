@@ -280,10 +280,15 @@ public class MainUI implements Serializable{
 		
 		if(game == null || game.getAppState() == AppState.NoGame)
 			newStatus += "Not in game.\nStart or load a game!\n";
-		else if(game.getAppState() == AppState.LocalTurn)
+		else if(game.getAppState() == AppState.LocalTurn){
 			newStatus += "Your turn\n";
-		else
+		newStatus += "Mines in inventory: " + game.getLocalPlayer().numberOfMines();
+		}
+		else{
 			newStatus += "Other players turn\n";
+			newStatus += "Mines in inventory: " + game.getLocalPlayer().numberOfMines();
+		}
+		
 		
 		status.setText(newStatus);
 	}
