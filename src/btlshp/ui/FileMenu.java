@@ -46,7 +46,7 @@ public class FileMenu extends JMenu {
 		});
 		add(joinGameItem);
 		addSeparator();
-		JMenuItem saveGameItem = fileMenuItems[2] = new JMenuItem("Save");
+		JMenuItem saveGameItem = fileMenuItems[2] = new JMenuItem("Save and exit current game");
 		saveGameItem.setMnemonic(KeyEvent.VK_S);
 		saveGameItem.addActionListener(new ActionListener() {
 			@Override
@@ -73,7 +73,7 @@ public class FileMenu extends JMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Btlshp.getGame().forfeitGame();
-				Btlshp.getGame().sendTurn(TurnFactory.requestSurrender());
+				
 			}
 		});
 		add(forfeitGameItem);
@@ -105,12 +105,24 @@ public class FileMenu extends JMenu {
 	
 	public void updateMenuItems() {
 		if(Btlshp.getGame().getAppState() == AppState.NoGame) {
+			fileMenuItems[0].setEnabled(true);
+			fileMenuItems[1].setEnabled(true);
 			fileMenuItems[2].setEnabled(false);
+			fileMenuItems[3].setEnabled(true);
 			fileMenuItems[4].setEnabled(false);
 		}
-		else {
-			
+		else if (Btlshp.getGame().getAppState() == AppState.LocalTurn) {
+			fileMenuItems[0].setEnabled(false);
+			fileMenuItems[1].setEnabled(false);
 			fileMenuItems[2].setEnabled(true);
+			fileMenuItems[3].setEnabled(false);
+			fileMenuItems[4].setEnabled(true);
+		
+		}else  { 									//AppState.remoteTurn
+			fileMenuItems[0].setEnabled(false);
+			fileMenuItems[1].setEnabled(false);
+			fileMenuItems[2].setEnabled(true);
+			fileMenuItems[3].setEnabled(false);
 			fileMenuItems[4].setEnabled(true);
 		}
 	}

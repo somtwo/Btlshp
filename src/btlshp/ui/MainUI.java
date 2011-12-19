@@ -183,6 +183,17 @@ public class MainUI implements Serializable{
 	
 	
 	/**
+	 * Utility function to display a dialog message popup to the user.
+	 * 
+	 * @param title    Title of the dialog window
+	 * @param message  Message to be displayed inside the dialog
+	 */
+	public void showNotificationDialog(String title, String message) {
+		JOptionPane.showMessageDialog(mainFrame, message, title, JOptionPane.WARNING_MESSAGE);
+	}
+	
+	
+	/**
 	 * Utility function to show an alert to the player
 	 * 
 	 * @param title    Title of the alert
