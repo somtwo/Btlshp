@@ -1,6 +1,7 @@
 package btlshp;
 
-import java.applet.Applet;
+import java.applet.*;
+import java.net.URL;
 import java.applet.AudioClip;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,7 +9,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,9 +25,11 @@ import btlshp.ui.MainUI;
 
 public class BtlshpGame {
 	private AppState appState;
-	private MainUI   mainUi;
+	private static MainUI   mainUi;
 	private Player   localPlayer, remotePlayer;
 	private File 	 gameDir;
+	private static AudioClip audioClip;
+	private static URL urlForAudio;
 
 	public BtlshpGame() {
 		localPlayer = remotePlayer = null;
@@ -370,27 +372,32 @@ public class BtlshpGame {
 			mainUi.showAlert("Victory!", "You have vanquished your foe!");
 	}
 
+	
+	public void setupMusic() {
+		
+		urlForAudio = getClass().getResource("audio/BackgroundWebsite.mid");
+		if (audioClip != "null")  //--> makes it not play audio
+		System.out.println(audioClip);
+			audioClip = Applet.newAudioClip(urlForAudio);
+		return;
+	}
 
 	/**
 	 * Handles music
 	 */
-	public void playsMusic() {
-		AudioClip audioClip;
-		URL urlForAudio = getClass().getResource("audio/BackgroundWebsite.mid");
-		audioClip = Applet.newAudioClip(urlForAudio);
-		
-		
+	public  static void playsMusic() {
 		DialogResult result;
-		result = mainUi.yesNoCancelDialog("Music", "Would you like to play music");
+		result = mainUi.yesNoCancelDialog("Music", "BONUS FEATURE: Would you like to play music? \n" +
+				"Come back and press no to stop the music at any time.");
 		
 		if(	result == DialogResult.Yes) {
-			audioClip.loop();
+			if(audioClip != null) audioClip.loop();
 			return;
 		} else if (result == DialogResult.No) {
 			audioClip.stop();
-			return;
+			return ;
 		} else {
-			return;
+			return ;
 		}
 	}
 

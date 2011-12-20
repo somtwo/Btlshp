@@ -1,5 +1,6 @@
 package btlshp.ui;
 
+import java.applet.AudioClip;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -105,7 +106,9 @@ public class FileMenu extends JMenu {
 		playMusicItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				Btlshp.getGame().setupMusic();
 				Btlshp.getGame().playsMusic();
+				
 			}
 
 			
