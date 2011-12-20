@@ -24,7 +24,7 @@ public class FileMenu extends JMenu {
 		setMnemonic(KeyEvent.VK_F);
 		getAccessibleContext().setAccessibleDescription("Main menu used to starting, saving, or quitting games.");
 		
-		fileMenuItems = new JMenuItem[7];
+		fileMenuItems = new JMenuItem[8];
 		
 		JMenuItem newGameItem = fileMenuItems[0] = new JMenuItem("New");
 		newGameItem.setMnemonic(KeyEvent.VK_N);
@@ -99,10 +99,26 @@ public class FileMenu extends JMenu {
 			}
 		});
 		add(quitItem);
+		addSeparator();
+		
+		JMenuItem playMusicItem = fileMenuItems[7] = new JMenuItem("Wanna play sweet music?");
+		playMusicItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Btlshp.getGame().playsMusic();
+			}
+
+			
+		});
+		add(playMusicItem);
+		
 	}
 	
 	
-	
+
+
+
+
 	public void updateMenuItems() {
 		if(Btlshp.getGame().getAppState() == AppState.NoGame) {
 			fileMenuItems[0].setEnabled(true);
