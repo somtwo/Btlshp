@@ -14,6 +14,7 @@ class RepairShip extends Turn implements Serializable{
 	private Ship s;
 	private ConstructBlock repairBlock;
 	private boolean success = false;
+	private Map m;
 
 	RepairShip(Ship s, ConstructBlock repairBlock) {
 		this.s = s;
@@ -22,6 +23,7 @@ class RepairShip extends Turn implements Serializable{
 
 	@Override
 	public void executeTurn() {
+		s = m.getShip(s.getConstructID());
 		s.AssesRepair(repairBlock);
 		success = true;
 	}
@@ -40,7 +42,7 @@ class RepairShip extends Turn implements Serializable{
 
 	@Override
 	public void setMap(Map m) {
-		// TODO Auto-generated method stub
+		this.m = m;
 		
 	}
 }
