@@ -67,8 +67,8 @@ public class ShipPopupMenu extends JPopupMenu {
 			item = new JMenuItem("Fire torpedo");
 			item.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ev) {
-					grid.getMap().fireTorpedo(target);
 					Btlshp.getGame().sendTurn(TurnFactory.launchTorpedo(grid.getMap(), target));
+					grid.getMap().fireTorpedo(target);
 					Btlshp.getGame().outputMessage("Fire a torpedo!");
 				}
 			});
