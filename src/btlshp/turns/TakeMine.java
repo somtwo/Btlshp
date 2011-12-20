@@ -12,20 +12,19 @@ class TakeMine extends Turn implements Serializable{
 	 */
 	private static final long serialVersionUID = -1991458862311470623L;
 	private Location loc;
-	private Ship s;
-	private Map m;
+	private int shipId;
 	private boolean success = false;
 
-	public TakeMine(Map m, Ship s, Location loc) {
-		this.s = s;
+	public TakeMine(Ship s, Location loc) {
+		this.shipId = s.getConstructID();
 		this.loc = loc;
-		this.m = m;
 	}
 
 	@Override
-	public void executeTurn() {
+	public void executeTurn(Map map) {
 		try{
-			m.pickupMine(s, loc);
+			Ship s = map.getShip(shipId);
+			map.pickupMine(s, loc);
 			success = true;
 		}catch(IllegalStateException e){
 			success = false;
@@ -39,10 +38,5 @@ class TakeMine extends Turn implements Serializable{
 	@Override
 	public String toString(){
 		return "takeMine";
-	}
-
-	@Override
-	public void setMap(Map m) {
-		this.m = m;		
 	}
 }

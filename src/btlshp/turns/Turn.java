@@ -25,7 +25,7 @@ public abstract class Turn {
 		
 		return f.lastModified();
 	}
-	public abstract void setMap(Map m);
+	
 	/**
 	 * @returns true if the move object represents a successful move, false otherwise.
 	 */
@@ -35,5 +35,5 @@ public abstract class Turn {
 	 * Executes a given move object representing a move from the other player.
 	 * @throws IllegalStateException If the turn was not successful.
 	 */
-	public abstract void executeTurn();
+	public abstract void executeTurn(Map map);
 }

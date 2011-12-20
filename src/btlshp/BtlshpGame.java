@@ -332,8 +332,7 @@ public class BtlshpGame {
 							fileIn.close();
 							mainUi.getMap().clearTurnFlags();
 							mainUi.refresh();
-							loadTurn.setMap(mainUi.getMap());
-							loadTurn.executeTurn();
+							loadTurn.executeTurn(mainUi.getMap());
 							setAppState(AppState.LocalTurn);
 							cancel();
 							

@@ -11,6 +11,7 @@ class LoadGameState extends Turn implements Serializable{
 
 	private static final long serialVersionUID = 4870988534077315987L;
 	private String filePath;
+	
 	/**
 	 * 
 	 * @param f location of saved game file
@@ -18,8 +19,9 @@ class LoadGameState extends Turn implements Serializable{
 	public LoadGameState(String f){
 		filePath = f;
 	}
+	
 	@Override
-	public void executeTurn() {
+	public void executeTurn(Map map) {
 			FileInputStream fileIn = null;
 			ObjectInputStream objIn = null;
 			try{
@@ -38,12 +40,7 @@ class LoadGameState extends Turn implements Serializable{
 		return true;
 	}
 	@Override
-	public String toString(){
+	public String toString() {
 		return "loadGameState";
-	}
-	@Override
-	public void setMap(Map m) {
-		// TODO Auto-generated method stub
-		
 	}
 }

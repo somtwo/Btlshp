@@ -8,8 +8,8 @@ public final class TurnFactory {
 	/**
 	 * Factory method to create a turn for joing two games
 	 */
-	public static JoinGame joinGame(Map m){
-		return new JoinGame(m);
+	public static JoinGame joinGame(){
+		return new JoinGame();
 	}
 	/**
 	* Factory method to create a turn representing a request to postpone the game.
@@ -65,20 +65,20 @@ public final class TurnFactory {
 	 * @param distance number of map units to move the ship
 	 * @return the resulting turn object.
 	 */
-	public static MoveShip moveShip(Map m, Ship s, Direction dir, int distance) {
-		return new MoveShip(m, s, dir, distance);
+	public static MoveShip moveShip(Ship s, Direction dir, int distance) {
+		return new MoveShip(s, dir, distance);
 	}
 
-	public static RotateShip rotateShip(Map m, Ship s, Direction dir){
-		return new RotateShip(m,s,dir);
+	public static RotateShip rotateShip(Ship s, Direction dir){
+		return new RotateShip(s, dir);
 	}
 	/**
 	* Immerse mine at specified location
 	* @param loc location to place mine
 	* @return the resulting turn object.
 	*/
-	public static PlaceMine placeMine(Map m, Ship s, Location loc) {
-		return new PlaceMine(m, s, loc);
+	public static PlaceMine placeMine(Ship s, Location loc) {
+		return new PlaceMine(s, loc);
 	}
 
 	/**
@@ -86,8 +86,8 @@ public final class TurnFactory {
 	* @param loc location of mine to be removed
 	* @return the resulting turn object.
 	*/
-	public static TakeMine takeMine(Map m, Ship s, Location loc) {
-		return new TakeMine(m, s, loc);
+	public static TakeMine takeMine(Ship s, Location loc) {
+		return new TakeMine(s, loc);
 	}
 
 	/**
@@ -96,8 +96,8 @@ public final class TurnFactory {
 	* @param s ship to launch a torpedo from
 	* @return true if torpedo launched
 	*/
-	public static LaunchTorpedo launchTorpedo(Map m, Ship s) {
-		return new LaunchTorpedo(m, s);
+	public static LaunchTorpedo launchTorpedo(Ship s) {
+		return new LaunchTorpedo(s);
 	}
 
 	/**
@@ -106,8 +106,8 @@ public final class TurnFactory {
 	* @param loc location to shoot at
 	* @return the resulting turn object.
 	*/
-	public static Shoot shoot(Map m, Ship s, Location loc) {
-		return new Shoot(m, s, loc);
+	public static Shoot shoot(Ship s, Location loc) {
+		return new Shoot(s, loc);
 	}
 
 	/**
@@ -135,7 +135,7 @@ public final class TurnFactory {
 		return new Pass();
 	}
 	
-	public static RotateShip180 rotateShip180(Map m, Ship s, boolean leftTurn) {
-		return new RotateShip180(m, s, leftTurn);
+	public static RotateShip180 rotateShip180(Ship s, boolean leftTurn) {
+		return new RotateShip180(s, leftTurn);
 	}
 }

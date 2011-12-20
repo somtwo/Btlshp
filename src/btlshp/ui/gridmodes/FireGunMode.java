@@ -53,7 +53,7 @@ public class FireGunMode extends GridMode {
 			Btlshp.getGame().outputMessage("Fire gun action.");
 			Location loc = new Location(grid.getHoverx(), grid.getHovery());
 			map.fireGuns(ship, loc );
-			Btlshp.getGame().sendTurn(TurnFactory.shoot(map, ship, loc));
+			Btlshp.getGame().sendTurn(TurnFactory.shoot(ship, loc));
 		}
 		grid.cancelAction();
 	}

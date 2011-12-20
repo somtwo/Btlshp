@@ -7,24 +7,20 @@ import btlshp.entities.Map;
 import btlshp.entities.Ship;
 
 class PlaceMine extends Turn implements Serializable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4336837927576289067L;
-	private Map m;
 	private Location loc;
-	private Ship s;
+	private int shipId;
 	private boolean success = false;
-	public PlaceMine(Map m, Ship s, Location loc) {
-		this.m = m;
+	
+	public PlaceMine(Ship s, Location loc) {
 		this.loc = loc;
-		this.s = s;
+		this.shipId = s.getConstructID();
 	}
 
 	@Override
-	public void executeTurn() {
+	public void executeTurn(Map map) {
 		try{
-			m.placeMine(s, loc);
+			map.placeMine(map.getShip(shipId), loc);
 			success = true;
 		}catch(IllegalStateException e){
 			success = false;
@@ -39,11 +35,5 @@ class PlaceMine extends Turn implements Serializable{
 	@Override
 	public String toString(){
 		return "placeMine";
-	}
-
-	@Override
-	public void setMap(Map m) {
-		this.m = m;
-		
 	}
 }

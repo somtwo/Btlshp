@@ -6,25 +6,18 @@ import btlshp.entities.Map;
 import btlshp.entities.Ship;
 import btlshp.enums.Direction;
 
-class RotateShip extends Turn implements Serializable{
-	private Map m;
-	private Ship s;
+class RotateShip extends Turn implements Serializable {
+	private int shipId;
 	private Direction dir;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2197899809799342874L;
-	RotateShip(Map m, Ship s, Direction dir){
-		this.m = m;
-		this.s = s;
+	RotateShip(Ship s, Direction dir){
+		this.shipId = s.getConstructID();
 		this.dir = dir;
 	}
-	@Override
-	public void setMap(Map m) {
-		this.m = m;
-		
-	}
-
+	
 	@Override
 	boolean wasSuccessful() {
 		// TODO Auto-generated method stub
@@ -32,9 +25,8 @@ class RotateShip extends Turn implements Serializable{
 	}
 
 	@Override
-	public void executeTurn() {
-		m.rotateShip(s, dir);
-		
+	public void executeTurn(Map map) {
+		map.rotateShip(map.getShip(shipId), dir);
 	}
 	
 }

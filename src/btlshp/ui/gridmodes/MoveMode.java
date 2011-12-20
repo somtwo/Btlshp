@@ -137,7 +137,7 @@ public class MoveMode extends GridMode {
 				map.canMove(ship, shipDirection, forwardDistance)) {
 			grid.cancelAction();
 			map.move(ship, shipDirection, forwardDistance);
-			Turn t = TurnFactory.moveShip(map, ship, shipDirection, forwardDistance);
+			Turn t = TurnFactory.moveShip(ship, shipDirection, forwardDistance);
 			Btlshp.getGame().sendTurn(t);
 			Btlshp.getGame().outputMessage("Move forward.");
 		}
@@ -145,21 +145,21 @@ public class MoveMode extends GridMode {
 		// Move Backward
 		if(currentMove == Move.Backward && map.canMove(ship, shipDirection.backwardsDir(), 1)) {
 			map.move(ship, shipDirection.backwardsDir(), 1);
-			Btlshp.getGame().sendTurn(TurnFactory.moveShip(map, ship, shipDirection.backwardsDir(), 1));
+			Btlshp.getGame().sendTurn(TurnFactory.moveShip(ship, shipDirection.backwardsDir(), 1));
 			Btlshp.getGame().outputMessage("Move Backwards.");
 		}
 		
 		// Move Left
 		if(currentMove == Move.Left && map.canMove(ship, shipDirection.leftDir(), 1)) {
 			map.move(ship, shipDirection.leftDir(), 1);
-			Btlshp.getGame().sendTurn(TurnFactory.moveShip(map, ship, shipDirection.leftDir(), 1));
+			Btlshp.getGame().sendTurn(TurnFactory.moveShip(ship, shipDirection.leftDir(), 1));
 			Btlshp.getGame().outputMessage("Move Left.");
 		}
 		
 		// Move Right
 		if(currentMove == Move.Right && map.canMove(ship, shipDirection.rightDir(), 1)) {
 			map.move(ship, shipDirection.rightDir(), 1);
-			Btlshp.getGame().sendTurn(TurnFactory.moveShip(map, ship, shipDirection.rightDir(), 1));
+			Btlshp.getGame().sendTurn(TurnFactory.moveShip(ship, shipDirection.rightDir(), 1));
 			Btlshp.getGame().outputMessage("Move Right.");
 		}
 		

@@ -11,7 +11,7 @@ class ConfirmPostponeGame extends Turn implements Serializable{
 	/**
 	 * Opponent accepted postponing game
 	 */
-	public void executeTurn() {
+	public void executeTurn(Map map) {
 		// TODO Implementation UI dependent
 		
 	}
@@ -22,15 +22,9 @@ class ConfirmPostponeGame extends Turn implements Serializable{
 		// TODO Implementation UI dependent
 		return true;
 	}
+	
 	@Override
 	public String toString(){
 		return "confirmPostponeGame";
-	}
-
-
-	@Override
-	public void setMap(Map m) {
-		// TODO Auto-generated method stub
-		
 	}
 }

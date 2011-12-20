@@ -11,20 +11,19 @@ class RepairShip extends Turn implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 89817140305258661L;
-	private Ship s;
-	private ConstructBlock repairBlock;
+	private int shipId;
+	private int blockId;
 	private boolean success = false;
-	private Map m;
 
 	RepairShip(Ship s, ConstructBlock repairBlock) {
-		this.s = s;
-		this.repairBlock = repairBlock;
+		this.shipId = s.getConstructID();
+		this.blockId = repairBlock.getId();
 	}
 
 	@Override
-	public void executeTurn() {
-		s = m.getShip(s.getConstructID());
-		s.AssesRepair(repairBlock);
+	public void executeTurn(Map map) {
+		Ship s = map.getShip(shipId);
+		s.AssesRepair(s.getBlockById(blockId));
 		success = true;
 	}
 
@@ -38,11 +37,5 @@ class RepairShip extends Turn implements Serializable{
 	@Override
 	public String toString(){
 		return "repairShip";
-	}
-
-	@Override
-	public void setMap(Map m) {
-		this.m = m;
-		
 	}
 }

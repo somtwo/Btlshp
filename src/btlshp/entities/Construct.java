@@ -271,4 +271,13 @@ public abstract class Construct implements Serializable{
 	public int getConstructID(){
 		return constructID;
 	}
+	
+	
+	public ConstructBlock getBlockById(int id) {
+		for(int i = 0; i < blocks.length; ++i) {
+			if(blocks[i].getId() == id)
+				return blocks[i];
+		}
+		return null;
+	}
 }

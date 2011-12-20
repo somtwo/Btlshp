@@ -16,8 +16,9 @@ class SaveGameState extends Turn implements Serializable{
 	{
 		saveGame = map;
 	}
+	
 	@Override
-	public void executeTurn()  {
+	public void executeTurn(Map map)  {
 		// TODO Auto-generated method stub
 		ObjectOutputStream objOut = null;
 		FileOutputStream fileOut = null;
@@ -39,14 +40,9 @@ class SaveGameState extends Turn implements Serializable{
 		// TODO Auto-generated method stub
 		return true;
 	}
+	
 	@Override
 	public String toString(){
 		return "saveGameState";
 	}
-	@Override
-	public void setMap(Map m) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

@@ -7,26 +7,21 @@ import btlshp.entities.Map;
 import btlshp.entities.Ship;
 
 class Shoot extends Turn implements Serializable{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -605750640559980738L;
-	private Map m;
-	private Ship s;
+	private int shipId;
 	private Location loc;
 	private boolean success = false;
 
-	public Shoot(Map m, Ship s, Location loc) {
-		this.m = m;
-		this.s = s;
+	public Shoot(Ship s, Location loc) {
+		this.shipId = s.getConstructID();
 		this.loc = loc;
 	}
 
 	@Override
-	public void executeTurn() {
+	public void executeTurn(Map map) {
 		try{
-			m.fireGuns(s, loc);
+			Ship s = map.getShip(shipId);
+			map.fireGuns(s, loc);
 			success = true;
 		}catch(IllegalStateException e){
 			success = false;
@@ -42,8 +37,4 @@ class Shoot extends Turn implements Serializable{
 		return "shoot";
 	}
 
-	@Override
-	public void setMap(Map m) {
-		this.m = m;		
-	}
 }

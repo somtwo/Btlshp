@@ -9,24 +9,23 @@ import btlshp.enums.Direction;
 class MoveShip extends Turn implements Serializable{
 	
 	private static final long serialVersionUID = 4599021282070269467L;
-	private Ship s;
+	private int shipId;
 	private Direction dir;
 	private int distance;
-	private Map m;
 	private boolean success = false;
 
-	public MoveShip(Map m, Ship s, Direction dir, int distance) {
-		this.s = s;
+	public MoveShip(Ship s, Direction dir, int distance) {
+		this.shipId = s.getConstructID();
 		this.dir = dir;
 		this.distance = distance;
 	}
 	
 	@Override
-	public void executeTurn() {
-		try{
-			m.move(s, dir,distance);
+	public void executeTurn(Map map) {
+		try {
+			map.move(map.getShip(shipId), dir,distance);
 			success = true;
-		}catch(IllegalStateException e){
+		} catch(IllegalStateException e){
 			e.printStackTrace();
 			success = false;
 		}
@@ -37,14 +36,9 @@ class MoveShip extends Turn implements Serializable{
 	public boolean wasSuccessful() {
 		return true;
 	}
+
 	@Override
 	public String toString(){
 		return "moveShip";
-	}
-
-	@Override
-	public void setMap(Map m) {
-		this.m = m;
-		
 	}
 }

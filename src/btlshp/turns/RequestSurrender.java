@@ -13,7 +13,7 @@ class RequestSurrender extends Turn implements Serializable{
 	/**
 	 * Opponent requests to quit(surrender) game
 	 */
-	public void executeTurn() {
+	public void executeTurn(Map m) {
 		// TODO Implementation UI dependent
 		//Generate dialog for the player to accept or reject surrender
 		Btlshp.getGame().otherPlayerForfeit();
@@ -25,15 +25,9 @@ class RequestSurrender extends Turn implements Serializable{
 		// TODO Implementation UI dependent
 		return true;
 	}
+	
 	@Override
 	public String toString(){
 		return "requestSurrender";
-	}
-
-
-	@Override
-	public void setMap(Map m) {
-		// TODO Auto-generated method stub
-		
 	}
 }

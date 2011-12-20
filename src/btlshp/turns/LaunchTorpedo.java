@@ -11,20 +11,18 @@ class LaunchTorpedo extends Turn implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1790493199271040630L;
-	private Map m;
-	private Ship s;
+	private int shipId;
 	private boolean success = false;
 
 
-	LaunchTorpedo(Map m2, Ship s2) {
-		this.m = m2;
-		this.s = s2;
+	LaunchTorpedo(Ship ship) {
+		this.shipId = ship.getConstructID();
 	}
 
 	@Override
-	public void executeTurn() {
-		try{
-			m.fireTorpedo(s);
+	public void executeTurn(Map map) {
+		try {
+			map.fireTorpedo(map.getShip(shipId));
 			success = true;
 		}catch(IllegalStateException e){
 			success = false;
@@ -36,14 +34,9 @@ class LaunchTorpedo extends Turn implements Serializable{
 	public boolean wasSuccessful() {
 		return success;
 	}
+
 	@Override
 	public String toString(){
 		return "launchTorpedo";
-	}
-
-	@Override
-	public void setMap(Map m) {
-		this.m = m;
-		
 	}
 }

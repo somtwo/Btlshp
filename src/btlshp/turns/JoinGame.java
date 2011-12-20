@@ -5,26 +5,17 @@ import java.io.Serializable;
 import btlshp.entities.Map;
 
 class JoinGame extends Turn implements Serializable{
-	private Map m;
 	private static final long serialVersionUID = 6638148998058324549L;
-	public JoinGame(Map m){
-		this.m = m;
+	public JoinGame(){
 	}
+	
 	@Override
-	public void executeTurn() {
-		// TODO Auto-generated method stub
-		
+	public void executeTurn(Map map) {
+		// This doesn't need to do anything
 	}
 
 	@Override
 	public boolean wasSuccessful() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
-	@Override
-	public void setMap(Map m) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }
