@@ -377,7 +377,7 @@ public class BtlshpGame {
 	public void setupMusic() {
 		
 		urlForAudio = getClass().getResource("audio/BackgroundWebsite.mid");
-		if (audioClip != "null")  //--> makes it not play audio
+		//if (audioClip != "null")  //--> makes it not play audio
 		System.out.println(audioClip);
 			audioClip = Applet.newAudioClip(urlForAudio);
 		return;
