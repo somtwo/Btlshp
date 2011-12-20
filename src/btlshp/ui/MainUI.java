@@ -77,7 +77,12 @@ public class MainUI implements Serializable{
 		status = new JTextArea();
 		status.setPreferredSize(new Dimension(140, 75));
 		status.setMinimumSize(new Dimension(140, 75));
-		status.setFont(proFont.deriveFont(Font.PLAIN, 12.0f));
+		
+		if(proFont != null)
+			status.setFont(proFont.deriveFont(Font.PLAIN, 12.0f));
+		else
+			status.setFont(status.getFont().deriveFont(10.0f));
+		
 		status.setForeground(new Color(6, 178, 48));
 		status.setBackground(new Color(0, 0, 0));
 		status.setOpaque(true);
