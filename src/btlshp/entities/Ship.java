@@ -294,7 +294,7 @@ public class Ship extends Construct implements Serializable{
 	/**
 	 * @return 
 	 */
-	boolean canRotate180() {
+	public boolean canRotate180() {
 		return (flags & canRotate180) == canRotate180;
 	}
 	
@@ -345,7 +345,7 @@ public class Ship extends Construct implements Serializable{
 			
 			// This code works only for destroyer.
 			for(int y = -1; y < 2; ++y)
-				rot180LeftArea.add(-1, y, blocks[blocks.length - y + 1]);
+				rot180LeftArea.add(-1, y, blocks[y + 1]);
 		}
 		// Account for Destroyer's odd pivot point
 		if(blocks.length == 3) {
@@ -380,7 +380,7 @@ public class Ship extends Construct implements Serializable{
 			
 			// This code works only for destroyer.
 			for(int y = -1; y < 2; ++y)
-				rot180RightArea.add(1, y, blocks[blocks.length - y + 1]);
+				rot180RightArea.add(1, y, blocks[y + 1]);
 		}
 		// Account for Destroyer's odd pivot point
 		if (blocks.length == 3) {

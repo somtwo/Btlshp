@@ -38,25 +38,14 @@ import btlshp.ui.gridmodes.NormalMode;
 import btlshp.ui.gridmodes.PickupMineMode;
 import btlshp.ui.gridmodes.PlaceMineMode;
 import btlshp.ui.gridmodes.RepairMode;
+import btlshp.ui.gridmodes.Rotate180Mode;
 import btlshp.ui.gridmodes.RotateMode;
 
 public class GameGrid extends JComponent implements MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1038483241713085828L;
 	private static final int  rowHeight = 16, colWidth = 16;
 	
-	public enum GridState {
-		TurnStart,
-		MoveShip,
-		RotateShip,
-		FireGun,
-		FireTorpedo,
-		PlaceMine,
-		PickupMine,
-		RepairConstruct
-	};
-	
 	private HashMap<String, BufferedImage> imageCache;
-	private GridState state;
 	
 	private Dimension size;
 	private Color     gridColor, hoverColor, hoverLineColor;
@@ -103,7 +92,6 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		hoverx = hovery = 0;
 		
 		map = null;
-		state = GridState.TurnStart;
 		
 		imageCache = new HashMap<String, BufferedImage>();
 		mode = null;
@@ -118,7 +106,6 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	 */
 	public void setMap(Map map) {
 		this.map = map;
-		this.state = GridState.TurnStart;
 		this.mode = new NormalMode(this, map);
 		repaint();
 	}
@@ -126,12 +113,6 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		return map;
 	}
 	
-	/**
-	 * @return The current state of the game.
-	 */
-	public GridState getGameState() {
-		return state;
-	}
 	/**
 	 * Fires a torpedo
 	 * @param ship 
@@ -272,7 +253,6 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	 * Cancels the current mode and returns to regular mode.
 	 */
 	public void cancelAction() {
-		state = GridState.TurnStart;
 		mode = new NormalMode(this, map);
 		repaint();
 	}
@@ -284,7 +264,6 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	 * @param s   Ship to move.
 	 */
 	public void startShipMove(Ship s) {
-		state = GridState.MoveShip;
 		mode = new MoveMode(s, this, map);
 		repaint();
 	}
@@ -296,8 +275,13 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	 * @param s    Ship to rotate
 	 */
 	public void startShipRotate(Ship s) {
-		state = GridState.RotateShip;
 		mode = new RotateMode(s, this, map);
+		repaint();
+	}
+	
+	
+	public void startShipRotate180(Ship s) {
+		mode = new Rotate180Mode(this, map, s);
 		repaint();
 	}
 	
@@ -310,7 +294,6 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 		if(!s.canFireGun())
 			throw new IllegalStateException();
 		
-		state = GridState.FireGun;
 		mode = new FireGunMode(s, this, map);
 		repaint();
 	}
@@ -321,7 +304,6 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	 * @param s    ship to place mine
 	 */
 	public void startPlaceMine(Ship s) {
-		state = GridState.PlaceMine;
 		mode = new PlaceMineMode(s, this, map);
 		repaint();
 	}
@@ -332,7 +314,6 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	 * @param s    ship to fire guns
 	 */
 	public void startPickupMine(Ship s) {
-		state = GridState.PickupMine;
 		mode = new PickupMineMode(s, this, map);
 		repaint();
 	}
@@ -344,7 +325,6 @@ public class GameGrid extends JComponent implements MouseListener, MouseMotionLi
 	 * @param b    base to conduct the repair.
 	 */
 	public void startRepair(Base b) {
-		state = GridState.RepairConstruct;
 		mode = new RepairMode(b, this, map);
 		repaint();
 	}

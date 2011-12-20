@@ -31,8 +31,6 @@ public class ShipPopupMenu extends JPopupMenu {
 	public ShipPopupMenu(GameGrid gameGrid, Ship clickedShip, btlshp.entities.Map map2) {
 		target = clickedShip;
 		grid = gameGrid;
-		final Ship ship = clickedShip;
-		final btlshp.entities.Map maps = map2;
 		
 		// Add menu items based on the capabilities of the ship
 		JMenuItem item = new JMenuItem("Move ship");
@@ -50,6 +48,16 @@ public class ShipPopupMenu extends JPopupMenu {
 			}
 		});
 		add(item);
+		
+		if(target.canRotate180()) {
+			item = new JMenuItem("Rotate ship 180");
+			item.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent ev) {
+					grid.startShipRotate180(target);
+				}
+			});
+			add(item);
+		}
 		
 		addSeparator();
 		
