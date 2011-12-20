@@ -564,7 +564,8 @@ public class Map implements Serializable {
 	*/
 	public void rotateShip(Ship s, Direction newDir) {
 		boolean canShipRotate = true;
-		
+		NodeIterator  adjIt = s.getSurroundingIterator();
+		final Ship w = s;
 		s.getDirection();
 		if(!ships.contains(s)){
 			s = getShip(s.getConstructID());
@@ -589,9 +590,9 @@ public class Map implements Serializable {
 						
 						//explode mine
 						if(n.block instanceof MineBlock) {
-							int x = 1;  				// this is wrong, and needs to be fixed
-							int y = 1;					// this is wrong, and needs to be fixed
-							explodeMine(x, y);
+							explodeMine(n);	
+							w.assessDamage((w.getBlocks())[0], Weapon.Mine);
+							Btlshp.getGame().outputMessage("A mine exploded on your ship!");
 							return false;
 						}
 						
@@ -613,9 +614,9 @@ public class Map implements Serializable {
 						
 						//explode mine
 						if(n.block instanceof MineBlock) {
-							int x = 1;  				// this is wrong, and needs to be fixed
-							int y = 1;					// this is wrong, and needs to be fixed
-							explodeMine(x, y);
+							explodeMine(n);
+							w.assessDamage((w.getBlocks())[0], Weapon.Mine);
+							Btlshp.getGame().outputMessage("A mine exploded on your ship!");
 							return false;
 						}
 						
@@ -631,8 +632,19 @@ public class Map implements Serializable {
 			placeShip(s,x,y,newDir);
 		}
 		
-		//check for mine next to ship after rotate
-		
+		// Check adjacent squares for mines
+					for(int i = 0; i < adjIt.size(); ++i) {
+						if(!insideMap(adjIt.getx(i), adjIt.gety(i)))
+							continue;
+						
+						MapNode n = getMapNode(adjIt.getx(i), adjIt.gety(i));
+						Block b = n.block;
+						
+						if(!(b instanceof MineBlock) || s.canPlaceMine())
+							continue;
+						
+						explodeMine(adjIt.getx(i), adjIt.gety(i));
+					}
 		return;
 	}
 
@@ -721,6 +733,16 @@ public class Map implements Serializable {
 		unplaceBlock(n, b);
 		s.getPlayer().addMine();
 		return true;
+	}
+	
+	public void explodeMine(MapNode n2) {
+		MapNode n = n2;
+		
+		if(n == null || n.block == null || !(n.block instanceof MineBlock))
+			return;
+		n.block = null;
+		n.hasExplosion(true);
+		
 	}
 	
 	
