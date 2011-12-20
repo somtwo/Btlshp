@@ -378,7 +378,6 @@ public class BtlshpGame {
 		if (!isSongPlaying) {
 			urlForAudio = getClass().getResource("audio/BackgroundWebsite.mid");
 			//if (audioClip != null)  //--> makes it not play audio
-			System.out.println(audioClip);
 			audioClip = Applet.newAudioClip(urlForAudio);
 			isSongPlaying = true;
 		}
@@ -394,7 +393,9 @@ public class BtlshpGame {
 				"Come back and press no to stop the music at any time.");
 		
 		if(	result == DialogResult.Yes) {
-			if(audioClip != null) audioClip.loop();
+			if(audioClip != null){
+				audioClip.loop();
+			}
 			return;
 		} else if (result == DialogResult.No) {
 			audioClip.stop();
