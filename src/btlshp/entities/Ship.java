@@ -17,11 +17,12 @@ public class Ship extends Construct implements Serializable{
 	private static final int  hasTorpedo = 0x4;
 	private static final int  hasMinePlacement = 0x8;
 	private static final int  hasSonar = 0x10;
+	private static final int  canRotate180 = 0x20;
 	
 	private int          flags;
 	private int          maxForwardMove, maxSideMove, maxBackMove, maxGunRange, maxSonarRange;
 	private NodeIterator coreArea, adjacentArea, radarArea, turnLeftArea, turnRightArea, firingArea, mineArea;
-	private NodeIterator forwardMoveArea, backMoveArea, leftMoveArea, rightMoveArea;
+	private NodeIterator forwardMoveArea, backMoveArea, leftMoveArea, rightMoveArea, rot180LeftArea, rot180RightArea;
 
 	/**
 	* Constructor for Ship
@@ -136,12 +137,34 @@ public class Ship extends Construct implements Serializable{
 	
 	
 	/**
+	 * Returns an interator that can be used to iterate over the map blocks covered when a ship rotates 180 degrees
+	 * to the left
+	 * 
+	 * @return NodeIterator object.
+	 */
+	public NodeIterator getLeft180RotationIterator() {
+		return rot180LeftArea;
+	}
+	
+	
+	/**
 	 * Returns an iterator that can be used to iterate over the map blocks covered when the ship turns right
 	 * 
 	 * @return NodeIterator object.
 	 */
 	public NodeIterator getRightRotationIterator() {
 		return turnRightArea;
+	}
+	
+
+	/**
+	 * Returns an interator that can be used to iterate over the map blocks covered when a ship rotates 180 degrees
+	 * to the right
+	 * 
+	 * @return NodeIterator object.
+	 */
+	public NodeIterator getRight180RotationIterator() {
+		return rot180RightArea;
 	}
 	
 	
@@ -266,6 +289,16 @@ public class Ship extends Construct implements Serializable{
 	boolean hasArmor(){
 		return (flags & isArmored) == isArmored;
 	}
+	
+	
+	/**
+	 * @return 
+	 */
+	boolean canRotate180() {
+		return (flags & canRotate180) == canRotate180;
+	}
+	
+	
 	/**
 	* Factory method for Cruiser
 	* @returns the Ship Constructed
@@ -281,13 +314,14 @@ public class Ship extends Construct implements Serializable{
 	public static Ship buildTorpedoBoat(Player owner) {
 		return new Ship(owner, hasGun|hasTorpedo, 8, 1, 1, 4, 5, 0, 4);
 	}
+	
 	// private Ship(Player owner, int flags, int forward, int side, int back, int gunRange, int radarRange, int sonarRange, int numberOfBlocks) {
 	/**
 	* Factory method for Destroyer
 	* @returns the Ship Constructed
 	*/
 	public static Ship buildDestroyer(Player owner) {
-		return new Ship(owner, hasTorpedo, 6, 1, 1, 0, 4, 0, 3);
+		return new Ship(owner, hasTorpedo|canRotate180, 6, 1, 1, 0, 4, 0, 3);
 	}
 
 	/**
@@ -306,6 +340,13 @@ public class Ship extends Construct implements Serializable{
 	private void buildLeftRotationIterator() {
 		turnLeftArea = new NodeIterator(null);
 		
+		if(canRotate180()) {
+			rot180LeftArea = new NodeIterator(null);
+			
+			// This code works only for destroyer.
+			for(int y = -1; y < 2; ++y)
+				rot180LeftArea.add(-1, y, blocks[blocks.length - y + 1]);
+		}
 		// Account for Destroyer's odd pivot point
 		if(blocks.length == 3) {
 			turnLeftArea.add(-1, 0,   blocks[0]);
@@ -333,7 +374,14 @@ public class Ship extends Construct implements Serializable{
 	
 	private void buildRightRotationIterator() {
 		turnRightArea = new NodeIterator(null);
-		
+
+		if(canRotate180()) {
+			rot180RightArea = new NodeIterator(null);
+			
+			// This code works only for destroyer.
+			for(int y = -1; y < 2; ++y)
+				rot180RightArea.add(1, y, blocks[blocks.length - y + 1]);
+		}
 		// Account for Destroyer's odd pivot point
 		if (blocks.length == 3) {
 			turnRightArea.add(-1, 0,   blocks[0]);
