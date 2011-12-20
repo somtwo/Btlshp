@@ -1,6 +1,5 @@
 package btlshp.ui;
 
-import java.applet.AudioClip;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -9,8 +8,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import btlshp.Btlshp;
+import btlshp.BtlshpGame;
 import btlshp.enums.AppState;
-import btlshp.turns.TurnFactory;
 
 public class FileMenu extends JMenu {
 	/**
@@ -91,6 +90,18 @@ public class FileMenu extends JMenu {
 		add(helpItem);
 		addSeparator();
 		
+		JMenuItem playMusicItem = fileMenuItems[7] = new JMenuItem("Wanna play sweet music?");
+		playMusicItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Btlshp.getGame().setupMusic();
+				Btlshp.getGame();
+				BtlshpGame.playsMusic();
+			}
+		});
+		add(playMusicItem);	
+		addSeparator();
+		
 		JMenuItem quitItem = fileMenuItems[6] = new JMenuItem("Quit");
 		quitItem.setMnemonic(KeyEvent.VK_Q);
 		quitItem.addActionListener(new ActionListener() {
@@ -102,18 +113,6 @@ public class FileMenu extends JMenu {
 		add(quitItem);
 		addSeparator();
 		
-		JMenuItem playMusicItem = fileMenuItems[7] = new JMenuItem("Wanna play sweet music?");
-		playMusicItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				Btlshp.getGame().setupMusic();
-				Btlshp.getGame().playsMusic();
-				
-			}
-
-			
-		});
-		add(playMusicItem);
 		
 	}
 	

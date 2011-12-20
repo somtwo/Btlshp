@@ -190,10 +190,6 @@ public class BtlshpGame {
 	public void saveGame() {
 		if(appState == AppState.NoGame) 
 			return;
-		if(appState == AppState.RemoteTurn) {
-			mainUi.showNotificationDialog("Save Game", "you can only save and exit the game when it is you turn.");
-			return;
-		}
 			
 		if (localPlayer.getPlayerID() != mainUi.getMap().getLeftPlayer().getPlayerID())
 		{
