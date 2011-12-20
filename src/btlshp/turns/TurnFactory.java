@@ -96,7 +96,7 @@ public final class TurnFactory {
 	* @param s ship to launch a torpedo from
 	* @return true if torpedo launched
 	*/
-	public static LaunchTorpedo launchTorpedo(btlshp.entities.Map m, btlshp.entities.Ship s) {
+	public static LaunchTorpedo launchTorpedo(Map m, Ship s) {
 		return new LaunchTorpedo(m, s);
 	}
 
