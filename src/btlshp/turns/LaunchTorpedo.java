@@ -43,7 +43,7 @@ class LaunchTorpedo extends Turn implements Serializable{
 
 	@Override
 	public void setMap(Map m) {
-		// TODO Auto-generated method stub
+		this.m = m;
 		
 	}
 }
