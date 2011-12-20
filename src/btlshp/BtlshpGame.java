@@ -30,7 +30,7 @@ public class BtlshpGame {
 	private File 	 gameDir;
 	private static AudioClip audioClip;
 	private static URL urlForAudio;
-
+	private static boolean isSongPlaying;
 	public BtlshpGame() {
 		localPlayer = remotePlayer = null;
 		mainUi = new MainUI();
@@ -375,11 +375,13 @@ public class BtlshpGame {
 
 	
 	public void setupMusic() {
-		
-		urlForAudio = getClass().getResource("audio/BackgroundWebsite.mid");
-		//if (audioClip != "null")  //--> makes it not play audio
-		System.out.println(audioClip);
+		if (!isSongPlaying) {
+			urlForAudio = getClass().getResource("audio/BackgroundWebsite.mid");
+			//if (audioClip != null)  //--> makes it not play audio
+			System.out.println(audioClip);
 			audioClip = Applet.newAudioClip(urlForAudio);
+			isSongPlaying = true;
+		}
 		return;
 	}
 
