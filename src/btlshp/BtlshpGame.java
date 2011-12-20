@@ -1,11 +1,14 @@
 package btlshp;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -366,4 +369,30 @@ public class BtlshpGame {
 		else
 			mainUi.showAlert("Victory!", "You have vanquished your foe!");
 	}
+
+
+	/**
+	 * Handles music
+	 */
+	public void playsMusic() {
+		AudioClip audioClip;
+		URL urlForAudio = getClass().getResource("audio/BackgroundWebsite.mid");
+		audioClip = Applet.newAudioClip(urlForAudio);
+		
+		
+		DialogResult result;
+		result = mainUi.yesNoCancelDialog("Music", "Would you like to play music");
+		
+		if(	result == DialogResult.Yes) {
+			audioClip.loop();
+			return;
+		} else if (result == DialogResult.No) {
+			audioClip.stop();
+			return;
+		} else {
+			return;
+		}
+	}
+
+
 }

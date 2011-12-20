@@ -812,6 +812,7 @@ public class Map implements Serializable {
 			Block b = n.block;
 			if(b != null){
 				n.block.takeHit(Weapon.Torpedo, x , y);
+				n.hasExplosion(true);
 				canContinue = false;
 			}
 			
