@@ -518,35 +518,51 @@ public class Map implements Serializable {
 	* @returns True if the ship can rotate in the new direction.
 	* @throws IllegalStateException If a move has already been made since the last generateTurn method call.
 	*/
-	public boolean canShipRotate(Ship s, Direction newDir) {
-
+	public boolean canShipRotate(final Ship s, Direction oldDir, Direction newDir) {
+		if(oldDir == null)
+			oldDir = s.getDirection();
+		
 		// left turn check
-		if (newDir == s.getDirection().leftDir()) {
+		if (newDir == oldDir.leftDir()) {
 			NodeIterator it = s.getLeftRotationIterator();
 			
-			return it.test(this, s.getLocation(), s.getDirection(), new NodeTestAction() {
+			return it.test(this, s.getLocation(), oldDir, new NodeTestAction() {
 				@Override
 				public boolean visit(MapNode n, Block b) {
 					if(n == null)
 						return false;
-					if(n.block != null && !(n.block instanceof MineBlock))
-						return false;
+					if(n.block != null && !(n.block instanceof MineBlock)) {
+						if(n.block instanceof ConstructBlock) {
+							ConstructBlock cb = (ConstructBlock)n.block;
+							
+							if(cb.getConstruct() == s)
+								return true;
+						}
+						return false;						
+					}
 
 					return true;
 				}
 			});
 		} 
 		// right turn check
-		else if(newDir == s.getDirection().rightDir()) {
+		else if(newDir == oldDir.rightDir()) {
 			NodeIterator it = s.getRightRotationIterator();
 			
-			return it.test(this, s.getLocation(), s.getDirection(), new NodeTestAction() {
+			return it.test(this, s.getLocation(), oldDir, new NodeTestAction() {
 				@Override
 				public boolean visit(MapNode n, Block b) {
 					if(n == null)
 						return false;
-					if(n.block != null && !(n.block instanceof MineBlock))
-						return false;
+					if(n.block != null && !(n.block instanceof MineBlock)) {
+						if(n.block instanceof ConstructBlock) {
+							ConstructBlock cb = (ConstructBlock)n.block;
+							
+							if(cb.getConstruct() == s)
+								return true;
+						}
+						return false;						
+					}
 
 					return true;
 				}
@@ -566,12 +582,12 @@ public class Map implements Serializable {
 	 */
 	public boolean canShipRotate180(Ship ship, boolean leftTurn) {
 		if(leftTurn) {
-			return canShipRotate(ship, ship.getDirection().leftDir()) &&
-					canShipRotate(ship, ship.getDirection().backwardsDir());
+			return canShipRotate(ship, ship.getDirection(), ship.getDirection().leftDir()) &&
+					canShipRotate(ship, ship.getDirection().leftDir(), ship.getDirection().backwardsDir());
 		}
 		
-		return canShipRotate(ship, ship.getDirection().rightDir()) &&
-				canShipRotate(ship, ship.getDirection().backwardsDir());
+		return canShipRotate(ship, ship.getDirection(), ship.getDirection().rightDir()) &&
+				canShipRotate(ship, ship.getDirection().rightDir(), ship.getDirection().backwardsDir());
 	}
 	
 	        	
