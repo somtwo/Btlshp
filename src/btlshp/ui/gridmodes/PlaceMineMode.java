@@ -49,7 +49,7 @@ public class PlaceMineMode extends GridMode {
 		
 		if(n != null && n.block == null && n.actionSquare() && 
 				map.placeMine(ship, new Location(grid.getHoverx(), grid.getHovery()))) {
-			Btlshp.getGame().sendTurn(TurnFactory.placeMine(map, ship, new Location(grid.getHoverx(), grid.getHovery())));
+			Btlshp.getGame().sendTurn(TurnFactory.placeMine(ship, new Location(grid.getHoverx(), grid.getHovery())));
 			Btlshp.getGame().outputMessage("Place a mine action action.");
 		}
 		

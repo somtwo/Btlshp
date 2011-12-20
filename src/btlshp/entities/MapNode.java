@@ -61,7 +61,8 @@ public class MapNode implements Serializable{
 	
 	
 	public void clearTurnFlags() {
-		
+		hasExplosion(false);
+		hasShot(false);
 	}
 	
 	

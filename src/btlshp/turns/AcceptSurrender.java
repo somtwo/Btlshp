@@ -11,11 +11,12 @@ class AcceptSurrender extends Turn implements Serializable{
 	/**
 	 * Opponent has accepted request to surrender
 	 */
-	public void executeTurn() {
+	public void executeTurn(Map map) {
 		// TODO Implementation UI dependent
 		//Generate dialog informing player opponent has accepted surrender
-		
 	}
+	
+	
 	@Override
 	public boolean wasSuccessful() {
 		// TODO Implementation UI dependent
@@ -24,10 +25,5 @@ class AcceptSurrender extends Turn implements Serializable{
 	@Override
 	public String toString(){
 		return "acceptSurrender";
-	}
-	@Override
-	public void setMap(Map m) {
-		// TODO Auto-generated method stub
-		
 	}
 }

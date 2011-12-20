@@ -51,7 +51,7 @@ public class PickupMineMode extends GridMode {
 		if(n != null && n.block != null && n.block instanceof MineBlock && n.actionSquare()) {
 			Location loc = new Location(grid.getHoverx(), grid.getHovery());
 			map.pickupMine(ship, loc);
-			Btlshp.getGame().sendTurn(TurnFactory.takeMine(map, ship, loc));
+			Btlshp.getGame().sendTurn(TurnFactory.takeMine(ship, loc));
 			Btlshp.getGame().outputMessage("Pickup mine action action.");
 		}
 		

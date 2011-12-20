@@ -7,25 +7,19 @@ import btlshp.entities.ConstructBlock;
 import btlshp.entities.Map;
 
 class RepairBase extends Turn implements Serializable{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3486672126675014858L;
-	private ConstructBlock repairBlock;
-	private Base b;
+	private int baseId, blockId;
 	private boolean success = false;
-	private Map m;
 
 	RepairBase(Base b, ConstructBlock repairBlock) {
-		this.b = b;
-		this.repairBlock = repairBlock;
+		this.baseId = b.getConstructID();
+		this.blockId = repairBlock.getId();
 	}
 
 	@Override
-	public void executeTurn() {
-		b = m.getBase(b.getConstructID());
-		b.AssesRepair(repairBlock);
+	public void executeTurn(Map map) {
+		Base b = map.getBase(baseId);
+		b.AssesRepair(b.getBlockById(blockId));
 		success = true;
 	}
 	@Override
@@ -35,11 +29,5 @@ class RepairBase extends Turn implements Serializable{
 	@Override
 	public String toString(){
 		return "repairBase";
-	}
-
-	@Override
-	public void setMap(Map m) {
-		this.m = m;
-		
 	}
 }
