@@ -134,4 +134,8 @@ public final class TurnFactory {
 	public static Pass pass() {
 		return new Pass();
 	}
+	
+	public static RotateShip180 rotateShip180(Map m, Ship s, boolean leftTurn) {
+		return new RotateShip180(m, s, leftTurn);
+	}
 }

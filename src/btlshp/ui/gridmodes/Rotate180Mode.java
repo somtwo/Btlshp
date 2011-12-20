@@ -65,13 +65,16 @@ public class Rotate180Mode extends GridMode {
 		}
 		
 		if(isLeftRotate(target.getDirection()) &&
-		   map.canShipRotate(target, target.getDirection().leftDir()) &&
-		   map.canShipRotate(target, target.getDirection().backwardsDir())) {
-			map.rotateShip(target, target.getDirection().leftDir());
-			map.rotateShip(target, target.getDirection().leftDir());
-			
-			
+		   map.canShipRotate180(target, true)) {
+			map.rotateShip180(target, true);
+			Btlshp.getGame().sendTurn(TurnFactory.rotateShip180(map, target, true));
 		}
+		else if(!isLeftRotate(target.getDirection()) && map.canShipRotate180(target, false)) {
+			map.rotateShip180(target, false);
+			Btlshp.getGame().sendTurn(TurnFactory.rotateShip180(map, target, false));
+		}
+		
+		grid.cancelAction();
 	}
 	
 	private boolean isLeftRotate(Direction dir) {

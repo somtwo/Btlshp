@@ -555,6 +555,25 @@ public class Map implements Serializable {
 		
 		return false;
 	}
+	
+	
+	/**
+	 * Returns true of the ship can make a 180 degree turn either left or right.
+	 * 
+	 * @param ship      Ship to test
+	 * @param leftTurn  True if the turn is a left turn, otherwise it is a right turn.
+	 * @return
+	 */
+	public boolean canShipRotate180(Ship ship, boolean leftTurn) {
+		if(leftTurn) {
+			return canShipRotate(ship, ship.getDirection().leftDir()) &&
+					canShipRotate(ship, ship.getDirection().backwardsDir());
+		}
+		
+		return canShipRotate(ship, ship.getDirection().rightDir()) &&
+				canShipRotate(ship, ship.getDirection().backwardsDir());
+	}
+	
 	        	
 	/**
 	* Attempts to turn a ship from it's current direction to a new direction.
@@ -647,6 +666,25 @@ public class Map implements Serializable {
 					}
 		return;
 	}
+	
+	
+	/**
+	 * Rotates a ship 180 degrees.
+	 * 
+	 * @param ship       Ship to rotate
+	 * @param leftTurn   True if the turn is a left turn, false if it is a right turn
+	 */
+	public void rotateShip180(Ship ship, boolean leftTurn) {
+		if(leftTurn) {
+			rotateShip(ship, ship.getDirection().leftDir());
+			rotateShip(ship, ship.getDirection().leftDir());
+		}
+		else {
+			rotateShip(ship, ship.getDirection().rightDir());
+			rotateShip(ship, ship.getDirection().rightDir());			
+		}
+	}
+	
 
 	/**
 	* Attempts to place a mine via the given ship in the given location
